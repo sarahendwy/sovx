@@ -16,10 +16,26 @@ class CategoriesView(ListView):
     context_object_name = "categories"
 
 
-def products(request):
-    category = request.GET.get("category", "")
-    page = request.GET.get("page")
-    return render(request, 'products.html', context={"category": category})
+class ProductListView(ListView):
+    model = Product
+    template_name = "products.html"
+    context_object_name = "products"
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        category = self.request.GET.get("category", "")
+        data['category'] = category
+        return data
+
+    def get_queryset(self):
+        category = self.request.GET.get("category", "")
+        if category:
+            products = Product.objects.filter(category__name__iexact=category)
+        else:
+            products = Product.objects.all()
+
+        return products
 
 
 class ProductView(DetailView):
