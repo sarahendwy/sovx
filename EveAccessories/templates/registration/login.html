@@ -1,0 +1,61 @@
+{% extends 'home/base.html' %}
+{% block content %}
+
+
+
+<div class="container my-5">
+    <form class="user-form w-50 mx-auto" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger p-3 mb-2" role="alert">
+            {% for error in form.non_field_errors%}
+                {% if 'verify' in error %}
+                    You need to activate your mail to login
+                    <a href="{% url 'resend_mail' uname=error|cut:'verify-' %}">Click here to resend</a>
+                {% else %}
+                    {{ error }}
+                {%endif%}
+            {%endfor%}  
+            </div>
+        {%endif%}
+
+        {% for field in form %}
+          <div class="form-outline mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        {%endfor%}
+
+        <!-- Submit button -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary btn-block mb-4 w-50">Sign in</button>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col text-center">
+                <!-- Simple link -->
+                <a href="{% url 'password_reset' %}">Forgot password?</a>
+            </div>
+        </div>
+
+
+
+        <!-- Register buttons -->
+        <div class="text-center">
+            <p>Not a member? <a href="{% url 'signup' %}">Register</a></p>
+            <div class="brands d-flex justify-content-around w-50 mx-auto"> 
+                <a type="button" class="btn btn-link btn-floating mx-1" href="{% url 'social:begin' 'google-oauth2' %}">
+                    <i class="fa-brands fa-google"></i>
+                </a>
+    
+                <a type="button" class="btn btn-link btn-floating mx-1" href="{% url 'social:begin' 'github' %}">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
