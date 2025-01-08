@@ -21,9 +21,12 @@ class Login(LoginView):
         return reverse('index')
 
     def form_valid(self, form):
-        """Security check complete. Log the user in."""
-        login(self.request, form.get_user(), backend='django.contrib.auth.backends.ModelBackend')
-        return HttpResponseRedirect(self.get_success_url())
+        user = form.get_user()
+        if user:
+            login(self.request, user)
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return self.form_invalid(form)
 
 
 class CreateAccount(generic.CreateView):
@@ -34,9 +37,9 @@ class CreateAccount(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = False
+        user.is_active = True # False
         user.save()
-        send_verification_email(self.request, user)
+        # send_verification_email(self.request, user)
         return redirect(self.success_url)
 
 
@@ -69,6 +72,9 @@ class ShowProfile(generic.DetailView):
     model = User
     template_name = 'auth/profile.html'
     context_object_name = 'profileuser'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 def logout_view(request):

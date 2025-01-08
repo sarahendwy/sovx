@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Category, Product
@@ -44,6 +45,7 @@ class ProductView(DetailView):
     context_object_name = "product"
 
 
+@login_required
 def cart(request):
     return render(request, 'cart.html')
 

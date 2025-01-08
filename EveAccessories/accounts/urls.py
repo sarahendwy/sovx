@@ -3,10 +3,6 @@ from django.contrib.auth.decorators import login_required
 from .views import *
 
 urlpatterns = [
-    # User functions
-    path('profile/<int:pk>', ShowProfile.as_view(), name='profile'),
-    path('profile/edit', login_required(EditAccount.as_view()), name='edit_profile'),
-
     # Authentication
     path('login/', Login.as_view(), name='login'),
     path('signup/', CreateAccount.as_view(), name='signup'),
@@ -14,6 +10,10 @@ urlpatterns = [
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('resend_mail/<str:uname>', ResendMail, name="resend_mail"),
     path("logout/", login_required(logout_view), name="logout"),
+
+    # User functions
+    path('profile/', ShowProfile.as_view(), name='profile'),
+    path('profile/edit', login_required(EditAccount.as_view()), name='edit_profile'),
 
     # Imports
     path('', include('django.contrib.auth.urls')),
