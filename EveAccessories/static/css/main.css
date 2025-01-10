@@ -53,3 +53,7 @@
   font-weight: 500;
   font-style: normal;
 }
+
+.border-primary {
+    border-color: var(--primary) !important;
+}

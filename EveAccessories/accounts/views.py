@@ -16,15 +16,18 @@ class Login(LoginView):
     redirect_authenticated_user = True
 
     def get_default_redirect_url(self):
+        if self.request.user.is_staff or self.request.user.is_superuser:
+            return reverse('admin_dashboard')
         if self.next_page:
             return resolve_url(self.next_page)
-        return reverse('index')
+        else:
+            return reverse('index')
 
     def form_valid(self, form):
         user = form.get_user()
         if user:
             login(self.request, user)
-            return HttpResponseRedirect(self.get_success_url())
+            return HttpResponseRedirect(self.get_default_redirect_url())
         else:
             return self.form_invalid(form)
 

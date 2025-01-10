@@ -44,14 +44,17 @@ img.hero-image {
     object-fit: cover;
     object-position: top;
 }
+
 .carousel-control-next, .carousel-control-prev {
     width: 50% !important;
 }
+
 .carousel-indicators button {
     width: 16px !important;
     height: 16px !important;
     background-color: var(--primary) !important;
 }
+
 .carousel-inner {
     max-height: 388px;
     overflow-y: auto;
@@ -63,7 +66,25 @@ img.hero-image {
     color: white !important;
 }
 
+.btn-outline-primary {
+    background-color: transparent;
+    border-color: var(--bg-primary);
+    color: var(--primary) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--bg-primary);
+    border-color: var(--bg-primary);
+    color: white !important;
+}
+
 .btn-primary:hover {
     background-color: var(--primary);
     border-color: var(--primary);
+}
+
+.admin-sidebar .nav-link.active {
+    background-color: var(--primary);
+    color: white !important;
+    border-radius: 12px 0 0 12px;
 }

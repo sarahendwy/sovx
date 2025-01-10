@@ -24,7 +24,12 @@
                                 Hi, {{ user.first_name }}
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'cart' %}">My Cart</a></li>
+                                {% if user.is_staff %}
+                                    <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="{% url 'cart' %}">My Cart</a></li>
+
+                                {% endif %}
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
