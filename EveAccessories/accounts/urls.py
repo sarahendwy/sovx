@@ -6,9 +6,9 @@ urlpatterns = [
     # Authentication
     path('login/', Login.as_view(), name='login'),
     path('signup/', CreateAccount.as_view(), name='signup'),
-    path('success/', Success, name='success'),
+    path('success/', success, name='success'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
-    path('resend_mail/<str:uname>', ResendMail, name="resend_mail"),
+    path('resend_mail/<str:uname>', resend_activation_mail, name="resend_mail"),
     path("logout/", login_required(logout_view), name="logout"),
 
     # User functions

@@ -37,44 +37,42 @@ class CreateAccount(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = True # False
+        user.is_active = False
         user.save()
-        # send_verification_email(self.request, user)
+        send_verification_email(self.request, user)
         return redirect(self.success_url)
 
 
-def Success(request):
-    return render(request, 'registration/success.html')
+def success(request):
+    return render(request, 'registration/success.html',
+                  context={'title': "An account verification link has been sent to your email",
+                           "message": 'Please Check your email for verification link and sign in again'})
 
 
 def activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
-    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect(reverse('index'))
+        return render(request, 'registration/success.html',
+                      context={'title': "You email is now activated successfully",
+                               "message": 'You may now login using your credentials'})
     else:
         return redirect(reverse('error'))
 
 
-def ResendMail(request, uname):
-    user = User.objects.get(username=uname)
+def resend_activation_mail(request, uname):
+    user = User.objects.get(email=uname)
     send_verification_email(request, user)
     return redirect('success')
 
 
-class ShowProfile(generic.DetailView):
-    model = User
+class ShowProfile(generic.TemplateView):
     template_name = 'auth/profile.html'
-    context_object_name = 'profileuser'
-
-    def get_object(self, queryset=None):
-        return self.request.user
 
 
 def logout_view(request):
@@ -89,7 +87,4 @@ class EditAccount(generic.UpdateView):
     model = User
     form_class = FullUserForm
     template_name = 'registration/edit.html'
-
-    def form_valid(self, form):
-        user = form.save()
-        return redirect(reverse_lazy('profile', kwargs={'pk': user.id}))
+    success_url = reverse_lazy('profile')

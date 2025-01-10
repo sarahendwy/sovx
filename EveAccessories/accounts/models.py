@@ -50,7 +50,7 @@ class User(AbstractUser):
     birthdate = models.DateField(null=True, blank=True)
     governorate = models.CharField(choices=egypt_governorates, max_length=25)
     city = models.CharField(max_length=55)
-    address = models.TextField(null=True, blank=True)
+    address = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         return self.email
@@ -61,3 +61,11 @@ class User(AbstractUser):
             return self.first_name + " " + self.last_name
 
         return self.email
+
+    @property
+    def pending_orders(self):
+        pass
+
+    @property
+    def past_orders(self):
+        pass

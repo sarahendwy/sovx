@@ -69,13 +69,11 @@ class LoginForm(AuthenticationForm):
 
 class FullUserForm(UserChangeForm):
     password = None
-    email = forms.EmailField(disabled=True, required=False)
     birthdate = forms.DateTimeField(widget=NumberInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'phone', 'birthdate', 'governorate', 'city',
-                  'address']
+        fields = ['first_name', 'last_name', 'phone', 'birthdate', 'governorate', 'city', 'address']
 
     def clean_email(self):
         return self.instance.email
