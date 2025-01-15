@@ -1,26 +1,16 @@
 from typing import Any
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView
-from django.contrib.admin.views.decorators import staff_member_required
-from accessories.models import Category, Product
+from accessories.models import Category, Product, ProductImage
 from .forms import CategoryForm, ProductForm
 from django.urls import reverse_lazy
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
 
-    @method_decorator(staff_member_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class OrdersView(TemplateView):
     template_name = 'dashboard/orders.html'
-
-    @method_decorator(staff_member_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
 
 class CategoriesView(ListView):
     template_name = 'dashboard/category/categories.html'
@@ -41,9 +31,6 @@ class CategoriesView(ListView):
         else:
             return super().get_queryset()
 
-    @method_decorator(staff_member_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
 
 class AddCategoryView(CreateView):
     model = Category
@@ -56,12 +43,10 @@ class DeleteCategoryView(DeleteView):
     success_url = reverse_lazy('admin_categories')
 
 
-class ProductsView(TemplateView):
+class ProductsView(CategoriesView):
     template_name = 'dashboard/product/products.html'
-
-    @method_decorator(staff_member_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    model = Product
+    context_object_name = "products"
 
 
 class AddProductView(CreateView):
@@ -70,11 +55,34 @@ class AddProductView(CreateView):
     template_name = 'dashboard/product/add_product.html'
     success_url = reverse_lazy('admin_products')
 
+    def form_valid(self, form):
+        self.object = form.save()
+        files = self.request.FILES.getlist('images')
+        if files:
+            for f in files:
+                ProductImage.objects.create(product=self.object,image=f)
+
+        return super().form_valid(form)
+
+
 class EditProductView(UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/edit_product.html'
     success_url = reverse_lazy('admin_products')
+
+    def form_valid(self, form):
+        clear_old_images = form.cleaned_data.get("clear_old_images")
+        if clear_old_images:
+            for image in self.object.images.all():
+                image.delete()
+                
+        files = self.request.FILES.getlist('images')
+        if files:
+            for f in files:
+                ProductImage.objects.create(product=self.object,image=f)
+
+        return super().form_valid(form)
 
 class DeleteProductView(DeleteView):
     model = Product
@@ -83,7 +91,3 @@ class DeleteProductView(DeleteView):
 
 class SettingsView(TemplateView):
     template_name = 'dashboard/settings.html'
-
-    @method_decorator(staff_member_required)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)

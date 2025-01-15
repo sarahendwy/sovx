@@ -20,12 +20,14 @@
 </form>
 
 <!-- Products Table -->
+<div class="overflow-x-scroll">
 <table class="table table-striped">
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
       <th scope="col">Product Name</th>
       <th scope="col">Price</th>
+      <th scope="col">Discount</th>
       <th scope="col">Stock</th>
       <th scope="col">Category</th>
       <th scope="col">Actions</th>
@@ -35,8 +37,9 @@
     {% for product in products %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ product.name }}</td>
+      <td>{{ product.title }}</td>
       <td>{{ product.price }}</td>
+      <td>{{ product.discount }}</td>
       <td>{{ product.stock }}</td>
       <td>{{ product.category }}</td>
       <td>
@@ -59,4 +62,5 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% endblock admin_content %}

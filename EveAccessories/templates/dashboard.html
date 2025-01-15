@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-    <div class="d-flex" style="min-height: 80vh">
+    <div class="d-flex flex-column flex-md-row" style="min-height: 80vh">
         <!-- Sidebar -->
         <div class="py-3 text-primary admin-sidebar" style="width: 250px;">
-            <ul class="nav flex-column border-end border-3 border-primary">
+            <ul class="nav flex-row flex-md-column border-end border-3 border-primary">
                 <li class="nav-item pb-2">
                     <a class="nav-link ps-0 fw-bold {% if request.path == '/dashboard/' %}ps-3 active{% endif %}" href="{% url 'admin_dashboard' %}">Dashboard</a>
                 </li>
@@ -25,7 +25,7 @@
         </div>
 
         <!-- Page Content Placeholder -->
-        <div class="flex-grow-1 p-4 pe-0">
+        <div class="flex-grow-1 p-2 p-md-4 pe-0">
             {% block admin_content %}
             {% endblock admin_content %}
         </div>
