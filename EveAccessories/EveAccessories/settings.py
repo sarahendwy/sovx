@@ -35,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.RequireAdminLoginMiddleware'
 ]
 
 ROOT_URLCONF = 'EveAccessories.urls'
@@ -139,3 +140,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+LOGIN_URL="/accounts/login"
+ADMIN_LOGIN_REQUIRED_URLS = (
+        r'/dashboard/(.*)$',
+    )

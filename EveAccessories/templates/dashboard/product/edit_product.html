@@ -1,0 +1,6 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block admin_content %}
+    {% include "partials/components/form.html" with form_title="Edit Product" form_class="product-form" form_button_text="Save" %}
+{% endblock admin_content %}

@@ -5,14 +5,18 @@
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Manage Categories</h2>
-        <a class="btn btn-primary" href="#">Create New</a>
+        <a class="btn btn-primary" href="{% url 'add_categories' %}">Create New</a>
     </div>
 
     <!-- Search Bar -->
-    <form method="get" class="input-group mb-3 gap-3">
-        <input type="text" name="query" class="form-control" placeholder="Search categories...">
+    <form method="get" class="input-group mb-3 gap-3" >
+        <input type="text" name="query" class="form-control" placeholder="{{ query }}">
         <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="submit">Search</button>
+            {% if query != "Search categories..." %}
+                <button class="btn btn-outline-primary" type="submit">Clear</button>
+            {% else %}
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            {% endif %}
         </div>
     </form>
 
@@ -33,7 +37,12 @@
                 <td>{{ category.name }}</td>
                 <td>{{ category.products.count }}</td>
                 <td>
-                    <a href="{% url 'delete_category' category.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    <a 
+                    href="{% url 'delete_category' category.id %}" 
+                    class="btn btn-sm btn-outline-danger" 
+                    {% if category.products.count > 0 %}disabled{% endif %}> 
+                        Delete
+                    </a>
                 </td>
             </tr>
         {% empty %}
@@ -43,6 +52,9 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <!-- Pagination -->
+    {% include 'partials/layout/paginator.html' %}
 
 
 {% endblock admin_content %}

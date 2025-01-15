@@ -1,7 +1,10 @@
+from typing import Any
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView
 from django.contrib.admin.views.decorators import staff_member_required
-from accessories.models import Category
+from accessories.models import Category, Product
+from .forms import CategoryForm, ProductForm
+from django.urls import reverse_lazy
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
@@ -20,10 +23,16 @@ class OrdersView(TemplateView):
 
 
 class CategoriesView(ListView):
-    template_name = 'dashboard/categories.html'
+    template_name = 'dashboard/category/categories.html'
     model = Category
     paginate_by = 24
     context_object_name = "categories"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get('query') or "Search categories..."
+        return context
+
 
     def get_queryset(self):
         query = self.request.GET.get('query')
@@ -36,13 +45,40 @@ class CategoriesView(ListView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
+class AddCategoryView(CreateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'dashboard/category/add_category.html'
+    success_url = reverse_lazy('admin_categories')
+
+class DeleteCategoryView(DeleteView):
+    model = Category
+    success_url = reverse_lazy('admin_categories')
+
 
 class ProductsView(TemplateView):
-    template_name = 'dashboard/products.html'
+    template_name = 'dashboard/product/products.html'
 
     @method_decorator(staff_member_required)
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
+
+
+class AddProductView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'dashboard/product/add_product.html'
+    success_url = reverse_lazy('admin_products')
+
+class EditProductView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'dashboard/product/edit_product.html'
+    success_url = reverse_lazy('admin_products')
+
+class DeleteProductView(DeleteView):
+    model = Product
+    success_url = reverse_lazy('admin_products')
 
 
 class SettingsView(TemplateView):
