@@ -76,7 +76,7 @@ class EditProductView(UpdateView):
         if clear_old_images:
             for image in self.object.images.all():
                 image.delete()
-                
+
         files = self.request.FILES.getlist('images')
         if files:
             for f in files:
@@ -87,7 +87,7 @@ class EditProductView(UpdateView):
 class DeleteProductView(DeleteView):
     model = Product
     success_url = reverse_lazy('admin_products')
-
+    
 
 class SettingsView(TemplateView):
     template_name = 'dashboard/settings.html'

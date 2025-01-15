@@ -40,7 +40,7 @@ class CreateAccount(generic.CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_active = False
+        user.is_active = True # False
         user.save()
         send_verification_email(self.request, user)
         return redirect(self.success_url)
