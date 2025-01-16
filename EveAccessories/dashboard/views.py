@@ -41,6 +41,7 @@ class AddCategoryView(CreateView):
 class DeleteCategoryView(DeleteView):
     model = Category
     success_url = reverse_lazy('admin_categories')
+    template_name = "dashboard/confirm_delete.html"
 
 
 class ProductsView(CategoriesView):
@@ -87,7 +88,8 @@ class EditProductView(UpdateView):
 class DeleteProductView(DeleteView):
     model = Product
     success_url = reverse_lazy('admin_products')
-    
+    template_name = "dashboard/confirm_delete.html"
+
 
 class SettingsView(TemplateView):
     template_name = 'dashboard/settings.html'

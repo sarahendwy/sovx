@@ -1,0 +1,12 @@
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
+<div class="d-flex">
+  <form method="post">
+    {% csrf_token %}
+
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+
+    <input class="btn btn-primary btn-block mt-4 px-5" type="submit" value="Confirm" />
+  </form>
+</div>
+
+{% endblock admin_content %}
