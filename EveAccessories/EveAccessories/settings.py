@@ -145,3 +145,11 @@ LOGIN_URL="/accounts/login"
 ADMIN_LOGIN_REQUIRED_URLS = (
         r'/dashboard/(.*)$',
     )
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+SESSION_COOKIE_HTTPONLY = True
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.core.context_processors.request',
+)

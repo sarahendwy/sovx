@@ -1,51 +1,100 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <div class="py-2 py-md-4">
-    <div class="d-flex ps-0 gap-3 flex-column flex-md-row justify-content-between align-items-stretch my-4"
-         style="max-width: 1200px;">
-        <!-- Product Image Section -->
-        <div class="product-image d-flex justify-content-center" style="flex-basis: 50%;">
-            <img src="{{product.thumbnail}}" alt="Eyeshadow Palette with Mirror" class="img-fluid"
-                 style="max-width: min(60vw,100%); height: auto; border: 1px solid #ddd;">
-        </div>
-
-        <!-- Product Details Section -->
-        <div class="product-details" style="flex-basis: 45%; display: flex; flex-direction: column; ">
-            <h2>{{product.title}}</h2>
-            <p style="color: #666;">{{product.description}}
-            </p>
-
-            <!-- Rating Section -->
-            <div class="rating" style="color: #FFD700; font-size: 1.2rem;">
-                {% for x in ""|ljust:product.rating %}
-                    &#9733;
-                {% endfor %}
-                {% for x in ""|ljust:product.empty_stars %}
-                    &#9734;
-                {% endfor %}
-
-            </div>
-
-            <!-- Price Section -->
-            <div class="price-section my-3" style="font-size: 1.5rem;">EGP
-                {% if product.discount %}
-                    <span class="old-price" style="text-decoration: line-through; color: #888;">{{product.price}}</span>
-                {% endif %}
-                <span class="new-price ml-2" style="color: #18A558;">{{product.discounted_price}}</span>
-            </div>
-
-            <!-- Stock and Brand -->
-            <div class="stock-brand my-3">
-                <span style="color: #28A745; font-weight: bold;">{{product.stock}} Items In Stock</span>
-                <p style="color: #666;">Category: <strong>{{product.category}}</strong></p>
-            </div>
-
-            <!-- Add to Cart Button -->
-            <button class="btn btn-primary btn-lg mt-auto" style="width: 100%;">Add to Cart</button>
-        </div>
+  <div
+    class="d-flex ps-0 gap-3 flex-column flex-md-row justify-content-between align-items-stretch my-4"
+    style="max-width: 1200px"
+  >
+    <!-- Product Image Section -->
+    <div
+      class="product-image d-flex justify-content-center"
+      style="flex-basis: 50%"
+    >
+      <img
+        src="{{product.thumbnail}}"
+        alt="Eyeshadow Palette with Mirror"
+        class="img-fluid"
+        style="max-width: min(60vw, 100%); height: auto; border: 1px solid #ddd"
+      />
     </div>
 
+    <!-- Product Details Section -->
+    <div
+      class="product-details"
+      style="flex-basis: 45%; display: flex; flex-direction: column"
+    >
+      <h2>{{product.title}}</h2>
+      <p style="color: #666">{{product.description}}</p>
+
+      <!-- Rating Section -->
+      <div class="rating" style="color: #ffd700; font-size: 1.2rem">
+        {% for x in ""|ljust:product.rating %} &#9733; {% endfor %} 
+        {% for x in ""|ljust:product.empty_stars %} &#9734; {% endfor %}
+      </div>
+
+      <!-- Price Section -->
+      <div class="price-section my-3" style="font-size: 1.5rem">
+        EGP {% if product.discount %}
+        <span
+          class="old-price"
+          style="text-decoration: line-through; color: #888"
+          >{{product.price}}</span
+        >
+        {% endif %}
+        <span class="new-price ml-2" style="color: #18a558"
+          >{{product.discounted_price}}</span
+        >
+      </div>
+
+      <!-- Stock and Brand -->
+      <div class="stock-brand my-3">
+        <span style="color: #28a745; font-weight: bold"
+          >{{product.stock}} Items In Stock</span
+        >
+        <p style="color: #666">
+          Category: <strong>{{product.category}}</strong>
+        </p>
+      </div>
+
+      {% if product.id|stringformat:"i" in cart %}
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="operation" value="remove" />
+        <button
+          id="remove_cart_button"
+          class="btn btn-primary btn-lg mt-auto"
+          type="submit"
+          style="width: 100%"
+        >
+          &#10003; Added to Cart
+        </button>
+      </form>
+      <script>
+        window.onload = function () {
+          var btn = document.querySelector("button#remove_cart_button");
+
+          btn.addEventListener("mouseover", function () {
+            this.innerHTML = "Remove from Cart";
+          });
+          btn.addEventListener("mouseout", function () {
+            this.innerHTML = "&#10003; Added to Cart";
+          });
+        };
+      </script>
+      {% else %}
+      <!-- Add to Cart Button -->
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="operation" value="add" />
+        <button
+          class="btn btn-primary btn-lg mt-auto"
+          type="submit"
+          style="width: 100%"
+        >
+          Add to Cart
+        </button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock content %}

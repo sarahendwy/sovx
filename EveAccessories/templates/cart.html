@@ -3,9 +3,83 @@
 
 {% block content %}
 <div class="py-2 py-md-4">
-    <h1 class="cormorant-garamond-regular mb-5">Shopping Cart</h1>
-    <div class="container text-center">
-        Cart View
+    <div class="container">
+        <h2 class="mb-4">Shopping Cart</h2>
+        <table class="table table-bordered table-hover cart-table">
+            <thead class="thead-light">
+                <tr>
+                    <th class="text-center">Product</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Quantity</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr data-id={{product.id}} id="product-{{product.id}}">
+                    <td class="text-center">
+                        <img src="{{ product.thumbnail }}" alt="{{ product.title }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
+                        {{ product.title }}
+                    </td>
+                    <td class="text-center" style="vertical-align: middle"> {{product.discounted_price}} </td>
+                    <td class="text-center quantity-cell" style="vertical-align: middle"></td>
+                    <td class="text-center" style="vertical-align: middle">
+                        <div class="btn-group" role="group">
+                            <button type="submit" class="btn btn-outline-primary btn-sm px-3 decrement">-</button>
+                            <button type="submit" class="btn btn-primary btn-sm px-3 increment">+</button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">Your cart is empty.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+    <script>
+        function incrementProduct (productId) {
+            current_quantity = parseInt(window.sessionStorage.getItem(productId) || 1);
+            window.sessionStorage.setItem(productId, current_quantity + 1);
+            document.querySelector(`#product-${productId} td.quantity-cell`).innerText = current_quantity + 1;
+        }
+        
+        function decrementProduct (productId) {
+            current_quantity = parseInt(window.sessionStorage.getItem(productId) || 1);
+            window.sessionStorage.setItem(productId, current_quantity - 1);
+            document.querySelector(`#product-${productId} td.quantity-cell`).innerText = current_quantity - 1;
+
+            if (current_quantity <= 1) {
+                window.sessionStorage.removeItem(productId);
+                document.querySelector(`#product-${productId}`).remove();
+            }        
+        }
+
+        window.onload = function () {
+            const incrementButtons = document.querySelectorAll('.increment');
+            const decrementButtons = document.querySelectorAll('.decrement');
+
+            incrementButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = e.target.closest("tr").dataset.id;
+                    incrementProduct(productId);
+                });
+            });
+
+            decrementButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const productId = e.target.closest("tr").dataset.id;
+                    decrementProduct(productId);
+                });
+            });
+
+            const quantityCells = document.querySelectorAll('.quantity-cell');
+            quantityCells.forEach(cell => {
+                const productId = cell.closest("tr").dataset.id;
+                cell.innerText = window.sessionStorage.getItem(productId) || 1;
+            });
+        }
+    </script>
 </div>
 {% endblock content %}
