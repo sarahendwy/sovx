@@ -55,7 +55,7 @@
         </p>
       </div>
 
-      {% if product.id|stringformat:"i" in cart %}
+      {% if in_cart %}
       <form method="post">
         {% csrf_token %}
         <input type="hidden" name="operation" value="remove" />

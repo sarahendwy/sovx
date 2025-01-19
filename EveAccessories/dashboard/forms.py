@@ -3,6 +3,7 @@ from django import forms
 from django.core.validators import validate_image_file_extension
 
 from accessories.models import Category, Product
+from .models import Setting
 
 class CategoryForm(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -54,3 +55,12 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
 
+class SettingsForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = Setting
+        fields = '__all__'

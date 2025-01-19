@@ -51,6 +51,7 @@ class User(AbstractUser):
     governorate = models.CharField(choices=egypt_governorates, max_length=25)
     city = models.CharField(max_length=55)
     address = models.CharField(max_length=200)
+    cart = models.CharField(max_length=255, default="", blank=True)
 
     def __str__(self) -> str:
         return self.email
@@ -69,3 +70,16 @@ class User(AbstractUser):
     @property
     def past_orders(self):
         pass
+
+    @property
+    def products_in_cart(self) -> list[int]:
+        cart = self.cart.strip("-").split("-")
+        if "" in cart:
+            cart.remove("")
+
+        if cart:
+            product_ids = list(map(int, cart))
+        else:
+            product_ids = []
+        return product_ids
+    

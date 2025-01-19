@@ -1,13 +1,13 @@
 from typing import Any
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView
-from accessories.models import Category, Product, ProductImage
-from .forms import CategoryForm, ProductForm
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView, FormView
+
+from orders.models import Order
+from .forms import CategoryForm, ProductForm, SettingsForm
+from accessories.models import Category, Product, ProductImage
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
-
 
 class OrdersView(TemplateView):
     template_name = 'dashboard/orders.html'
@@ -31,7 +31,6 @@ class CategoriesView(ListView):
         else:
             return super().get_queryset()
 
-
 class AddCategoryView(CreateView):
     model = Category
     form_class = CategoryForm
@@ -43,12 +42,10 @@ class DeleteCategoryView(DeleteView):
     success_url = reverse_lazy('admin_categories')
     template_name = "dashboard/confirm_delete.html"
 
-
 class ProductsView(CategoriesView):
     template_name = 'dashboard/product/products.html'
     model = Product
     context_object_name = "products"
-
 
 class AddProductView(CreateView):
     model = Product
@@ -64,7 +61,6 @@ class AddProductView(CreateView):
                 ProductImage.objects.create(product=self.object,image=f)
 
         return super().form_valid(form)
-
 
 class EditProductView(UpdateView):
     model = Product
@@ -90,6 +86,15 @@ class DeleteProductView(DeleteView):
     success_url = reverse_lazy('admin_products')
     template_name = "dashboard/confirm_delete.html"
 
-
-class SettingsView(TemplateView):
+class SettingsView(FormView):
     template_name = 'dashboard/settings.html'
+    form_class = SettingsForm
+
+
+def confirm_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    for product in order.products:
+        product.stock -= order.quanitites[str(product.id)]
+        product.save()
+
+    return order

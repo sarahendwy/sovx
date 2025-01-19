@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django_cleanup',
     'accessories.apps.AccessoriesConfig',
     'accounts.apps.AccountsConfig',
-    'dashboard.apps.DashboardConfig'
+    'dashboard.apps.DashboardConfig',
+    'orders.apps.OrdersConfig'
 ]
 
 MIDDLEWARE = [

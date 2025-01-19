@@ -4,80 +4,38 @@
 {% block content %}
 <div class="py-2 py-md-4">
     <div class="container">
-        <h2 class="mb-4">Shopping Cart</h2>
-        <table class="table table-bordered table-hover cart-table">
-            <thead class="thead-light">
-                <tr>
-                    <th class="text-center">Product</th>
-                    <th class="text-center">Price</th>
-                    <th class="text-center">Quantity</th>
-                    <th class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for product in products %}
-                <tr data-id={{product.id}} id="product-{{product.id}}">
-                    <td class="text-center">
-                        <img src="{{ product.thumbnail }}" alt="{{ product.title }}" class="img-thumbnail me-2" style="width: 100px; height: auto;">
-                        {{ product.title }}
-                    </td>
-                    <td class="text-center" style="vertical-align: middle"> {{product.discounted_price}} </td>
-                    <td class="text-center quantity-cell" style="vertical-align: middle"></td>
-                    <td class="text-center" style="vertical-align: middle">
-                        <div class="btn-group" role="group">
-                            <button type="submit" class="btn btn-outline-primary btn-sm px-3 decrement">-</button>
-                            <button type="submit" class="btn btn-primary btn-sm px-3 increment">+</button>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="5" class="text-center">Your cart is empty.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Shopping Cart</h2>
+            {% if products %}
+            <a href="{% url 'create_order' %}" style="height: fit-content" class="btn btn-primary ms-3">Proceed to Checkout</a>
+            {% endif %}
+        </div>
+        <div class="row justify-content-center gap-1">
+            {% for product in products %}
+            <div class="col-12 col-md-6 col-lg-3" style="width: 200px">
+                <a href="{% url 'product' product.id %}">
+                    <img src="{{ product.thumbnail }}" class="card-img-top" alt="{{ product.title }}">
+                </a>
+                <h5 class="text-center mt-3">{{ product.title }}</h5>
+                <p class="text-center">Price: ${{ product.discounted_price }}</p>
+                <button data-id="{{product.id}}" class="btn btn-outline-primary py-0 remove-from-cart" style="width: 100%">Remove</button>
+            </div>
+                
+            {% empty %}
+            <h3 class="text-center">No products in cart</h3>
+            {% endfor %}
+        </div>
+
     </div>
     <script>
-        function incrementProduct (productId) {
-            current_quantity = parseInt(window.sessionStorage.getItem(productId) || 1);
-            window.sessionStorage.setItem(productId, current_quantity + 1);
-            document.querySelector(`#product-${productId} td.quantity-cell`).innerText = current_quantity + 1;
-        }
-        
-        function decrementProduct (productId) {
-            current_quantity = parseInt(window.sessionStorage.getItem(productId) || 1);
-            window.sessionStorage.setItem(productId, current_quantity - 1);
-            document.querySelector(`#product-${productId} td.quantity-cell`).innerText = current_quantity - 1;
-
-            if (current_quantity <= 1) {
-                window.sessionStorage.removeItem(productId);
-                document.querySelector(`#product-${productId}`).remove();
-            }        
-        }
-
         window.onload = function () {
-            const incrementButtons = document.querySelectorAll('.increment');
-            const decrementButtons = document.querySelectorAll('.decrement');
+            const Buttons = document.querySelectorAll('.remove-from-cart');
 
-            incrementButtons.forEach(button => {
+            Buttons.forEach(button => {
                 button.addEventListener('click', (e) => {
-                    const productId = e.target.closest("tr").dataset.id;
-                    incrementProduct(productId);
+                    const productId = e.target.dataset.id;
+                    fetch(`/cart/remove/${productId}`).then(response => {if (response.status == 200) e.target.closest('div').remove()});
                 });
-            });
-
-            decrementButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const productId = e.target.closest("tr").dataset.id;
-                    decrementProduct(productId);
-                });
-            });
-
-            const quantityCells = document.querySelectorAll('.quantity-cell');
-            quantityCells.forEach(cell => {
-                const productId = cell.closest("tr").dataset.id;
-                cell.innerText = window.sessionStorage.getItem(productId) || 1;
             });
         }
     </script>

@@ -46,15 +46,24 @@ class ProductView(DetailView):
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        cart = self.request.session.get('cart') or ""
+        if self.request.user.is_authenticated:
+            cart = self.request.user.cart or ""
+        else:
+            cart = self.request.session.get('cart') or ""
+
         cart = set(cart.split("-"))
-        context["cart"] = cart
+        product_id = str(self.get_object().id)
+        context["in_cart"] = product_id in cart
         return context
     
     def post(self, request, *args, **kwargs):
         operation = request.POST.get("operation", "remove")
         product_id = str(self.get_object().id)
-        cart = request.session.get('cart') or ""
+        if request.user.is_authenticated:
+            cart = request.user.cart or ""
+        else:
+            cart = self.request.session.get('cart') or ""
+
         cart = set(cart.split("-"))
 
         if operation == "add":
@@ -64,16 +73,14 @@ class ProductView(DetailView):
             if product_id in cart:
                 cart.remove(str(product_id))
 
-        request.session['cart'] = "-".join(list(cart))
-        return redirect(request.path)
-    
-def cart(request):
-    cart = request.session.get('cart') or ""
-    cart = cart.strip("-")
-    product_ids = list(map(int, cart.split("-")))
-    products = Product.objects.filter(id__in=product_ids)
-    return render(request, 'cart.html', context={"products": products})
+        cart = "-".join(list(cart))
+        
+        if request.user.is_authenticated:
+            request.user.cart = cart
+            request.user.save()
 
+        request.session['cart'] = cart
+        return redirect(request.path)
 
 def about(request):
     return render(request, 'about.html')

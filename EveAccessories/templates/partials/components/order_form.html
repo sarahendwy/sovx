@@ -1,0 +1,240 @@
+{% load static %}
+
+<form novalidate method="post" enctype="multipart/form-data">
+  {% csrf_token %} {% if form.non_field_errors %}
+  <div class="alert alert-danger p-3 mb-2" role="alert">
+    {{ form.non_field_errors }}
+  </div>
+  {% endif %}
+  <div id="OrderFormCarousel" class="carousel slide carousel-dark">
+    <div
+      class="carousel-indicators position-relative m-2 justify-content-between"
+    >
+      {% comment %}
+      <div class="progress"></div>
+      {% endcomment %}
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Order Details"
+      >
+        {% include "partials/icons/cart.html" %}
+      </button>
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="1"
+        aria-label="Shipping Information"
+      >
+        {% include "partials/icons/truck.html" %}
+      </button>
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="2"
+        aria-label="Payment Information"
+      >
+        {% include "partials/icons/credit_card.html" %}
+      </button>
+    </div>
+    <div class="carousel-inner overflow-y-visible overflow-visible">
+      <div class="carousel-item active">
+        <h2 class="m-0 mb-2">Order Summary</h2>
+        <hr />
+
+        <div>
+          {% for product in products %}
+          <div
+            data-price="{{product.discounted_price}}"
+            class="product d-flex justify-content-between align-items-center mb-3"
+          >
+            <div class="d-flex align-items-center w-50">
+              <img
+                src="{{ product.thumbnail }}"
+                alt="{{ product.title }}"
+                class="img-thumbnail"
+                style="width: 100px; height: 100px; margin-right: 10px"
+              />
+              <div>
+                <p class="mb-0">{{ product.title }}</p>
+                <small>{{ product.description }}</small>
+              </div>
+            </div>
+            <div
+              class="d-flex align-items-center gap-3"
+              data-mdb-input-init
+              class="form-outline"
+            >
+              <label for="quantity-{{product.id}}" class="form-label m-0"
+                >Quantity:</label
+              >
+              <input
+                style="width: 5rem"
+                value="1"
+                min="1"
+                max="{{product.stock}}"
+                type="number"
+                name="quantity-{{product.id}}"
+                class="form-control bg-transparent border-1 border-primary quantity"
+              />
+            </div>
+            <p class="price m-0">EGP {{ product.discounted_price }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+          <div class="text-end">
+            <p class="mb-1">Subtotal: EGP <strong class="subtotal"></strong></p>
+            <p class="mb-1 pb-3 border-1 border-bottom border-primary">
+              Shipping: EGP
+              <strong class="shipping-cost">{{shipping_cost}}</strong>
+            </p>
+            <p class="mb-1">Total: EGP <strong class="total-cost"></strong></p>
+            <button
+              class="btn btn-primary my-3 px-3 mb-5"
+              type="button"
+              data-bs-target="#OrderFormCarousel"
+              data-bs-slide="next"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <h2 class="m-0">Shipping Information</h2>
+        <hr />
+        <div class="row row-cols-1 row-cols-md-2">
+          {% for field in form %}
+          <div class="col">
+            <div class="mb-3">
+              <label for="{{ field.auto_id }}" class="form-label fw-bold"
+                >{{ field.label }}</label
+              >
+              {{ field }} {% for error in field.errors %}
+              <div class="form-text text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+              <button
+                class="btn btn-primary my-3 px-3 mb-5"
+                type="button"
+                data-bs-target="#OrderFormCarousel"
+                data-bs-slide="next"
+              >
+                Continue
+              </button>
+          </div>
+      </div>
+
+      <div class="carousel-item">
+        <h2 class="m-0">Payment Information</h2>
+        <hr />
+
+        <p class="my-2 fs-2">
+            Total Amount to Pay: EGP <strong class="total-cost"></strong>
+          </p>
+          <hr />
+
+        <div class="d-flex justify-content-center align-items-center flex-column">
+          <img
+            src="/media/dashboard/settings/instapay.jpg"
+            alt="Payment Methods"
+            class="img-fluid w-75"
+            style="max-width: 300px"
+          />
+          <h3 class="text-center mt-3">Pay with Instapay</h3>
+          <p class="text-center p-0">
+            Complete the payment with Instapay to get your order confirmed
+          </p>
+        </div>
+        <hr />
+
+
+        <h3 class="mb-3">Proof of Payment</h3>
+        <div class="row row-cols-1 row-cols-md-2">
+          <div class="col">
+            <div class="mb-3">
+              <label for="instapay_account" class="form-label fw-bold">
+                Your instapay account or phone number
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="instapay_account"
+                name="instapay_account"
+                required
+              />
+              <div class="form-text">
+                Enter your instapay account or phone number
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="mb-3">
+              <label for="instapay_image" class="form-label fw-bold">
+                Payment Screenshot
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                id="instapay_image"
+                name="instapay_image"
+                required
+              />
+              <div class="form-text">
+                Upload a screenshot of the payment receipt
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-block my-4 px-5">
+            Send Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  window.onload = () => {
+      const shipping_cost = {{ shipping_cost }};
+
+      function calculate_subtotal() {
+          const products = document.querySelectorAll('.product');
+          let subtotal = 0;
+          products.forEach((product) => {
+              const price = parseInt(product.dataset.price || 0);
+              const quantity = product.querySelector('.quantity').value;
+              subtotal += price * quantity;
+          });
+          const total = subtotal + shipping_cost;
+          document.querySelector('.subtotal').textContent = subtotal;
+          document.querySelectorAll('.total-cost').forEach(element => element.textContent = total)
+      }
+
+      calculate_subtotal();
+
+      document.querySelectorAll('.quantity').forEach((quantity) => {
+          quantity.addEventListener('change', (e) => {
+              const product = e.target.closest('.product');
+              const price = parseInt(product.dataset.price || 0);
+              const quantity = e.target.value;
+              const total = price * quantity;
+              product.querySelector('p.price').textContent = `EGP ${total}`;
+              calculate_subtotal();
+          });
+      });
+  }
+</script>
