@@ -1,4 +1,6 @@
+from datetime import datetime, timezone
 from typing import Any
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView, FormView
 
@@ -8,9 +10,6 @@ from accessories.models import Category, Product, ProductImage
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
-
-class OrdersView(TemplateView):
-    template_name = 'dashboard/orders.html'
 
 class CategoriesView(ListView):
     template_name = 'dashboard/category/categories.html'
@@ -90,11 +89,47 @@ class SettingsView(FormView):
     template_name = 'dashboard/settings.html'
     form_class = SettingsForm
 
+class OrdersView(CategoriesView):
+    template_name = 'dashboard/orders/orders.html'
+    model = Order
+    context_object_name = "orders"
+    
+    def get_queryset(self):
+        queryset = self.model.objects.exclude(status__in=['Delivered', 'Cancelled'])
+
+        query = self.request.GET.get('query')
+        if query:
+            return queryset.filter(name__icontains=query)
+        else:
+            return queryset
+
 
 def confirm_order(request, order_id):
     order = Order.objects.get(id=order_id)
-    for product in order.products:
-        product.stock -= order.quanitites[str(product.id)]
-        product.save()
+    order.status = "Confirmed"
+    order.save()
+    return redirect('admin_orders')
 
-    return order
+def reject_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = "Cancelled"
+    order.save()
+
+    for entry in order.entries.all():
+        entry.product.stock += entry.quantity
+        entry.product.save()
+
+    return redirect('admin_orders')
+
+def deliver_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = "In Delivery"
+    order.save()
+    return redirect('admin_orders')
+
+def complete_order(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order.status = "Delivered"
+    order.delivered_at = datetime.now(timezone.utc)
+    order.save()
+    return redirect('admin_orders')
