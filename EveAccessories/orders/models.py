@@ -20,16 +20,27 @@ class Order(models.Model):
     status = models.CharField(choices=orders_states, max_length=25, default="Not Paid")
 
     user = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="orders")
-    order_total = models.DecimalField(max_digits=10, decimal_places=2)
+    delivered_at = models.DateTimeField(null=True, blank=True)
 
-    instapay_account = models.CharField(max_length=255, default="", blank=True)
+    instapay_account = models.CharField(max_length=255)
     instapay_image = models.ImageField(upload_to="orders/images/%Y/%m/%d/%h/%M/%S/")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def shipping_fees(self):
+        if self.governorate == "Cairo":
+            return 30
+        else:
+            return 50
+
+    @property
+    def order_total(self):
+        return self.shipping_fees + sum([entry.price for entry in self.entries.all()])
+
     def __str__(self):
-        return self.name
+        return f"Order id: {self.id} - {self.name} - {self.status} - {self.created_at} - {self.order_total}"
 
 class OrderEntry(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="entries")
@@ -38,7 +49,7 @@ class OrderEntry(models.Model):
     price = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.order.name} - {self.product.name} - {self.quantity}"
+        return f"{self.order} - {self.product.title} - {self.quantity}"
 
 class OrderLog(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="logs")
@@ -46,4 +57,4 @@ class OrderLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.order.name} - {self.content}"
+        return f"{self.order} - {self.content}"

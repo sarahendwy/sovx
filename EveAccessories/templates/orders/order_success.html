@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card text-center">
+        <div class="card-header bg-success text-white">
+          <h4>Order Placed Successfully</h4>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            Thank you for your order! Your order has been placed successfully
+            and is currently pending confirmation.
+          </p>
+          <p class="card-text">
+            You can track your order status from your
+            <a href="{% url 'profile_page' %}" class="text-decoration-none"
+              >Profile Page</a
+            >.
+          </p>
+          <p class="card-text">
+            We will send you an email once your order is confirmed. Stay tuned!
+          </p>
+        </div>
+        <div class="card-footer">
+          <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

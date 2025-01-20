@@ -78,6 +78,13 @@ def resend_activation_mail(request, uname):
 
 class ShowProfile(generic.TemplateView):
     template_name = 'auth/profile.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_orders'] = self.request.user.orders.exclude(status__in=['Delivered', 'Cancelled'])
+        context['previous_orders'] = self.request.user.orders.filter(status__in=['Delivered', 'Cancelled'])
+        return context
+    
 
 
 def logout_view(request):

@@ -1,12 +1,12 @@
 from typing import Any
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect, JsonResponse
-from .models import Order, OrderEntry
+from .models import Order, OrderEntry, OrderLog
 from accessories.models import Product
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import OrderForm
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 
 def remove_from_cart(request, product_id):
@@ -55,11 +55,13 @@ class CartView(TemplateView):
         context['products'] = products
         return context
 
+class OrderSuccess(TemplateView):
+    template_name = 'orders/order_success.html'
 
 class CreateOrder(LoginRequiredMixin, CreateView):
-    template_name = 'create_order.html'
+    template_name = 'orders/create_order.html'
     form_class = OrderForm
-    # success_url = reverse_lazy("payment")
+    success_url = "orders/success"
 
     def get_shipping_fees(self, governorate: str = "") -> int:
         return 50
@@ -72,7 +74,7 @@ class CreateOrder(LoginRequiredMixin, CreateView):
 
         context['products'] = products
         context['stocks'] = stocks
-        context['shipping_cost'] = self.get_shipping_fees()
+        context['shipping_cost'] = self.get_shipping_fees(self.request.user.governorate)
         
         return context
     
@@ -94,22 +96,25 @@ class CreateOrder(LoginRequiredMixin, CreateView):
         user = self.request.user
         form.instance.user = user
         form.instance.status = "Pending Confirmation"
-        shipping_fees = self.get_shipping_fees()
-        form.instance.order_total = shipping_fees + sum(
-            product.discounted_price * form.cleaned_data['quanitites'][str(product.id)]
-            for product in form.instance.products
-        )
+        form.instance.instapay_account = form.data.get("instapay_account")
+
+        instapay_image = form.files.get('instapay_image')
+        if instapay_image:
+            form.instance.instapay_image = instapay_image
 
         order = form.save()
 
-        for field_name in form["data"]:
-            if not field_name.startswith("quantity_"):
+        for field_name in form.data:
+            if not field_name.startswith("quantity"):
                 continue
-            
-            quanity = int(form["data"][field_name])
-            product_id = field_name.split("-")[-1]
-            product = Product.objects.get(id=product_id)
 
+            quanity = int(form.data[field_name])
+            
+            product_id = int(field_name.split("-")[-1])
+            product = Product.objects.get(id=product_id)
+            if quanity > product.stock:
+                return self.form_invalid(form)
+            
             product.stock -= quanity
             product.save()
 
@@ -119,10 +124,20 @@ class CreateOrder(LoginRequiredMixin, CreateView):
                 quantity=quanity,
                 price=product.discounted_price * quanity
             )
+            order.order_total += entry.price
             entry.save()
 
-        return HttpResponseRedirect(self.get_success_url())
+        OrderLog.objects.create(
+            order=order,
+            content="Order Created"
+        )
+
+        order.save()
+        return redirect("orders/success")
 
 
 
+class OrderDetails(DetailView):
+    model = Order
+    template_name = 'orders/order_details.html'
     

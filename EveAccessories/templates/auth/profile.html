@@ -37,15 +37,17 @@
                             <th>Date</th>
                             <th>Status</th>
                             <th>Total Price</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for order in current_orders %}
                             <tr>
                                 <td>{{ order.id }}</td>
-                                <td>{{ order.date }}</td>
+                                <td>{{ order.created_at }}</td>
                                 <td>{{ order.status }}</td>
-                                <td>{{ order.total_price }}</td>
+                                <td>EGP {{ order.order_total }}</td>
+                                <td class="text-center"><a href="{% url 'order_details' order.id %}">View Details</a></td>
                             </tr>
                         {% empty %}
                             <tr>
@@ -67,18 +69,20 @@
                         <thead>
                         <tr>
                             <th>Order ID</th>
-                            <th>Date</th>
+                            <th>Delivered On</th>
                             <th>Status</th>
                             <th>Total Price</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for order in previous_orders %}
                             <tr>
                                 <td>{{ order.id }}</td>
-                                <td>{{ order.date }}</td>
+                                <td>{{ order.delivered_at }}</td>
                                 <td>{{ order.status }}</td>
-                                <td>{{ order.total_price }}</td>
+                                <td>EGP {{ order.order_total }}</td>
+                                <td class="text-center"><a href="{% url 'order_details' order.id %}">View Details</a></td>
                             </tr>
                         {% empty %}
                             <tr>
