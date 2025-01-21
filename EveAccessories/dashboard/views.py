@@ -89,20 +89,24 @@ class SettingsView(FormView):
     template_name = 'dashboard/settings.html'
     form_class = SettingsForm
 
-class OrdersView(CategoriesView):
+class OrdersView(TemplateView):
     template_name = 'dashboard/orders/orders.html'
-    model = Order
-    context_object_name = "orders"
-    
-    def get_queryset(self):
-        queryset = self.model.objects.exclude(status__in=['Delivered', 'Cancelled'])
 
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
         query = self.request.GET.get('query')
         if query:
-            return queryset.filter(name__icontains=query)
+            all_orders = Order.objects.filter(name__icontains=query)
         else:
-            return queryset
+            all_orders = Order.objects.all()
 
+        context["query"] = query or "Search categories..."
+        context["pending_orders"] = all_orders.filter(status="Pending Confirmation")[:10]
+        context["confirmed_orders"] = all_orders.filter(status="Confirmed")[:10]
+        context["in_delivery_orders"] = all_orders.filter(status="In Delivery")[:10]
+
+        return context
+    
 
 def confirm_order(request, order_id):
     order = Order.objects.get(id=order_id)

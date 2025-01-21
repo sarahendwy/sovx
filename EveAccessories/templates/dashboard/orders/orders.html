@@ -18,75 +18,19 @@
   </div>
 </form>
 
-<!-- Products Table -->
-<div class="overflow-x-scroll">
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Order ID</th>
-      <th scope="col">Customer</th>
-      <th scope="col">Price</th>
-      <th scope="col">Status</th>
-      <th scope="col">Created at</th>
-      <th scope="col">Actions</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for order in orders %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ order.name }}</td>
-      <td>{{ order.id }}</td>
-      <td>{{ order.order_total }}</td>
-      <td>{{ order.status }}</td>
-      <td>{{ order.created_at|date }}</td>
-      <td>
-        {% if order.status == "Pending Confirmation" %}
-        <a
-          href="{% url 'confirm_order' order.id %}"
-          class="btn btn-sm btn-primary"> 
-          Confirm Payment
-        </a>
-        <a
-          href="{% url 'cancel_order' order.id %}"
-          class="btn btn-sm btn-outline-primary"> 
-          Cancel Order
-        </a>
-        {% elif order.status == "Confirmed" %}
-        <a
-          href="{% url 'deliver_order' order.id %}"
-          class="btn btn-sm btn-primary"> 
-          Start Delivery
-        </a>
-        <a
-          href="{% url 'cancel_order' order.id %}"
-          class="btn btn-sm btn-outline-primary"> 
-          Cancel Order
-        </a>
-        {% elif order.status == "In Delivery" %}
-        <a
-          href="{% url 'complete_order' order.id %}"
-          class="btn btn-sm btn-primary"> 
-          Delivered
-        </a>
-        <a
-          href="{% url 'cancel_order' order.id %}"
-          class="btn btn-sm btn-outline-primary"> 
-          Cancel Order
-        </a>
-        {% endif %}
-      </td>
-      <td class="text-center"><a href="{% url 'order_details' order.id %}">View Details</a></td>
+{% if pending_orders %}
+<h3 class="my-4">Pending Orders</h3>
+{% include "dashboard/orders/orders_table.html" with orders=pending_orders %}
+{% endif %}
 
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6" class="text-center">No products found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
+{% if confirmed_orders %}
+<h3 class="my-4">Confirmed Orders</h3>
+{% include "dashboard/orders/orders_table.html" with orders=confirmed_orders %}
+{% endif %}
+
+{% if in_delivery_orders %}
+<h3 class="my-4">In Delivery Orders</h3>
+{% include "dashboard/orders/orders_table.html" with orders=in_delivery_orders %}
+{% endif %}
+
 {% endblock admin_content %}
