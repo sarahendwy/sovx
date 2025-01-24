@@ -16,8 +16,9 @@ class Login(LoginView):
     redirect_authenticated_user = True
 
     def get_default_redirect_url(self):
-        if self.get_success_url():
-            return self.get_success_url()
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return next_url
         
         if self.request.user.is_staff or self.request.user.is_superuser:
             return reverse('admin_dashboard')
