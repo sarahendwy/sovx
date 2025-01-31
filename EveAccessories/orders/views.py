@@ -1,6 +1,6 @@
 from typing import Any
 from django.shortcuts import redirect, render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from .models import Order, OrderEntry, OrderLog
 from accessories.models import Product
 from django.views.generic import CreateView, TemplateView, DetailView
@@ -64,7 +64,7 @@ class CreateOrder(LoginRequiredMixin, CreateView):
     success_url = "orders/success"
 
     def get_shipping_fees(self, governorate: str = "") -> int:
-        return 50
+        return 70
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -103,7 +103,8 @@ class CreateOrder(LoginRequiredMixin, CreateView):
             form.instance.instapay_image = instapay_image
 
         order = form.save()
-
+        order.order_total = order.shipping_fees
+        
         for field_name in form.data:
             if not field_name.startswith("quantity"):
                 continue

@@ -10,7 +10,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        exclude = ['user', 'status', 'order_total', 'created_at', 'updated_at', 'products', 'quanitites', 'instapay_account', 'instapay_image']
+        exclude = ['user', 'status', 'order_total', 'created_at', 'updated_at', 'products', 'quanitites', 'instapay_account', 'instapay_image', 'delivered_at']
 
     def clean_quanitites(self):
         quanitites = self.cleaned_data.get('quanitites')

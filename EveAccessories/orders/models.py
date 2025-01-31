@@ -27,16 +27,14 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    order_total = models.PositiveIntegerField(default=0)
+
     @property
     def shipping_fees(self):
         if self.governorate == "Cairo":
-            return 30
+            return 70
         else:
-            return 50
-
-    @property
-    def order_total(self):
-        return self.shipping_fees + sum([entry.price for entry in self.entries.all()])
+            return 70
 
     def __str__(self):
         return f"Order id: {self.id} - {self.name}"

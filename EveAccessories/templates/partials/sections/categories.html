@@ -22,26 +22,13 @@
         </div>
         <div class="d-block d-md-none">
             <div class="row">
-                <a href="{% url 'products' %}?category=rings" class="text-decoration-none col-6 col-md-3"
-                   style="margin-bottom: 20px;">
-                    <img src="/media/images/category.jpg" alt="Rings" class="img-fluid rounded">
-                    <h5 class="cormorant-garamond-bold mt-2">Rings</h5>
-                </a>
-                <a href="{% url 'products' %}?category=necklace" class="text-decoration-none col-6 col-md-3"
-                   style="margin-bottom: 20px;">
-                    <img src="/media/images/category.jpg" alt="Necklace" class="img-fluid rounded">
-                    <h5 class="cormorant-garamond-bold mt-2">Necklace</h5>
-                </a>
-                <a href="{% url 'products' %}?category=earrings" class="text-decoration-none col-6 col-md-3"
-                   style="margin-bottom: 20px;">
-                    <img src="/media/images/category.jpg" alt="Earrings" class="img-fluid rounded">
-                    <h5 class="cormorant-garamond-bold mt-2">Earrings</h5>
-                </a>
-                <a href="{% url 'products' %}?category=bracelet" class="text-decoration-none col-6 col-md-3"
-                   style="margin-bottom: 20px;">
-                    <img src="/media/images/category.jpg" alt="Bracelet" class="img-fluid rounded">
-                    <h5 class="cormorant-garamond-bold mt-2">Bracelet</h5>
-                </a>
+                {% for category in categories %}
+                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="text-decoration-none col-6 col-md-3"
+                           style="margin-bottom: 20px;">
+                            <img src="{{category.image.url}}" alt="{{category.name|lower}}" class="img-fluid rounded">
+                            <h5 class="cormorant-garamond-bold mt-2">{{category.name|title}}</h5>
+                        </a>
+                {% endfor %}
             </div>
         </div>
 

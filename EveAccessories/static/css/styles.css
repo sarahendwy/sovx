@@ -39,10 +39,10 @@ footer .social-icons svg {
 }
 
 img.hero-image {
-  max-height: 450px;
+  max-height: 600px;
   width: 100%;
   object-fit: cover;
-  object-position: top;
+  object-position: center;
 }
 
 .carousel-control-next,
