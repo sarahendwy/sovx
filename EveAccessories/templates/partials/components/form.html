@@ -1,8 +1,7 @@
+<h2>{{form_title}}</h2>
+<hr>
 <form class="{{form_class}}" method="post" enctype="multipart/form-data">
-    <h2>{{form_title}}</h2>
-    <hr>
     {% csrf_token %}
-
     {% if form.non_field_errors %}
         <div class="alert alert-danger p-3 mb-2" role="alert">
             {{ form.non_field_errors }}

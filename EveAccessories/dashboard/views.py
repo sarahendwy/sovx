@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView, CreateView, DeleteView,
 
 from orders.models import Order
 from .forms import CategoryForm, ProductForm, SettingsForm
+from .models import Setting
 from accessories.models import Category, Product, ProductImage
 
 class DashboardView(TemplateView):
@@ -85,9 +86,13 @@ class DeleteProductView(DeleteView):
     success_url = reverse_lazy('admin_products')
     template_name = "dashboard/confirm_delete.html"
 
-class SettingsView(FormView):
+class SettingsView(UpdateView):
     template_name = 'dashboard/settings.html'
     form_class = SettingsForm
+    success_url = reverse_lazy('admin_settings')
+
+    def get_object(self, queryset=None):
+        return Setting.objects.first()
 
 class OrdersView(TemplateView):
     template_name = 'dashboard/orders/orders.html'

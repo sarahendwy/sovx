@@ -7,6 +7,7 @@ from django.views.generic import CreateView, TemplateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import OrderForm
 from django.urls import reverse
+from dashboard.models import Setting
 
 
 def remove_from_cart(request, product_id):
@@ -61,10 +62,10 @@ class OrderSuccess(TemplateView):
 class CreateOrder(LoginRequiredMixin, CreateView):
     template_name = 'orders/create_order.html'
     form_class = OrderForm
-    success_url = "orders/success"
+    success_url = "/order/success"
 
     def get_shipping_fees(self, governorate: str = "") -> int:
-        return 70
+        return getattr(Setting.objects.first(), f"{governorate.lower()}_shipping")
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -72,6 +73,7 @@ class CreateOrder(LoginRequiredMixin, CreateView):
         products = Product.objects.filter(id__in=self.request.user.products_in_cart)
         stocks = {product.id: product.stock for product in products}
 
+        context['instapay_image'] = Setting.objects.first().payment_image.url
         context['products'] = products
         context['stocks'] = stocks
         context['shipping_cost'] = self.get_shipping_fees(self.request.user.governorate)

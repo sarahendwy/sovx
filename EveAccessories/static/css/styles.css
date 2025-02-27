@@ -168,3 +168,18 @@ img.hero-image {
     border-radius: 12px;
   }
 }
+
+form.site-settings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+}
+
+form.site-settings > div:nth-of-type(1-2) {
+    min-width: 45%;
+}
+
+form.site-settings > div:not:nth-of-type(3-) {
+    min-width: 30%;
+}

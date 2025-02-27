@@ -3,12 +3,18 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from .models import Category, Product
+from dashboard.models import Setting
 
 
 def index(request):
     top_categories = Category.objects.all()[:4]
     new_products = Product.objects.order_by("updated_at")[:12]
-    return render(request, 'index.html', context={"categories": top_categories, "products": new_products})
+    landing_image = Setting.objects.first().hero_image.url
+    return render(request, 'index.html', context={
+        "categories": top_categories,
+        "products": new_products,
+        "landing_image": landing_image
+    })
 
 
 class CategoriesView(ListView):
