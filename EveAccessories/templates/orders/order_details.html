@@ -23,6 +23,7 @@
             {% if order.status == "Delivered" %}
             <li class="list-group-item"><strong>Delivered At:</strong> {{ order.delivered_at|default:"N/A" }}</li>
             {% endif %}
+            <li class="list-group-item"><strong>Payment Method:</strong> {{ order.payment_method }}</li>
             <li class="list-group-item"><strong>Payment Account:</strong> {{ order.payment_account }}</li>
             <li class="list-group-item">
                 <strong>Payment Proof:</strong><br>
