@@ -9,6 +9,11 @@ orders_states = [
     ('Delivered', 'Delivered')
 ]
 
+payment_methods = [
+    ('Cash on Delivery', 'Cash on Delivery'),
+    ('Wallet', 'Wallet'),
+]
+
 class Order(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
@@ -21,6 +26,7 @@ class Order(models.Model):
     user = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="orders", null=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
 
+    payment_method = models.CharField(choices=payment_methods, max_length=25, default="Cash on Delivery")
     payment_account = models.CharField(max_length=255, null=True, blank=True)
     payment_proof = models.ImageField(upload_to="orders/images/%Y/%m/%d/%h/%M/%S/", null=True, blank=True)
 

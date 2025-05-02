@@ -99,8 +99,19 @@ class CreateOrder(CreateView):
             form.instance.payment_proof = payment_proof
 
         order = form.save()
+        order.payment_method = form.data.get("payment_method")
         order.order_total = order.shipping_fees
-        
+        variants = defaultdict(lambda: 1)
+        if self.request.user.is_authenticated:
+            cart = self.request.user.cart or ""
+            self.request.user.cart = ""
+        else:
+            cart = self.request.session.get('cart') or ""
+            self.request.session['cart'] = ""
+
+        cart = set(cart.strip("-").split("-"))
+        for pr in cart:
+            variants[int(pr.split("#")[0])] = pr.split("#")[1]
         for field_name in form.data:
             if not field_name.startswith("quantity"):
                 continue
@@ -119,9 +130,13 @@ class CreateOrder(CreateView):
                 order=order,
                 product=product,
                 quantity=quanity,
+                variant=variants.get(product.id, 1),
                 price=product.discounted_price * quanity
             )
             order.order_total += entry.price
+            if order.payment_method == "Cash on Delivery":
+                order.status = "Confirmed"
+
             entry.save()
 
         OrderLog.objects.create(
