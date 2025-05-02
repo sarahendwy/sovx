@@ -9,12 +9,30 @@
       class="product-image d-flex justify-content-center"
       style="flex-basis: 50%"
     >
-      <img
-        src="{{product.thumbnail}}"
-        alt="Eyeshadow Palette with Mirror"
-        class="img-fluid"
-        style="max-width: min(60vw, 100%); height: auto; border: 1px solid #ddd"
-      />
+      <div id="carouselExampleAutoplaying" class="carousel slide flex-grow-1" data-bs-ride="carousel">
+        <div class="carousel-inner w-100 h-100">
+          {% for product_image in product.images.all %}
+          <div class="carousel-item  w-100 h-100 {% if forloop.first %}active{% endif %}">
+            <div class="d-flex justify-content-center align-items-center w-100 h-100">
+            <img
+              src="{{product_image.image.url}}"
+              alt="Product Thumbnail"
+              class="img-fluid"
+              style="max-width: min(60vw, 100%); height: auto; border: 1px solid #ddd"
+            /></div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev justify-content-start" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next justify-content-end" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
     </div>
 
     <!-- Product Details Section -->
@@ -85,6 +103,16 @@
       <form method="post">
         {% csrf_token %}
         <input type="hidden" name="operation" value="add" />
+        {% if product.variants > 1 %}
+          <label for="product_variant" class="form-label fw-bold">
+            Item Number
+          </label>
+          <input value="1" required
+                 class="form-control mb-2" id="product_variant"
+                 type="number" name="variant"
+                 min="1" max="{{product.variants}}"/>
+
+        {% endif %}
         <button
           class="btn btn-primary btn-lg mt-auto"
           type="submit"

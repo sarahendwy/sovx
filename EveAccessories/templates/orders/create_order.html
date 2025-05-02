@@ -4,13 +4,7 @@
 {% block content %}
 <div class="py-2 py-md-4">
     <div class="container">
-        {% if user.is_authenticated %}
-            {% include "partials/components/order_form.html"%}
-        {% else %}
-        <div class="alert alert-warning" role="alert">
-            You need to <a href="{% url 'login' %}?next={% url 'create_order' %}" class="alert-link">login</a> to complete your order.
-        </div>
-        {% endif %}
+        {% include "partials/components/order_form.html"%}
         <div class="row justify-content-center gap-1">
         </div>
 

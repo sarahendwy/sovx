@@ -18,11 +18,11 @@ class Order(models.Model):
     address = models.CharField(max_length=500)
     status = models.CharField(choices=orders_states, max_length=25, default="Pending Confirmation")
 
-    user = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="orders")
+    user = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="orders", null=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
 
-    instapay_account = models.CharField(max_length=255)
-    instapay_image = models.ImageField(upload_to="orders/images/%Y/%m/%d/%h/%M/%S/")
+    payment_account = models.CharField(max_length=255, null=True, blank=True)
+    payment_proof = models.ImageField(upload_to="orders/images/%Y/%m/%d/%h/%M/%S/", null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,6 +44,7 @@ class OrderEntry(models.Model):
     product = models.ForeignKey("accessories.Product", on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
+    variant = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"{self.order} - {self.product.title} - {self.quantity}"

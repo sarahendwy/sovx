@@ -23,10 +23,10 @@
             {% if order.status == "Delivered" %}
             <li class="list-group-item"><strong>Delivered At:</strong> {{ order.delivered_at|default:"N/A" }}</li>
             {% endif %}
-            <li class="list-group-item"><strong>InstaPay Account:</strong> {{ order.instapay_account }}</li>
+            <li class="list-group-item"><strong>Payment Account:</strong> {{ order.payment_account }}</li>
             <li class="list-group-item">
                 <strong>Payment Proof:</strong><br>
-                {% if order.instapay_image %}
+                {% if order.payment_proof %}
                     Attached Payment Proof &#10004;
                 {% else %}
                     No Payment Proof Attached &#10006;

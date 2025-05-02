@@ -71,15 +71,3 @@ class User(AbstractUser):
     def past_orders(self):
         pass
 
-    @property
-    def products_in_cart(self) -> list[int]:
-        cart = self.cart.strip("-").split("-")
-        if "" in cart:
-            cart.remove("")
-
-        if cart:
-            product_ids = list(map(int, cart))
-        else:
-            product_ids = []
-        return product_ids
-    

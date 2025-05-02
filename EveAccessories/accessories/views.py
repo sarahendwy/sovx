@@ -58,12 +58,14 @@ class ProductView(DetailView):
             cart = self.request.session.get('cart') or ""
 
         cart = set(cart.split("-"))
+        cart_products = [pr.split("#")[0] for pr in cart]
         product_id = str(self.get_object().id)
-        context["in_cart"] = product_id in cart
+        context["in_cart"] = product_id in cart_products
         return context
     
     def post(self, request, *args, **kwargs):
         operation = request.POST.get("operation", "remove")
+        variant = int(request.POST.get("product_variant", 1))
         product_id = str(self.get_object().id)
         if request.user.is_authenticated:
             cart = request.user.cart or ""
@@ -71,13 +73,15 @@ class ProductView(DetailView):
             cart = self.request.session.get('cart') or ""
 
         cart = set(cart.split("-"))
-
+        cart_products = [pr.split("#")[0] for pr in cart]
         if operation == "add":
-            if product_id not in cart:
-                    cart.add(str(product_id))
+            if product_id not in cart_products:
+                    cart.add(str(product_id) + "#" + str(variant))
         elif operation == "remove":
-            if product_id in cart:
-                cart.remove(str(product_id))
+            for pr in list(cart):
+                pr_id = pr.split("#")[0]
+                if product_id == pr_id:
+                    cart.remove(pr)
 
         cart = "-".join(list(cart))
         
