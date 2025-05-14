@@ -26,7 +26,7 @@
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://mobile-db-do-user-15918528-0.j.db.ondigitalocean.com:25061/mobile</jdbc-url>
+      <jdbc-url>jdbc:postgresql://mobile-db-do-user-15918528-0.j.db.ondigitalocean.com:25060/mobile</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="RH Nodiet Production" uuid="ee17fff8-cc54-4293-bd6b-a336d5bd55ba">
