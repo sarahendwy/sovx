@@ -106,9 +106,9 @@ class OrdersView(TemplateView):
             all_orders = Order.objects.all()
 
         context["query"] = query or "Search categories..."
-        context["pending_orders"] = all_orders.filter(status="Pending Confirmation")[:10]
-        context["confirmed_orders"] = all_orders.filter(status="Confirmed")[:10]
-        context["in_delivery_orders"] = all_orders.filter(status="In Delivery")[:10]
+        context["pending_orders"] = all_orders.filter(status="Pending Confirmation")[:50]
+        context["confirmed_orders"] = all_orders.filter(status="Confirmed")[:50]
+        context["in_delivery_orders"] = all_orders.filter(status="In Delivery")[:50]
 
         return context
     

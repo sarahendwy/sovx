@@ -13,7 +13,7 @@
 18594||16423|C|G
 18594||-9223372036854775808|T|G
 18594||16423|T|G</Grants>
-      <IntrospectionStateNumber>10697311</IntrospectionStateNumber>
+      <IntrospectionStateNumber>11212690</IntrospectionStateNumber>
       <ServerVersion>16.8</ServerVersion>
       <StartupTime>1746589955</StartupTime>
       <TimeZones>true ACDT
@@ -1420,7 +1420,7 @@ true posixrules
 14219||10|C|G
 14219||-9223372036854775808|U|G
 14219||10|U|G</Grants>
-      <IntrospectionStateNumber>10697311</IntrospectionStateNumber>
+      <IntrospectionStateNumber>11212690</IntrospectionStateNumber>
       <ObjectId>18594</ObjectId>
       <OwnerName>doadmin</OwnerName>
     </database>
@@ -6675,8 +6675,8 @@ unpackaged</AvailableUpdates>
 36781||16423|D|G
 36781||16423|w|G
 36781||18039|w|G</Grants>
-      <IntrospectionStateNumber>10697311</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2025-05-13.08:01:57</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>11212690</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2025-05-21.16:47:39</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>786008</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
@@ -16927,7 +16927,7 @@ unpackaged</AvailableUpdates>
     </table>
     <table id="1174" parent="300" name="products">
       <ObjectId>18734</ObjectId>
-      <StateNumber>10338020</StateNumber>
+      <StateNumber>11212357</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>doadmin</OwnerName>
     </table>
@@ -31651,14 +31651,33 @@ unpackaged</AvailableUpdates>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <index id="4273" parent="1174" name="products_id_uindex">
+    <column id="4273" parent="1174" name="tags">
+      <Position>54</Position>
+      <StateNumber>11071760</StateNumber>
+      <StoredType>uuid[]|0s</StoredType>
+      <TypeId>2951</TypeId>
+    </column>
+    <column id="4274" parent="1174" name="sub_category">
+      <Position>55</Position>
+      <StateNumber>11071760</StateNumber>
+      <StoredType>uuid[]|0s</StoredType>
+      <TypeId>2951</TypeId>
+    </column>
+    <column id="4275" parent="1174" name="total_ordered_quantity">
+      <DefaultExpression>0</DefaultExpression>
+      <Position>56</Position>
+      <StateNumber>11212688</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <index id="4276" parent="1174" name="products_id_uindex">
       <ColNames>id</ColNames>
       <ObjectId>18953</ObjectId>
       <StateNumber>785937</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4274" parent="1174" name="products_pk">
+    <index id="4277" parent="1174" name="products_pk">
       <ColNames>id</ColNames>
       <ObjectId>18941</ObjectId>
       <Primary>1</Primary>
@@ -31666,13 +31685,13 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="4275" parent="1174" name="products_pk">
+    <key id="4278" parent="1174" name="products_pk">
       <ObjectId>18942</ObjectId>
       <Primary>1</Primary>
       <StateNumber>785929</StateNumber>
       <UnderlyingIndexId>18941</UnderlyingIndexId>
     </key>
-    <column id="4276" parent="1175" name="id">
+    <column id="4279" parent="1175" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -31680,148 +31699,148 @@ unpackaged</AvailableUpdates>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4277" parent="1175" name="customer_id">
+    <column id="4280" parent="1175" name="customer_id">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4278" parent="1175" name="order_id">
+    <column id="4281" parent="1175" name="order_id">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4279" parent="1175" name="name">
+    <column id="4282" parent="1175" name="name">
       <Position>4</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4280" parent="1175" name="email">
+    <column id="4283" parent="1175" name="email">
       <Position>5</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4281" parent="1175" name="mobile">
+    <column id="4284" parent="1175" name="mobile">
       <Position>6</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4282" parent="1175" name="description">
+    <column id="4285" parent="1175" name="description">
       <Position>7</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4283" parent="1175" name="payflowly_refund_id">
+    <column id="4286" parent="1175" name="payflowly_refund_id">
       <Position>8</Position>
       <StateNumber>1622039</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4284" parent="1175" name="status">
+    <column id="4287" parent="1175" name="status">
       <Position>9</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4285" parent="1175" name="amount">
+    <column id="4288" parent="1175" name="amount">
       <NotNull>1</NotNull>
       <Position>10</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>double precision|0s</StoredType>
       <TypeId>701</TypeId>
     </column>
-    <column id="4286" parent="1175" name="created_at">
+    <column id="4289" parent="1175" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>11</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4287" parent="1175" name="updated_at">
+    <column id="4290" parent="1175" name="updated_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>12</Position>
       <StateNumber>880569</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4288" parent="1175" name="odoo_picking_refs">
+    <column id="4291" parent="1175" name="odoo_picking_refs">
       <Position>13</Position>
       <StateNumber>9207155</StateNumber>
       <StoredType>character varying[]|0s</StoredType>
       <TypeId>1015</TypeId>
     </column>
-    <column id="4289" parent="1175" name="odoo_credit_note_reference">
+    <column id="4292" parent="1175" name="odoo_credit_note_reference">
       <Position>14</Position>
       <StateNumber>1349118</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4290" parent="1175" name="reason_id">
+    <column id="4293" parent="1175" name="reason_id">
       <Position>15</Position>
       <StateNumber>2185050</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4291" parent="1175" name="is_premium_only">
+    <column id="4294" parent="1175" name="is_premium_only">
       <DefaultExpression>false</DefaultExpression>
       <Position>16</Position>
       <StateNumber>9207154</StateNumber>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="4292" parent="1175" name="is_replaced">
+    <column id="4295" parent="1175" name="is_replaced">
       <DefaultExpression>false</DefaultExpression>
       <Position>18</Position>
       <StateNumber>4755836</StateNumber>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="4293" parent="1175" name="new_warehouse_id">
+    <column id="4296" parent="1175" name="new_warehouse_id">
       <Position>19</Position>
       <StateNumber>4755807</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4294" parent="1175" name="note">
+    <column id="4297" parent="1175" name="note">
       <Position>20</Position>
       <StateNumber>4758354</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4295" parent="1175" name="new_product_id">
+    <column id="4298" parent="1175" name="new_product_id">
       <Position>21</Position>
       <StateNumber>4976045</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4296" parent="1175" name="order_item_id">
+    <column id="4299" parent="1175" name="order_item_id">
       <Position>22</Position>
       <StateNumber>8481138</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <foreign-key id="4297" parent="1175" name="refunds_customers_id_fk">
+    <foreign-key id="4300" parent="1175" name="refunds_customers_id_fk">
       <ColNames>customer_id</ColNames>
       <ObjectId>19273</ObjectId>
       <StateNumber>880569</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18630</RefTableId>
     </foreign-key>
-    <foreign-key id="4298" parent="1175" name="refunds_orders_id_fk">
+    <foreign-key id="4301" parent="1175" name="refunds_orders_id_fk">
       <ColNames>order_id</ColNames>
       <ObjectId>19278</ObjectId>
       <StateNumber>880569</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18695</RefTableId>
     </foreign-key>
-    <foreign-key id="4299" parent="1175" name="refunds_order_item_id_fkey">
+    <foreign-key id="4302" parent="1175" name="refunds_order_item_id_fkey">
       <ColNames>order_item_id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>35798</ObjectId>
@@ -31829,7 +31848,7 @@ unpackaged</AvailableUpdates>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18671</RefTableId>
     </foreign-key>
-    <index id="4300" parent="1175" name="refunds_pk">
+    <index id="4303" parent="1175" name="refunds_pk">
       <ColNames>id</ColNames>
       <ObjectId>19271</ObjectId>
       <Primary>1</Primary>
@@ -31837,62 +31856,62 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4301" parent="1175" name="refunds_customer_id_index">
+    <index id="4304" parent="1175" name="refunds_customer_id_index">
       <ColNames>customer_id</ColNames>
       <ObjectId>30376</ObjectId>
       <StateNumber>9207154</StateNumber>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4302" parent="1175" name="refunds_order_id_index">
+    <index id="4305" parent="1175" name="refunds_order_id_index">
       <ColNames>order_id</ColNames>
       <ObjectId>30377</ObjectId>
       <StateNumber>9207154</StateNumber>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="4303" parent="1175" name="refunds_pk">
+    <key id="4306" parent="1175" name="refunds_pk">
       <ObjectId>19272</ObjectId>
       <Primary>1</Primary>
       <StateNumber>880569</StateNumber>
       <UnderlyingIndexId>19271</UnderlyingIndexId>
     </key>
-    <check id="4304" parent="1176" name="spatial_ref_sys_srid_check">
+    <check id="4307" parent="1176" name="spatial_ref_sys_srid_check">
       <ColNames>srid</ColNames>
       <ObjectId>28928</ObjectId>
       <Predicate>(srid &gt; 0) AND (srid &lt;= 998999)</Predicate>
       <StateNumber>2103729</StateNumber>
     </check>
-    <column id="4305" parent="1176" name="srid">
+    <column id="4308" parent="1176" name="srid">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4306" parent="1176" name="auth_name">
+    <column id="4309" parent="1176" name="auth_name">
       <Position>2</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>varchar(256)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4307" parent="1176" name="auth_srid">
+    <column id="4310" parent="1176" name="auth_srid">
       <Position>3</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4308" parent="1176" name="srtext">
+    <column id="4311" parent="1176" name="srtext">
       <Position>4</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>varchar(2048)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4309" parent="1176" name="proj4text">
+    <column id="4312" parent="1176" name="proj4text">
       <Position>5</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>varchar(2048)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <index id="4310" parent="1176" name="spatial_ref_sys_pkey">
+    <index id="4313" parent="1176" name="spatial_ref_sys_pkey">
       <ColNames>srid</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>28931</ObjectId>
@@ -31901,85 +31920,85 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="4311" parent="1176" name="spatial_ref_sys_pkey">
+    <key id="4314" parent="1176" name="spatial_ref_sys_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>28932</ObjectId>
       <Primary>1</Primary>
       <StateNumber>2103729</StateNumber>
       <UnderlyingIndexId>28931</UnderlyingIndexId>
     </key>
-    <column id="4312" parent="1177" name="id">
+    <column id="4315" parent="1177" name="id">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4313" parent="1177" name="source">
+    <column id="4316" parent="1177" name="source">
       <NotNull>1</NotNull>
       <Position>2</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4314" parent="1177" name="type">
+    <column id="4317" parent="1177" name="type">
       <NotNull>1</NotNull>
       <Position>3</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4315" parent="1177" name="mobile">
+    <column id="4318" parent="1177" name="mobile">
       <Position>4</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4316" parent="1177" name="description">
+    <column id="4319" parent="1177" name="description">
       <Position>5</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4317" parent="1177" name="event_timestamp">
+    <column id="4320" parent="1177" name="event_timestamp">
       <DefaultExpression>now()</DefaultExpression>
       <Position>6</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4318" parent="1177" name="customer_id">
+    <column id="4321" parent="1177" name="customer_id">
       <Position>7</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4319" parent="1177" name="order_id">
+    <column id="4322" parent="1177" name="order_id">
       <Position>8</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4320" parent="1177" name="is_processed">
+    <column id="4323" parent="1177" name="is_processed">
       <DefaultExpression>false</DefaultExpression>
       <Position>9</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="4321" parent="1177" name="name">
+    <column id="4324" parent="1177" name="name">
       <Position>10</Position>
       <StateNumber>785887</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4322" parent="1177" name="product_id">
+    <column id="4325" parent="1177" name="product_id">
       <Position>13</Position>
       <StateNumber>4496691</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <foreign-key id="4323" parent="1177" name="tracking_events_customers_id_fk">
+    <foreign-key id="4326" parent="1177" name="tracking_events_customers_id_fk">
       <ColNames>customer_id</ColNames>
       <ObjectId>19080</ObjectId>
       <OnDelete>set-null</OnDelete>
@@ -31988,7 +32007,7 @@ unpackaged</AvailableUpdates>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18630</RefTableId>
     </foreign-key>
-    <foreign-key id="4324" parent="1177" name="tracking_events_orders_id_fk">
+    <foreign-key id="4327" parent="1177" name="tracking_events_orders_id_fk">
       <ColNames>order_id</ColNames>
       <ObjectId>19085</ObjectId>
       <OnDelete>set-null</OnDelete>
@@ -31997,14 +32016,14 @@ unpackaged</AvailableUpdates>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18695</RefTableId>
     </foreign-key>
-    <foreign-key id="4325" parent="1177" name="tracking_events_product_id_fk">
+    <foreign-key id="4328" parent="1177" name="tracking_events_product_id_fk">
       <ColNames>product_id</ColNames>
       <ObjectId>32970</ObjectId>
       <StateNumber>4496709</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18734</RefTableId>
     </foreign-key>
-    <index id="4326" parent="1177" name="tracking_events_pk">
+    <index id="4329" parent="1177" name="tracking_events_pk">
       <ColNames>id</ColNames>
       <ObjectId>18943</ObjectId>
       <Primary>1</Primary>
@@ -32012,25 +32031,25 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4327" parent="1177" name="tracking_events_customer_id_index">
+    <index id="4330" parent="1177" name="tracking_events_customer_id_index">
       <ColNames>customer_id</ColNames>
       <ObjectId>30378</ObjectId>
       <StateNumber>2558161</StateNumber>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4328" parent="1177" name="tracking_events_order_id_index">
+    <index id="4331" parent="1177" name="tracking_events_order_id_index">
       <ColNames>order_id</ColNames>
       <ObjectId>30379</ObjectId>
       <StateNumber>2558162</StateNumber>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="4329" parent="1177" name="tracking_events_pk">
+    <key id="4332" parent="1177" name="tracking_events_pk">
       <ObjectId>18944</ObjectId>
       <Primary>1</Primary>
       <StateNumber>785930</StateNumber>
       <UnderlyingIndexId>18943</UnderlyingIndexId>
     </key>
-    <column id="4330" parent="1178" name="id">
+    <column id="4333" parent="1178" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -32038,45 +32057,45 @@ unpackaged</AvailableUpdates>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4331" parent="1178" name="key">
+    <column id="4334" parent="1178" name="key">
       <Position>2</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4332" parent="1178" name="element_id">
+    <column id="4335" parent="1178" name="element_id">
       <Position>3</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4333" parent="1178" name="ar">
+    <column id="4336" parent="1178" name="ar">
       <Position>4</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4334" parent="1178" name="en">
+    <column id="4337" parent="1178" name="en">
       <Position>5</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4335" parent="1178" name="created_at">
+    <column id="4338" parent="1178" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>6</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <column id="4336" parent="1178" name="updated_at">
+    <column id="4339" parent="1178" name="updated_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>7</Position>
       <StateNumber>10648164</StateNumber>
       <StoredType>timestamp with time zone|0s</StoredType>
       <TypeId>1184</TypeId>
     </column>
-    <index id="4337" parent="1178" name="translations_pk">
+    <index id="4340" parent="1178" name="translations_pk">
       <ColNames>id</ColNames>
       <ObjectId>36789</ObjectId>
       <Primary>1</Primary>
@@ -32084,39 +32103,39 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="4338" parent="1178" name="translations_pk">
+    <key id="4341" parent="1178" name="translations_pk">
       <ObjectId>36790</ObjectId>
       <Primary>1</Primary>
       <StateNumber>10648164</StateNumber>
       <UnderlyingIndexId>36789</UnderlyingIndexId>
     </key>
-    <column id="4339" parent="1179" name="id">
+    <column id="4342" parent="1179" name="id">
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4340" parent="1179" name="payload">
+    <column id="4343" parent="1179" name="payload">
       <Position>2</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>json|0s</StoredType>
       <TypeId>114</TypeId>
     </column>
-    <column id="4341" parent="1179" name="mobile">
+    <column id="4344" parent="1179" name="mobile">
       <Position>3</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4342" parent="1179" name="retry_count">
+    <column id="4345" parent="1179" name="retry_count">
       <DefaultExpression>0</DefaultExpression>
       <Position>4</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4343" parent="1179" name="is_delivered">
+    <column id="4346" parent="1179" name="is_delivered">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>5</Position>
@@ -32124,47 +32143,47 @@ unpackaged</AvailableUpdates>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="4344" parent="1179" name="last_retry_time">
+    <column id="4347" parent="1179" name="last_retry_time">
       <Position>6</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4345" parent="1179" name="retries_limit">
+    <column id="4348" parent="1179" name="retries_limit">
       <DefaultExpression>3</DefaultExpression>
       <Position>7</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4346" parent="1179" name="retry_interval_seconds">
+    <column id="4349" parent="1179" name="retry_interval_seconds">
       <DefaultExpression>(30 * 60)</DefaultExpression>
       <Position>8</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>integer|0s</StoredType>
       <TypeId>23</TypeId>
     </column>
-    <column id="4347" parent="1179" name="created_at">
+    <column id="4350" parent="1179" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>9</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4348" parent="1179" name="updated_at">
+    <column id="4351" parent="1179" name="updated_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>10</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4349" parent="1179" name="next_retry_time">
+    <column id="4352" parent="1179" name="next_retry_time">
       <Position>11</Position>
       <StateNumber>785888</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <index id="4350" parent="1179" name="undelivered_messages_pk">
+    <index id="4353" parent="1179" name="undelivered_messages_pk">
       <ColNames>id</ColNames>
       <ObjectId>18945</ObjectId>
       <Primary>1</Primary>
@@ -32172,7 +32191,7 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4351" parent="1179" name="undelivered_messages_mobile_index">
+    <index id="4354" parent="1179" name="undelivered_messages_mobile_index">
       <ColNames>mobile</ColNames>
       <ObjectId>30380</ObjectId>
       <StateNumber>2558166</StateNumber>
@@ -32181,13 +32200,13 @@ unpackaged</AvailableUpdates>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="4352" parent="1179" name="undelivered_messages_pk">
+    <key id="4355" parent="1179" name="undelivered_messages_pk">
       <ObjectId>18946</ObjectId>
       <Primary>1</Primary>
       <StateNumber>785931</StateNumber>
       <UnderlyingIndexId>18945</UnderlyingIndexId>
     </key>
-    <column id="4353" parent="1180" name="id">
+    <column id="4356" parent="1180" name="id">
       <DefaultExpression>gen_random_uuid()</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -32195,63 +32214,63 @@ unpackaged</AvailableUpdates>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4354" parent="1180" name="name">
+    <column id="4357" parent="1180" name="name">
       <Position>2</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4355" parent="1180" name="email">
+    <column id="4358" parent="1180" name="email">
       <Position>3</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4356" parent="1180" name="mobile">
+    <column id="4359" parent="1180" name="mobile">
       <Position>4</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4357" parent="1180" name="image">
+    <column id="4360" parent="1180" name="image">
       <Position>5</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4358" parent="1180" name="password">
+    <column id="4361" parent="1180" name="password">
       <Position>6</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4359" parent="1180" name="group">
+    <column id="4362" parent="1180" name="group">
       <Position>7</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>text|0s</StoredType>
       <TypeId>25</TypeId>
     </column>
-    <column id="4360" parent="1180" name="group_id">
+    <column id="4363" parent="1180" name="group_id">
       <Position>8</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>uuid|0s</StoredType>
       <TypeId>2950</TypeId>
     </column>
-    <column id="4361" parent="1180" name="created_at">
+    <column id="4364" parent="1180" name="created_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>9</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4362" parent="1180" name="updated_at">
+    <column id="4365" parent="1180" name="updated_at">
       <DefaultExpression>now()</DefaultExpression>
       <Position>10</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <column id="4363" parent="1180" name="is_active">
+    <column id="4366" parent="1180" name="is_active">
       <DefaultExpression>false</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>11</Position>
@@ -32259,52 +32278,52 @@ unpackaged</AvailableUpdates>
       <StoredType>boolean|0s</StoredType>
       <TypeId>16</TypeId>
     </column>
-    <column id="4364" parent="1180" name="name_ar">
+    <column id="4367" parent="1180" name="name_ar">
       <Position>12</Position>
       <StateNumber>785889</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4365" parent="1180" name="client_id">
+    <column id="4368" parent="1180" name="client_id">
       <Position>13</Position>
       <StateNumber>1494647</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4366" parent="1180" name="mobile_user_token_ios">
+    <column id="4369" parent="1180" name="mobile_user_token_ios">
       <Position>15</Position>
       <StateNumber>5835378</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4367" parent="1180" name="mobile_user_token_android">
+    <column id="4370" parent="1180" name="mobile_user_token_android">
       <Position>16</Position>
       <StateNumber>5835397</StateNumber>
       <StoredType>varchar|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="4368" parent="1180" name="last_active">
+    <column id="4371" parent="1180" name="last_active">
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>19</Position>
       <StateNumber>6497809</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <foreign-key id="4369" parent="1180" name="users_attributes_id_fk">
+    <foreign-key id="4372" parent="1180" name="users_attributes_id_fk">
       <ColNames>group_id</ColNames>
       <ObjectId>19090</ObjectId>
       <StateNumber>785967</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
       <RefTableId>18595</RefTableId>
     </foreign-key>
-    <index id="4370" parent="1180" name="users_id_uindex">
+    <index id="4373" parent="1180" name="users_id_uindex">
       <ColNames>id</ColNames>
       <ObjectId>18954</ObjectId>
       <StateNumber>6417914</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4371" parent="1180" name="users_pk">
+    <index id="4374" parent="1180" name="users_pk">
       <ColNames>id</ColNames>
       <ObjectId>18947</ObjectId>
       <Primary>1</Primary>
@@ -32312,7 +32331,7 @@ unpackaged</AvailableUpdates>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="4372" parent="1180" name="users_mobile_index">
+    <index id="4375" parent="1180" name="users_mobile_index">
       <ColNames>mobile</ColNames>
       <ObjectId>30382</ObjectId>
       <StateNumber>6417914</StateNumber>
@@ -32321,97 +32340,97 @@ unpackaged</AvailableUpdates>
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="4373" parent="1180" name="users_pk">
+    <key id="4376" parent="1180" name="users_pk">
       <ObjectId>18948</ObjectId>
       <Primary>1</Primary>
       <StateNumber>785932</StateNumber>
       <UnderlyingIndexId>18947</UnderlyingIndexId>
     </key>
-    <column id="4374" parent="1181" name="f_table_catalog">
+    <column id="4377" parent="1181" name="f_table_catalog">
       <Position>1</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4375" parent="1181" name="f_table_schema">
+    <column id="4378" parent="1181" name="f_table_schema">
       <Position>2</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4376" parent="1181" name="f_table_name">
+    <column id="4379" parent="1181" name="f_table_name">
       <Position>3</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4377" parent="1181" name="f_geography_column">
+    <column id="4380" parent="1181" name="f_geography_column">
       <Position>4</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4378" parent="1181" name="coord_dimension">
+    <column id="4381" parent="1181" name="coord_dimension">
       <Position>5</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
     </column>
-    <column id="4379" parent="1181" name="srid">
+    <column id="4382" parent="1181" name="srid">
       <Position>6</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
     </column>
-    <column id="4380" parent="1181" name="type">
+    <column id="4383" parent="1181" name="type">
       <Position>7</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>text|0s</StoredType>
     </column>
-    <column id="4381" parent="1182" name="f_table_catalog">
+    <column id="4384" parent="1182" name="f_table_catalog">
       <Position>1</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>varchar(256)|0s</StoredType>
     </column>
-    <column id="4382" parent="1182" name="f_table_schema">
+    <column id="4385" parent="1182" name="f_table_schema">
       <Position>2</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4383" parent="1182" name="f_table_name">
+    <column id="4386" parent="1182" name="f_table_name">
       <Position>3</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4384" parent="1182" name="f_geometry_column">
+    <column id="4387" parent="1182" name="f_geometry_column">
       <Position>4</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>name|0s</StoredType>
     </column>
-    <column id="4385" parent="1182" name="coord_dimension">
+    <column id="4388" parent="1182" name="coord_dimension">
       <Position>5</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
     </column>
-    <column id="4386" parent="1182" name="srid">
+    <column id="4389" parent="1182" name="srid">
       <Position>6</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>integer|0s</StoredType>
     </column>
-    <column id="4387" parent="1182" name="type">
+    <column id="4390" parent="1182" name="type">
       <Position>7</Position>
       <StateNumber>2103729</StateNumber>
       <StoredType>varchar(30)|0s</StoredType>
     </column>
-    <rule id="4388" parent="1182" name="geometry_columns_insert">
+    <rule id="4391" parent="1182" name="geometry_columns_insert">
       <Events>I</Events>
       <ObjectId>29470</ObjectId>
       <SourceTextLength>92</SourceTextLength>
       <StateNumber>2103729</StateNumber>
       <Turn>instead-of</Turn>
     </rule>
-    <rule id="4389" parent="1182" name="geometry_columns_update">
+    <rule id="4392" parent="1182" name="geometry_columns_update">
       <Events>U</Events>
       <ObjectId>29471</ObjectId>
       <SourceTextLength>92</SourceTextLength>
       <StateNumber>2103729</StateNumber>
       <Turn>instead-of</Turn>
     </rule>
-    <rule id="4390" parent="1182" name="geometry_columns_delete">
+    <rule id="4393" parent="1182" name="geometry_columns_delete">
       <Events>D</Events>
       <ObjectId>29472</ObjectId>
       <SourceTextLength>92</SourceTextLength>

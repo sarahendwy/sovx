@@ -16,21 +16,6 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
-    <data-source name="Raedhealth Odoo Local" uuid="343f48b9-23ba-4036-8c68-bd7b8357ce80">
-      <database-info product="PostgreSQL" version="17.2" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="17.2" exact-driver-version="42.7">
-        <identifier-quote-string>&quot;</identifier-quote-string>
-      </database-info>
-      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
-      <secret-storage>master_key</secret-storage>
-      <user-name>hyYCexQW4F</user-name>
-      <schema-mapping>
-        <introspection-scope>
-          <node kind="database" qname="@">
-            <node kind="schema" qname="@" />
-          </node>
-        </introspection-scope>
-      </schema-mapping>
-    </data-source>
     <data-source name="Raedhealth Odoo Staging" uuid="54d7b4de-4d58-47da-b5a0-be5c28032e06">
       <database-info product="PostgreSQL" version="16.4 (Debian 16.4-1.pgdg120+1)" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="16.4" exact-driver-version="42.7">
         <identifier-quote-string>&quot;</identifier-quote-string>
@@ -40,8 +25,11 @@
       <user-name>hyYCexQW4F</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="database" qname="@">
-            <node kind="schema" qname="@" />
+          <node negative="1">
+            <node kind="database" negative="1" />
+            <node kind="database" qname="@">
+              <node kind="schema" qname="@" />
+            </node>
           </node>
         </introspection-scope>
       </schema-mapping>
@@ -72,6 +60,36 @@
         <introspection-scope>
           <node kind="database" qname="@">
             <node kind="schema" qname="@" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="rh_odoo@localhost" uuid="0eb15bcd-3cac-458f-9998-ecb833c241e1">
+      <database-info product="PostgreSQL" version="17.2" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="17.2" exact-driver-version="42.7">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>hyYCexQW4F</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="database" qname="@">
+            <node kind="schema" qname="@" />
+          </node>
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
+    <data-source name="Form prod" uuid="028836b7-2ffc-4627-8d4e-696fc19d8585">
+      <database-info product="PostgreSQL" version="17.5" jdbc-version="4.2" driver-name="PostgreSQL JDBC Driver" driver-version="42.7.3" dbms="POSTGRES" exact-version="17.5" exact-driver-version="42.7">
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>doadmin</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="database" negative="1">
+            <node kind="schema" negative="1" />
           </node>
         </introspection-scope>
       </schema-mapping>
