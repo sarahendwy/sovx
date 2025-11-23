@@ -116,22 +116,22 @@ class CreateOrder(CreateView):
             if not field_name.startswith("quantity"):
                 continue
 
-            quanity = int(form.data[field_name])
+            quantity = int(form.data[field_name])
             
             product_id = int(field_name.split("-")[-1])
             product = Product.objects.get(id=product_id)
-            if quanity > product.stock:
+            if quantity > product.stock:
                 return self.form_invalid(form)
             
-            product.stock -= quanity
+            product.stock -= quantity
             product.save()
 
             entry = OrderEntry.objects.create(
                 order=order,
                 product=product,
-                quantity=quanity,
+                quantity=quantity,
                 variant=variants.get(product.id, 1),
-                price=product.discounted_price * quanity
+                price=product.discounted_price * quantity
             )
             order.order_total += entry.price
             if order.payment_method == "Cash on Delivery":
