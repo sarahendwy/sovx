@@ -188,3 +188,33 @@ form.site-settings > div:not:nth-of-type(3-) {
 .carousel-control-next-icon {
   filter: invert(100%) sepia(130%) saturate(1000%) hue-rotate(200deg);
 }
+
+@media screen and (max-width: 600px) {
+  .product-details {
+    align-items: center;
+  }
+
+  .product-details form button {
+    padding-inline: 24px;
+  }
+
+  .shopping-cart-nav, .payment-info-nav {
+    flex-direction: column;
+  }
+
+  .shopping-cart-nav .btn {
+    margin-inline-start: 0 !important;
+  }
+
+  .product {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--bg-primary);
+  }
+
+  .product > div:first-child {
+    width: 100% !important;
+  }
+
+}

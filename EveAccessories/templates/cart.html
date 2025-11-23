@@ -4,7 +4,7 @@
 {% block content %}
 <div class="py-2 py-md-4">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 shopping-cart-nav">
             <h2>Shopping Cart</h2>
             {% if products %}
             <a href="{% url 'create_order' %}" style="height: fit-content" class="btn btn-primary ms-3">Proceed to Checkout</a>
