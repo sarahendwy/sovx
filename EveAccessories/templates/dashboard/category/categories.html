@@ -25,6 +25,7 @@
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
+            <th scope="col">Display Order</th>
             <th scope="col">Category Name</th>
             <th scope="col">Product Count</th>
             <th scope="col">Actions</th>
@@ -34,9 +35,16 @@
         {% for category in categories %}
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ category.display_order }}</td>
                 <td>{{ category.name }}</td>
                 <td>{{ category.products.count }}</td>
                 <td>
+                    <a 
+                    href="{% url 'edit_category' category.id %}" 
+                    class="btn btn-sm btn-outline-primary" 
+                    > 
+                        Edit
+                    </a>
                     {% if category.products.count == 0 %}
                     <a 
                     href="{% url 'delete_category' category.id %}" 
@@ -49,7 +57,7 @@
             </tr>
         {% empty %}
             <tr>
-                <td colspan="4" class="text-center">No categories found.</td>
+                <td colspan="5" class="text-center">No categories found.</td>
             </tr>
         {% endfor %}
         </tbody>

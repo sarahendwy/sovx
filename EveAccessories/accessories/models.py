@@ -6,6 +6,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Category(models.Model):
     name = models.CharField(max_length=30)
     image = models.ImageField(upload_to="categories/images/%Y/%m/%d/")
+    display_order = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first on homepage")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -14,6 +15,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+        ordering = ['display_order', 'name']
 
 
 class Product(models.Model):

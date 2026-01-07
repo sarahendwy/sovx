@@ -70,25 +70,74 @@ class CreateOrder(CreateView):
         else:
             cart = self.request.session.get('cart') or ""
 
-        cart = set(cart.strip("-").split("-"))
-        cart_products = [int(pr.split("#")[0]) for pr in cart]
-        products = Product.objects.filter(id__in=cart_products)
-        stocks = {product.id: product.stock for product in products}
-        variants = defaultdict(lambda: 1)
-        for pr in cart:
-            variants[int(pr.split("#")[0])] = pr.split("#")[1]
+        cart = cart.strip("-")
+        if cart:
+            cart_set = set(cart.split("-"))
+            cart_products = []
+            variants = defaultdict(lambda: 1)
+            for pr in cart_set:
+                if pr:  # Skip empty strings
+                    try:
+                        product_id = int(pr.split("#")[0])
+                        cart_products.append(product_id)
+                        if "#" in pr:
+                            variants[product_id] = pr.split("#")[1]
+                    except (ValueError, IndexError):
+                        continue
+            products = Product.objects.filter(id__in=cart_products)
+            stocks = {product.id: product.stock for product in products}
+        else:
+            products = Product.objects.none()
+            stocks = {}
+            variants = {}
 
-        context['payment_proof'] = Setting.objects.first().payment_image.url
+        setting = Setting.objects.first()
+        if setting:
+            context['payment_proof'] = setting.payment_image.url if setting.payment_image else ""
+            shipping_costs = model_to_dict(setting)
+            shipping_costs.pop("payment_image", None)
+            shipping_costs.pop("hero_image", None)
+            context['shipping_costs'] = shipping_costs
+        else:
+            context['payment_proof'] = ""
+            context['shipping_costs'] = {}
+        
         context['products'] = products
         context['stocks'] = stocks
         context['variants'] = variants
-        context['shipping_costs'] = model_to_dict(Setting.objects.first())
-        context['shipping_costs'].pop("payment_image")
-        context['shipping_costs'].pop("hero_image")
         return context
     
     def form_valid(self, form):
         user = self.request.user
+        
+        # Check for undelivered orders limit (max 2)
+        # Undelivered orders are those not "Delivered" or "Cancelled"
+        undelivered_statuses = ['Pending Confirmation', 'Confirmed', 'In Delivery']
+        
+        if user.is_authenticated:
+            # Check by authenticated user
+            undelivered_count = Order.objects.filter(
+                user=user,
+                status__in=undelivered_statuses
+            ).count()
+        else:
+            # Check by phone number for non-authenticated users
+            phone = form.cleaned_data.get('phone') or form.data.get('phone')
+            if phone:
+                undelivered_count = Order.objects.filter(
+                    phone=phone,
+                    status__in=undelivered_statuses
+                ).count()
+            else:
+                undelivered_count = 0
+        
+        if undelivered_count >= 2:
+            form.add_error(
+                None, 
+                "You cannot have more than 2 undelivered orders at the same time. Please wait for your existing orders to be delivered before placing a new order."
+            )
+            return self.form_invalid(form)
+        
         if user.is_authenticated:
             form.instance.user = user
         form.instance.status = "Pending Confirmation"
@@ -98,46 +147,108 @@ class CreateOrder(CreateView):
         if payment_proof:
             form.instance.payment_proof = payment_proof
 
-        order = form.save()
-        order.payment_method = form.data.get("payment_method")
-        order.order_total = order.shipping_fees
-        variants = defaultdict(lambda: 1)
+        # Get cart items
         if self.request.user.is_authenticated:
             cart = self.request.user.cart or ""
-            self.request.user.cart = ""
         else:
             cart = self.request.session.get('cart') or ""
-            self.request.session['cart'] = ""
 
-        cart = set(cart.strip("-").split("-"))
-        for pr in cart:
-            variants[int(pr.split("#")[0])] = pr.split("#")[1]
+        cart = cart.strip("-")
+        variants = defaultdict(lambda: 1)
+        if cart:
+            cart_set = set(cart.split("-"))
+            for pr in cart_set:
+                if pr:  # Skip empty strings
+                    try:
+                        product_id = int(pr.split("#")[0])
+                        if "#" in pr:
+                            variants[product_id] = pr.split("#")[1]
+                    except (ValueError, IndexError):
+                        continue
+
+        # Collect all quantity fields and validate
+        order_items = []
+        errors = []
+        
         for field_name in form.data:
             if not field_name.startswith("quantity"):
                 continue
 
-            quantity = int(form.data[field_name])
+            try:
+                quantity = int(form.data[field_name])
+            except (ValueError, TypeError):
+                continue
+            
+            # Skip items with zero quantity
+            if quantity <= 0:
+                continue
             
             product_id = int(field_name.split("-")[-1])
-            product = Product.objects.get(id=product_id)
-            if quantity > product.stock:
-                return self.form_invalid(form)
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                errors.append(f"Product with ID {product_id} not found.")
+                continue
             
+            # Validate stock availability
+            if product.stock == 0:
+                errors.append(f"'{product.title}' is out of stock.")
+                continue
+            
+            if quantity > product.stock:
+                errors.append(f"Requested quantity for '{product.title}' ({quantity}) exceeds available stock ({product.stock}).")
+                continue
+            
+            order_items.append({
+                'product': product,
+                'quantity': quantity,
+                'variant': variants.get(product.id, 1)
+            })
+        
+        # Check if order has any items
+        if not order_items:
+            errors.append("Your order must contain at least one item.")
+        
+        # If there are errors, return form invalid with error messages
+        if errors:
+            for error in errors:
+                form.add_error(None, error)
+            return self.form_invalid(form)
+        
+        # All validations passed, create the order
+        order = form.save()
+        order.payment_method = form.data.get("payment_method")
+        order.order_total = order.shipping_fees
+        
+        # Clear cart
+        if self.request.user.is_authenticated:
+            self.request.user.cart = ""
+            self.request.user.save()
+        else:
+            self.request.session['cart'] = ""
+        
+        # Create order entries and update stock
+        for item in order_items:
+            product = item['product']
+            quantity = item['quantity']
+            variant = item['variant']
+            
+            # Update product stock
             product.stock -= quantity
             product.save()
-
+            
+            # Create order entry
             entry = OrderEntry.objects.create(
                 order=order,
                 product=product,
                 quantity=quantity,
-                variant=variants.get(product.id, 1),
+                variant=variant,
                 price=product.discounted_price * quantity
             )
             order.order_total += entry.price
-            if order.payment_method == "Cash on Delivery":
-                order.status = "Confirmed"
-
-            entry.save()
+        
+        if order.payment_method == "Cash on Delivery":
+            order.status = "Confirmed"
 
         OrderLog.objects.create(
             order=order,

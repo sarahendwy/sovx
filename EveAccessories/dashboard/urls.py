@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('categories/', CategoriesView.as_view(), name='admin_categories'),
     path('categories/add', AddCategoryView.as_view(), name='add_categories'),
+    path('categories/edit/<pk>', EditCategoryView.as_view(), name='edit_category'),
     path('categories/delete/<pk>', DeleteCategoryView.as_view(), name='delete_category'),
 
     path('settings/', SettingsView.as_view(), name='admin_settings'),

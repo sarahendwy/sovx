@@ -65,9 +65,13 @@
 
       <!-- Stock and Brand -->
       <div class="stock-brand my-3">
+        {% if product.stock == 0 %}
+        <span class="badge bg-danger fs-6 mb-2">Sold Out</span>
+        {% else %}
         <span style="color: #28a745; font-weight: bold"
           >{{product.stock}} Items In Stock</span
         >
+        {% endif %}
         <p style="color: #666">
           Category: <strong>{{product.category}}</strong>
         </p>
@@ -100,6 +104,16 @@
       </script>
       {% else %}
       <!-- Add to Cart Button -->
+      {% if product.stock == 0 %}
+      <button
+        class="btn btn-secondary btn-lg mt-auto"
+        type="button"
+        style="width: 100%"
+        disabled
+      >
+        Sold Out
+      </button>
+      {% else %}
       <form method="post">
         {% csrf_token %}
         <input type="hidden" name="operation" value="add" />
@@ -121,6 +135,7 @@
           Add to Cart
         </button>
       </form>
+      {% endif %}
       {% endif %}
     </div>
   </div>

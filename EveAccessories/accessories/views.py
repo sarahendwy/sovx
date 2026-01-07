@@ -1,5 +1,4 @@
 from typing import Any
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from .models import Category, Product
@@ -7,9 +6,16 @@ from dashboard.models import Setting
 
 
 def index(request):
-    top_categories = Category.objects.all()[:4]
+    setting = Setting.objects.first()
+    if setting:
+        categories_count = setting.homepage_categories_count
+        landing_image = setting.hero_image.url if setting.hero_image else ""
+    else:
+        categories_count = 4
+        landing_image = ""
+    
+    top_categories = Category.objects.all()[:categories_count]
     new_products = Product.objects.order_by("updated_at")[:12]
-    landing_image = Setting.objects.first().hero_image.url
     return render(request, 'index.html', context={
         "categories": top_categories,
         "products": new_products,
@@ -66,7 +72,15 @@ class ProductView(DetailView):
     def post(self, request, *args, **kwargs):
         operation = request.POST.get("operation", "remove")
         variant = int(request.POST.get("product_variant", 1))
-        product_id = str(self.get_object().id)
+        product = self.get_object()
+        product_id = str(product.id)
+        
+        # Prevent adding out of stock products
+        if operation == "add" and product.stock == 0:
+            from django.contrib import messages
+            messages.error(request, f"'{product.title}' is out of stock and cannot be added to cart.")
+            return redirect(request.path)
+        
         if request.user.is_authenticated:
             cart = request.user.cart or ""
         else:
