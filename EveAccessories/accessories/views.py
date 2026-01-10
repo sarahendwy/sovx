@@ -44,9 +44,9 @@ class ProductListView(ListView):
     def get_queryset(self):
         category = self.request.GET.get("category", "")
         if category:
-            products = Product.objects.filter(category__name__iexact=category)
+            products = Product.objects.filter(category__name__iexact=category).order_by("-created_at")
         else:
-            products = Product.objects.all()
+            products = Product.objects.all().order_by("-created_at")
 
         return products
 
