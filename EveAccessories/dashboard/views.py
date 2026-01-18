@@ -130,6 +130,14 @@ class DeleteCategoryView(DeleteView):
     success_url = reverse_lazy('admin_categories')
     template_name = "dashboard/confirm_delete.html"
 
+def category_discount(request, pk):
+    category = Category.objects.get(pk=pk)
+    if request.method == 'POST':
+        discount = request.POST.get('discount')
+        if discount:
+            category.products.update(discount=discount)
+    return redirect('edit_category', pk=pk)
+
 class ProductsView(CategoriesView):
     template_name = 'dashboard/product/products.html'
     model = Product
