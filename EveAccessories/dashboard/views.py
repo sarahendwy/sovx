@@ -158,10 +158,18 @@ class AddProductView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+
         files = self.request.FILES.getlist('images')
         if files:
             for f in files:
-                ProductImage.objects.create(product=self.object,image=f)
+                ProductImage.objects.create(product=self.object, image=f)
+
+        image_urls_value = form.cleaned_data.get("image_urls") or ""
+        if image_urls_value:
+            for raw_url in image_urls_value.splitlines():
+                url = raw_url.strip()
+                if url:
+                    ProductImage.objects.create(product=self.object, image_url=url)
 
         return super().form_valid(form)
 
@@ -180,7 +188,14 @@ class EditProductView(UpdateView):
         files = self.request.FILES.getlist('images')
         if files:
             for f in files:
-                ProductImage.objects.create(product=self.object,image=f)
+                ProductImage.objects.create(product=self.object, image=f)
+
+        image_urls_value = form.cleaned_data.get("image_urls") or ""
+        if image_urls_value:
+            for raw_url in image_urls_value.splitlines():
+                url = raw_url.strip()
+                if url:
+                    ProductImage.objects.create(product=self.object, image_url=url)
 
         return super().form_valid(form)
 

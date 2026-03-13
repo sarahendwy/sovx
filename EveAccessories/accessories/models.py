@@ -40,7 +40,8 @@ class Product(models.Model):
 
     @property
     def thumbnail(self):
-        return self.images.all()[:1].get().image.url
+        first_image = self.images.first()
+        return first_image.url if first_image else ""
 
     def __str__(self):
         return self.title
@@ -48,4 +49,13 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="products/images/%Y/%m/%d/")
+    image = models.ImageField(upload_to="products/images/%Y/%m/%d/", blank=True, null=True)
+    image_url = models.URLField(max_length=500, blank=True, null=True)
+
+    @property
+    def url(self):
+        if self.image_url:
+            return self.image_url
+        if self.image:
+            return self.image.url
+        return ""

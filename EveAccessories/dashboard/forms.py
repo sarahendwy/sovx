@@ -46,10 +46,22 @@ class ProductForm(forms.ModelForm):
         else:
             del self.fields['clear_old_images']
         
-
-
-    images = MultipleFileField(widget=MultipleFileInput(attrs={'multiple': True, 'accept': "image/*"}),required=False)
-    clear_old_images = forms.BooleanField(required=False, label="Clear old images?", help_text="Check this box to clear all old images")
+    # images = MultipleFileField(
+    #     widget=MultipleFileInput(attrs={'multiple': True, 'accept': "image/*"}),
+    #     required=False,
+    #     help_text="Upload one or more image files for this product.",
+    # )
+    image_urls = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
+        help_text="Paste image URLs here, one per line. Leave blank if not using URLs.",
+        label="Image URLs",
+    )
+    clear_old_images = forms.BooleanField(
+        required=False,
+        label="Clear old images?",
+        help_text="Check this box to clear all old images before saving new ones.",
+    )
 
     class Meta:
         model = Product
