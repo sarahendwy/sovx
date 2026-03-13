@@ -45,11 +45,22 @@ class CartView(TemplateView):
             cart = self.request.session.get('cart') or ""
 
         cart = cart.strip("-")
+
+        products = []
+
         if cart:
-            product_ids = [int(pr.split("#")[0]) for pr in cart.split("-")]
+            product_ids = []
+            
+            for pr in cart.split("-"):
+                if not pr:
+                    continue
+                
+                product_id = pr.split("#")[0]
+                
+                if product_id.isdigit():
+                    product_ids.append(int(product_id))
+
             products = Product.objects.filter(id__in=product_ids)
-        else:
-            products = []
 
         context['products'] = products
         return context
