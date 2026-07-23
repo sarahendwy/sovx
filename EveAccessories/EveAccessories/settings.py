@@ -114,12 +114,13 @@ APPEND_SLASH = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+#STATIC_ROOT = BASE_DIR / "staticfiles" #new
 
 if os.getenv("DEVELOPMENT"):
     STATICFILES_DIRS = [
         BASE_DIR / "static",
     ]
-else:
+else: 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_URL = 'media/'

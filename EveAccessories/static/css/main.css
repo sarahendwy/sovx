@@ -1,9 +1,20 @@
 :root {
-    --primary: #4D1F08;
-    --secondary: #FFF2EB;
-    --bg-primary: #957461;
+    --primary: rgba(24, 34, 29, 1);
+    --secondary: #ffffff;
+    --bg-primary: #FFFFFF;
     --bg-primary-disabled: #9b867a;
 }
+
+/*
+:root {
+
+    --color-primary: #DF1C41;     
+    --color-secondary: #D90E0E;   
+    --bg-page: #FFFFFF; 
+    --bg-card: rgba(254, 219, 220, 1);            
+    --text-primary: rgba(24, 34, 29, 1);     
+}
+*/
 
 .cormorant-garamond-regular {
   font-family: "Cormorant Garamond", system-ui;
