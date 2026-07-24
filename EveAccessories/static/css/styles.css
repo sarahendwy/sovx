@@ -3,6 +3,8 @@ body {
   background-color: var(--secondary);
   display: flex;
   flex-direction: column;
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
 }
 
 * {
@@ -88,15 +90,17 @@ img.hero-image {
   opacity: 100% !important;
 }
 
-
 #OrderFormCarousel .carousel-indicators button:not(:first-of-type).active path,
-#OrderFormCarousel .carousel-indicators button:not(:first-of-type):has(+ button.active) path{
+#OrderFormCarousel
+  .carousel-indicators
+  button:not(:first-of-type):has(+ button.active)
+  path {
   fill: white;
 }
 
 #OrderFormCarousel .carousel-indicators button:first-of-type::before,
 #OrderFormCarousel .carousel-indicators button.active::before,
-#OrderFormCarousel .carousel-indicators button:has(+ button.active)::before{
+#OrderFormCarousel .carousel-indicators button:has(+ button.active)::before {
   content: "";
   width: 50%;
   height: 3px;
@@ -170,18 +174,17 @@ img.hero-image {
 }
 
 form.site-settings {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 form.site-settings > div:nth-of-type(1-2) {
-    min-width: 45%;
+  min-width: 45%;
 }
 
 form.site-settings > div:not:nth-of-type(3-) {
-    min-width: 30%;
+  min-width: 30%;
 }
 
 .carousel-control-prev-icon,
@@ -198,7 +201,8 @@ form.site-settings > div:not:nth-of-type(3-) {
     padding-inline: 24px;
   }
 
-  .shopping-cart-nav, .payment-info-nav {
+  .shopping-cart-nav,
+  .payment-info-nav {
     flex-direction: column;
   }
 
@@ -216,5 +220,19 @@ form.site-settings > div:not:nth-of-type(3-) {
   .product > div:first-child {
     width: 100% !important;
   }
-
 }
+
+/* Announcement Bar */
+/* =========================================
+   Announcement Bar
+========================================= */
+
+
+
+
+.announcement-bar-icons {
+  display: inline-block;
+  margin-inline-start: 4px;
+  font-size: 13px;
+}
+
