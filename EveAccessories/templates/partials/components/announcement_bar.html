@@ -1,7 +1,6 @@
 {% load static %}
+{% if site_settings.offer_banner_text %}
 <div class="text-center py-12 bg-tertiary">
-  <p class="body-regular text-white">
-    اطلب قبل 18 ديسمبر علشان توصلك الأوردرات قبل الكريسماس
-    <span class="announcement-bar-icons" aria-hidden="true"> 🎄🎁 </span>
-  </p>
+  <p class="body-regular text-white">{{ site_settings.offer_banner_text }}</p>
 </div>
+{% endif %}

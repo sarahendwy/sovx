@@ -1,18 +1,46 @@
 from django.db import models
 
-egypt_governorates = [('Cairo', 'Cairo'), ('Alexandria', 'Alexandria'), ('Giza', 'Giza'), ('Qalyubia', 'Qalyubia'),
-                      ('Port Said', 'Port Said'), ('Suez', 'Suez'), ('Dakahlia', 'Dakahlia'), ('Sharkia', 'Sharkia'),
-                      ('Monufia', 'Monufia'), ('Gharbia', 'Gharbia'), ('Kafr El Sheikh', 'Kafr El Sheikh'),
-                      ('Beheira', 'Beheira'), ('Ismailia', 'Ismailia'), ('Beni Suef', 'Beni Suef'),
-                      ('Fayoum', 'Fayoum'), ('Minya', 'Minya'), ('Assiut', 'Assiut'), ('Sohag', 'Sohag'),
-                      ('Qena', 'Qena'), ('Luxor', 'Luxor'), ('Aswan', 'Aswan'), ('Red Sea', 'Red Sea'),
-                      ('New Valley', 'New Valley'), ('Matruh', 'Matruh'), ('North Sinai', 'North Sinai'),
-                      ('South Sinai', 'South Sinai')]
+egypt_governorates = [
+    ("Cairo", "Cairo"),
+    ("Alexandria", "Alexandria"),
+    ("Giza", "Giza"),
+    ("Qalyubia", "Qalyubia"),
+    ("Port Said", "Port Said"),
+    ("Suez", "Suez"),
+    ("Dakahlia", "Dakahlia"),
+    ("Sharkia", "Sharkia"),
+    ("Monufia", "Monufia"),
+    ("Gharbia", "Gharbia"),
+    ("Kafr El Sheikh", "Kafr El Sheikh"),
+    ("Beheira", "Beheira"),
+    ("Ismailia", "Ismailia"),
+    ("Beni Suef", "Beni Suef"),
+    ("Fayoum", "Fayoum"),
+    ("Minya", "Minya"),
+    ("Assiut", "Assiut"),
+    ("Sohag", "Sohag"),
+    ("Qena", "Qena"),
+    ("Luxor", "Luxor"),
+    ("Aswan", "Aswan"),
+    ("Red Sea", "Red Sea"),
+    ("New Valley", "New Valley"),
+    ("Matruh", "Matruh"),
+    ("North Sinai", "North Sinai"),
+    ("South Sinai", "South Sinai"),
+]
+
 
 class Setting(models.Model):
-    payment_image = models.ImageField(upload_to="dashboard/settings/")
-    hero_image = models.ImageField(upload_to="dashboard/settings/")
-    homepage_categories_count = models.PositiveIntegerField(default=4, help_text="Number of categories to display on homepage")
+    offer_banner_text = models.CharField(
+        help_text="The offer text at the top of the landing page",
+        default="",
+        max_length=250,
+    )
+    payment_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
+    hero_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
+    homepage_categories_count = models.PositiveIntegerField(
+        default=4, help_text="Number of categories to display on homepage"
+    )
     cairo_shipping = models.PositiveIntegerField(default=0)
     alexandria_shipping = models.PositiveIntegerField(default=0)
     giza_shipping = models.PositiveIntegerField(default=0)
@@ -39,4 +67,3 @@ class Setting(models.Model):
     matruh_shipping = models.PositiveIntegerField(default=0)
     north_sinai_shipping = models.PositiveIntegerField(default=0)
     south_sinai_shipping = models.PositiveIntegerField(default=0)
-
