@@ -64,7 +64,6 @@ db.sqlite3-journal
 
 # Django migrations
 **/migrations/
-*/migrations/
 
 # Flask stuff:
 instance/
@@ -167,5 +166,3 @@ cython_debug/
 #.idea/
 
 media/
-
-*/migrations/*
