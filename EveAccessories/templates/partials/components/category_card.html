@@ -1,5 +1,4 @@
-<a href="{% url 'products' %}?category={{category.name|lower}}" class="text-decoration-none col-6 col-md-3"
-   style="margin-bottom: 20px;">
+<a href="{% url 'products' %}?category={{category.name|lower}}" class="category-card text-decoration-none col-6 col-md-3">
     <img src="{{category.image.url}}" alt="Bracelet" class="img-fluid rounded">
-    <h5 class="cormorant-garamond-bold mt-4 text-capitalize">{{category.name|title}}</h5>
+    <h5 class="body-large font-bold mt-4 text-capitalize">{{category.name|title}}</h5>
 </a>

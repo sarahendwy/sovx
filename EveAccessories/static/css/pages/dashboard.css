@@ -1,0 +1,13 @@
+.dashboard-settings-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard-settings-form > div:nth-of-type(-n + 2) {
+  min-width: 45%;
+}
+
+.dashboard-settings-form > div:nth-of-type(n + 3) {
+  min-width: 30%;
+}

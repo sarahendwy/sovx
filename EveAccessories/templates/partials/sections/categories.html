@@ -1,20 +1,18 @@
 <section class="categories pt-3 pb-5 my-3">
     <div class="container text-center">
-        <h1 class="cormorant-garamond-regular mb-5">Catalog</h1>
+        <h1 class="heading-1 font-regular mb-5">Catalog</h1>
         <div class="d-none d-md-block">
             <div class="row">
                 {% for category in categories %}
                     {% if forloop.counter|divisibleby:2 %}
-                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="text-decoration-none col-6 col-md-3"
-                           style="margin-bottom: 20px;">
-                            <h5 class="cormorant-garamond-bold mb-4">{{category.name|title}}</h5>
+                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="category-card text-decoration-none col-6 col-md-3">
+                            <h5 class="body-large font-bold mb-4">{{category.name|title}}</h5>
                             <img src="{{category.image.url}}" alt="{{category.name|lower}}" class="img-fluid rounded">
                         </a>
                     {%else%}
-                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="text-decoration-none col-6 col-md-3"
-                           style="margin-bottom: 20px;">
+                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="category-card text-decoration-none col-6 col-md-3">
                             <img src="{{category.image.url}}" alt="{{category.name|lower}}" class="img-fluid rounded">
-                            <h5 class="cormorant-garamond-bold mt-4">{{category.name|title}}</h5>
+                            <h5 class="body-large font-bold mt-4">{{category.name|title}}</h5>
                         </a>
                     {%endif%}
                 {% endfor %}
@@ -23,16 +21,14 @@
         <div class="d-block d-md-none">
             <div class="row">
                 {% for category in categories %}
-                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="text-decoration-none col-6 col-md-3"
-                           style="margin-bottom: 20px;">
+                        <a href="{% url 'products' %}?category={{category.name|lower}}" class="category-card text-decoration-none col-6 col-md-3">
                             <img src="{{category.image.url}}" alt="{{category.name|lower}}" class="img-fluid rounded">
-                            <h5 class="cormorant-garamond-bold mt-2">{{category.name|title}}</h5>
+                            <h5 class="body-large font-bold mt-2">{{category.name|title}}</h5>
                         </a>
                 {% endfor %}
             </div>
         </div>
 
-        <a href="/categories" class="cormorant-garamond-bold d-inline-block text-decoration-none mt-3"
-           style="font-size: 18px;">View All &rarr;</a>
+        <a href="/categories" class="body-regular font-bold d-inline-block text-decoration-none mt-3">View All &rarr;</a>
     </div>
 </section>

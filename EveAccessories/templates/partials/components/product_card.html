@@ -1,25 +1,22 @@
 <a
-  class="col-12 col-md-6 col-lg-3 mb-2 text-decoration-none"
-  style="max-width: 80vw"
+  class="product-card col-12 col-md-6 col-lg-3 mb-2 text-decoration-none"
   href="{% url 'product' pk=product.id %}"
 >
-  <div style="position: relative; font-size: 20px;">
+  <div class="product-card-media">
     <img src="{{product.thumbnail}}" alt="ring" class="img-fluid" />
     {% if product.stock == 0 %}
     <span
-      class="badge bg-danger"
-      style="position: absolute; top: 10px; right: 10px; padding: 6px 16px;"
+      class="product-card-badge badge bg-danger"
       >Sold Out</span
     >
     {% elif product.discount > 0 %}
     <span
-      class="badge bg-warning"
-      style="position: absolute; top: 10px; right: 10px; padding: 6px 16px;"
+      class="product-card-badge badge bg-warning"
       >{{ product.discount }}% OFF!</span
     >
     {% endif %}
   </div>
-  <p class="cormorant-garamond-bold">{{product.title}}</p>
+  <p class="body-large font-bold">{{product.title}}</p>
   <p>
     LE {{product.discounted_price}} {% if product.discount %}
     <span class="text-decoration-line-through ms-2 fw-light"

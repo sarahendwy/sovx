@@ -1,0 +1,9 @@
+@media screen and (max-width: 600px) {
+  .cart-page-header {
+    flex-direction: column;
+  }
+
+  .cart-page-header .btn {
+    margin-inline-start: 0 !important;
+  }
+}

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/components/order-form.css' %}" />
+{% endblock header %}
+
 {% block content %}
 <div class="py-2 py-md-4">
     <div class="container">

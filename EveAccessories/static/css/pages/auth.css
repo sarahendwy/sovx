@@ -1,0 +1,14 @@
+.auth-page-panel {
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.auth-page-breadcrumbs {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.auth-page-breadcrumbs a {
+  color: inherit;
+}

@@ -59,7 +59,7 @@
                     {% for product in products %}
                     <div
                             data-price="{{product.discounted_price}}"
-                            class="product d-flex justify-content-between align-items-center mb-3"
+                            class="order-form-product-row d-flex justify-content-between align-items-center mb-3"
                     >
                         <div class="d-flex align-items-center w-50">
                             <img
@@ -73,11 +73,7 @@
                                 <small>{{ product.description }}</small>
                             </div>
                         </div>
-                        <div
-                                class="d-flex align-items-center gap-3"
-                                data-mdb-input-init
-                                class="form-outline"
-                        >
+                        <div class="d-flex align-items-center gap-3">
                             <label for="quantity-{{product.id}}" class="form-label m-0"
                             >Quantity:</label
                             >
@@ -88,21 +84,21 @@
                                     max="{{product.stock}}"
                                     type="number"
                                     name="quantity-{{product.id}}"
-                                    class="form-control bg-transparent border-1 border-primary quantity"
+                                    class="form-control bg-transparent border-1 border-primary js-quantity"
                             />
                         </div>
-                        <p class="price m-0">EGP {{ product.discounted_price }}</p>
+                        <p class="js-price m-0">EGP {{ product.discounted_price }}</p>
                     </div>
                     {% endfor %}
                 </div>
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     <div class="text-end">
-                        <p class="mb-1">Subtotal: EGP <strong class="subtotal"></strong></p>
+                        <p class="mb-1">Subtotal: EGP <strong class="js-subtotal"></strong></p>
                         <p class="mb-1 pb-3 border-1 border-bottom border-primary">
                             Shipping: EGP
-                            <strong class="shipping-cost">{{shipping_cost}}</strong>
+                            <strong class="js-shipping-cost">{{shipping_cost}}</strong>
                         </p>
-                        <p class="mb-1">Total: EGP <strong class="total-cost"></strong></p>
+                        <p class="mb-1">Total: EGP <strong class="js-total-cost"></strong></p>
                         <button
                                 class="btn btn-primary my-3 px-3 mb-5"
                                 type="button"
@@ -134,12 +130,12 @@
                 </div>
                 <div class="d-flex justify-content-end align-items-center mt-3">
                     <div class="text-end">
-                        <p class="mb-1">Subtotal: EGP <strong class="subtotal"></strong></p>
+                        <p class="mb-1">Subtotal: EGP <strong class="js-subtotal"></strong></p>
                         <p class="mb-1 pb-3 border-1 border-bottom border-primary">
                             Shipping: EGP
-                            <strong class="shipping-cost">{{shipping_cost}}</strong>
+                            <strong class="js-shipping-cost">{{shipping_cost}}</strong>
                         </p>
-                        <p class="mb-1">Total: EGP <strong class="total-cost"></strong></p>
+                        <p class="mb-1">Total: EGP <strong class="js-total-cost"></strong></p>
                         <button
                                 class="btn btn-primary my-3 px-3 mb-5"
                                 type="button"
@@ -156,9 +152,9 @@
             <div class="carousel-item">
                 <h2 class="m-0">Payment Information</h2>
                 <hr/>
-                <div class=" d-flex justify-content-between align-items-center payment-info-nav">
+                <div class=" d-flex justify-content-between align-items-center order-form-payment-nav">
                     <p class="my-2 fs-2">
-                        Total Amount to Pay: EGP <strong class="total-cost"></strong>
+                        Total Amount to Pay: EGP <strong class="js-total-cost"></strong>
                     </p>
 
                     <div>
@@ -246,30 +242,30 @@
         const shipping_costs = JSON.parse(document.getElementById("shipping_costs").textContent);
 
         function calculate_subtotal() {
-            const products = document.querySelectorAll('.product');
+            const products = document.querySelectorAll('.order-form-product-row');
             const governorate = document.querySelector('select[name="governorate"]').value;
             const shipping_cost = shipping_costs[`${governorate}_shipping`.toLocaleLowerCase()] || 50;
             let subtotal = 0;
             products.forEach((product) => {
                 const price = parseInt(product.dataset.price || 0);
-                const quantity = product.querySelector('.quantity').value;
+                const quantity = product.querySelector('.js-quantity').value;
                 subtotal += price * quantity;
             });
             const total = subtotal + shipping_cost;
-            document.querySelectorAll('.shipping-cost').forEach(e => e.textContent = shipping_cost);
-            document.querySelectorAll('.subtotal').forEach(e => e.textContent = subtotal);
-            document.querySelectorAll('.total-cost').forEach(element => element.textContent = total)
+            document.querySelectorAll('.js-shipping-cost').forEach(e => e.textContent = shipping_cost);
+            document.querySelectorAll('.js-subtotal').forEach(e => e.textContent = subtotal);
+            document.querySelectorAll('.js-total-cost').forEach(element => element.textContent = total)
         }
 
         calculate_subtotal();
 
-        document.querySelectorAll('.quantity').forEach((quantity) => {
+        document.querySelectorAll('.js-quantity').forEach((quantity) => {
             quantity.addEventListener('change', (e) => {
-                const product = e.target.closest('.product');
+                const product = e.target.closest('.order-form-product-row');
                 const price = parseInt(product.dataset.price || 0);
                 const quantity = e.target.value;
                 const total = price * quantity;
-                product.querySelector('p.price').textContent = `EGP ${total}`;
+                product.querySelector('.js-price').textContent = `EGP ${total}`;
                 calculate_subtotal();
             });
         });

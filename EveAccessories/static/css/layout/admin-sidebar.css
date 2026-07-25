@@ -1,0 +1,21 @@
+.admin-sidebar .nav-link.active {
+  background-color: var(--primary);
+  color: white;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+@media screen and (max-width: 768px) {
+  .admin-sidebar {
+    width: 100% !important;
+  }
+
+  .admin-sidebar ul {
+    align-items: baseline;
+    width: 100% !important;
+    border-width: 0 !important;
+  }
+
+  .admin-sidebar .nav-link.active {
+    border-radius: var(--radius-lg);
+  }
+}

@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/pages/cart.css' %}" />
+{% endblock header %}
+
 {% block content %}
 <div class="py-2 py-md-4">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4 shopping-cart-nav">
+        <div class="d-flex justify-content-between align-items-center mb-4 cart-page-header">
             <h2>Shopping Cart</h2>
             {% if products %}
             <a href="{% url 'create_order' %}" style="height: fit-content" class="btn btn-primary ms-3">Proceed to Checkout</a>
@@ -18,9 +22,9 @@
                 </a>
                 <h5 class="text-center mt-3">{{ product.title }}</h5>
                 <p class="text-center">Price: ${{ product.discounted_price }}</p>
-                <button data-id="{{product.id}}" class="btn btn-outline-primary py-0 remove-from-cart" style="width: 100%">Remove</button>
+                <button data-id="{{product.id}}" class="btn btn-outline-primary py-0 js-remove-from-cart" style="width: 100%">Remove</button>
             </div>
-                
+
             {% empty %}
             <h3 class="text-center">No products in cart</h3>
             {% endfor %}
@@ -29,7 +33,7 @@
     </div>
     <script>
         window.onload = function () {
-            const Buttons = document.querySelectorAll('.remove-from-cart');
+            const Buttons = document.querySelectorAll('.js-remove-from-cart');
 
             Buttons.forEach(button => {
                 button.addEventListener('click', (e) => {

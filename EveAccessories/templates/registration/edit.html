@@ -1,10 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/pages/auth.css' %}" />
+{% endblock header %}
+
 {% block content %}
 
-
     <div class="container py-5">
-        <form class="user-form" method="post" enctype="multipart/form-data">
+        <form class="auth-form" method="post" enctype="multipart/form-data">
             <h2>Edit your profile information</h2>
             <hr>
             {% csrf_token %}
@@ -36,7 +40,7 @@
     </div>
     <script>
         window.onload = () => {
-            document.querySelectorAll("form.user-form input, form.user-form select ").forEach(elem => {
+            document.querySelectorAll("form.auth-form input, form.auth-form select ").forEach(elem => {
                 elem.classList.add("form-control")
             })
         }

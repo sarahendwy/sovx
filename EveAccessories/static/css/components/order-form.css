@@ -1,0 +1,76 @@
+#OrderFormCarousel .carousel-indicators {
+  overflow-x: hidden;
+}
+
+#OrderFormCarousel .carousel-inner {
+  max-height: 388px;
+  overflow-y: auto;
+}
+
+#OrderFormCarousel .carousel-indicators button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  width: max(6vw, 60px) !important;
+  height: max(6vw, 60px) !important;
+  margin: 0 !important;
+}
+
+#OrderFormCarousel .carousel-indicators .progress {
+  content: "";
+  width: 100%;
+  height: 3px;
+  background-color: var(--primary);
+  z-index: -100;
+  position: absolute;
+  opacity: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#OrderFormCarousel .carousel-indicators button.active,
+#OrderFormCarousel .carousel-indicators button:first-of-type,
+#OrderFormCarousel .carousel-indicators button:has(+ button.active) {
+  opacity: 100% !important;
+}
+
+#OrderFormCarousel .carousel-indicators button:not(:first-of-type).active path,
+#OrderFormCarousel
+  .carousel-indicators
+  button:not(:first-of-type):has(+ button.active)
+  path {
+  fill: white;
+}
+
+#OrderFormCarousel .carousel-indicators button:first-of-type::before,
+#OrderFormCarousel .carousel-indicators button.active::before,
+#OrderFormCarousel .carousel-indicators button:has(+ button.active)::before {
+  content: "";
+  width: 50%;
+  height: 3px;
+  background-color: var(--primary);
+  z-index: -100;
+  position: absolute;
+}
+
+.order-form-product-row {
+  /* row layout comes from Bootstrap utility classes in the markup */
+}
+
+@media screen and (max-width: 600px) {
+  .order-form-product-row {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--bg-primary);
+  }
+
+  .order-form-product-row > div:first-child {
+    width: 100% !important;
+  }
+
+  .order-form-payment-nav {
+    flex-direction: column;
+  }
+}

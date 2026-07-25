@@ -1,4 +1,10 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %} {% load static %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
+{% endblock header %}
+
+{% block content %}
 <div class="py-2 py-md-4">
   <div
     class="d-flex ps-0 gap-3 flex-column flex-md-row justify-content-between align-items-stretch my-4"
@@ -6,8 +12,7 @@
   >
     <!-- Product Image Section -->
     <div
-      class="product-image d-flex justify-content-center"
-      style="flex-basis: 50%"
+      class="product-page-image d-flex justify-content-center"
     >
       <div id="carouselExampleAutoplaying" class="carousel slide flex-grow-1" data-bs-ride="carousel">
         <div class="carousel-inner w-100 h-100">
@@ -17,8 +22,7 @@
             <img
               src="{{ product_image.url }}"
               alt="Product Thumbnail"
-              class="img-fluid"
-              style="max-width: min(60vw, 100%); height: auto; border: 1px solid #ddd"
+              class="product-page-carousel-img img-fluid"
             /></div>
           </div>
           {% endfor %}
@@ -37,42 +41,40 @@
 
     <!-- Product Details Section -->
     <div
-      class="product-details"
-      style="flex-basis: 45%; display: flex; flex-direction: column"
+      class="product-page-details"
     >
       <h2>{{product.title}}</h2>
-      <p style="color: #666">{{product.description}}</p>
+      <p class="text-muted">{{product.description}}</p>
 
       <!-- Rating Section -->
-      <div class="rating" style="color: #ffd700; font-size: 1.2rem">
-        {% for x in ""|ljust:product.rating %} &#9733; {% endfor %} 
+      <div class="product-page-rating">
+        {% for x in ""|ljust:product.rating %} &#9733; {% endfor %}
         {% for x in ""|ljust:product.empty_stars %} &#9734; {% endfor %}
       </div>
 
       <!-- Price Section -->
-      <div class="price-section my-3" style="font-size: 1.5rem">
+      <div class="product-page-price my-3">
         EGP {% if product.discount %}
         <span
-          class="old-price"
-          style="text-decoration: line-through; color: #888"
+          class="product-page-price-old"
           >{{product.price}}</span
         >
         {% endif %}
-        <span class="new-price ml-2" style="color: #18a558"
+        <span class="product-page-price-new ml-2"
           >{{product.discounted_price}}</span
         >
       </div>
 
       <!-- Stock and Brand -->
-      <div class="stock-brand my-3">
+      <div class="my-3">
         {% if product.stock == 0 %}
         <span class="badge bg-danger fs-6 mb-2">Sold Out</span>
         {% else %}
-        <span style="color: #28a745; font-weight: bold"
+        <span class="product-page-stock-available"
           >{{product.stock}} Items In Stock</span
         >
         {% endif %}
-        <p style="color: #666">
+        <p class="text-muted">
           Category: <strong>{{product.category}}</strong>
         </p>
       </div>

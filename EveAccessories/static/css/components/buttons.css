@@ -1,0 +1,28 @@
+.btn-primary {
+  background-color: var(--bg-primary);
+  border-color: var(--bg-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  background-color: var(--bg-primary-disabled) !important;
+  border-color: var(--bg-primary-disabled) !important;
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  border-color: var(--bg-primary);
+  color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--bg-primary);
+  border-color: var(--bg-primary);
+  color: white;
+}

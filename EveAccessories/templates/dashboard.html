@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/layout/admin-sidebar.css' %}" />
+<link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}" />
+{% endblock header %}
+
 {% block content %}
     <div class="d-flex flex-column flex-md-row" style="min-height: 80vh">
         <!-- Sidebar -->

@@ -1,8 +1,8 @@
 {% load static %}
 
-<nav class="nav bg-white" aria-label="Main navigation">
+<nav class="site-navbar bg-white" aria-label="Main navigation">
   <div class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
-    <a class="brand" href="/" aria-label="Home">
+    <a class="site-navbar-brand" href="/" aria-label="Home">
       <img
         src="{% static 'images/logo.svg' %}"
         alt="SOVX"
@@ -11,7 +11,7 @@
     </a>
     <form
       method="get"
-      class="search-bar position-relative ms-auto"
+      class="site-navbar-search position-relative ms-auto"
       role="search"
     >
       <input
@@ -45,7 +45,7 @@
       aria-label="Current language: English"
     >
       <svg
-        class="flag d-block overflow-hidden rounded-circle"
+        class="site-navbar-flag d-block overflow-hidden rounded-circle"
         viewBox="0 0 60 60"
         aria-hidden="true"
       >
@@ -65,7 +65,7 @@
       <span class="body-small text-secondary">English</span>
     </div>
     <a
-      class="cart position-relative d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
+      class="site-navbar-cart position-relative d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
       href="/cart"
       aria-label="Shopping cart"
     >

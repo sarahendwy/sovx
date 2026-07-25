@@ -1,0 +1,27 @@
+.home-page-hero-title {
+  font-size: 5vw;
+  font-weight: var(--font-bold);
+  font-style: italic;
+}
+
+.home-page-hero-subtitle {
+  font-size: 5vw;
+  font-family: var(--font-secondary);
+  font-weight: var(--font-medium);
+}
+
+.home-page-hero-image {
+  max-height: 600px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.home-page-hero-tagline {
+  font-size: max(16px, 2vw);
+  font-weight: var(--font-bold);
+}
+
+.home-page-hero-brand {
+  font-style: italic;
+}
