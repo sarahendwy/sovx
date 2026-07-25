@@ -14,28 +14,19 @@
     <div
       class="product-page-image d-flex justify-content-center"
     >
-      <div id="carouselExampleAutoplaying" class="carousel slide flex-grow-1" data-bs-ride="carousel">
-        <div class="carousel-inner w-100 h-100">
-          {% for product_image in product.images.all %}
-          <div class="carousel-item  w-100 h-100 {% if forloop.first %}active{% endif %}">
-            <div class="d-flex justify-content-center align-items-center w-100 h-100">
-            <img
-              src="{{ product_image.url }}"
-              alt="Product Thumbnail"
-              class="product-page-carousel-img img-fluid"
-            /></div>
-          </div>
-          {% endfor %}
+      <div class="w-100 h-100">
+        {% for product_image in product.images.all %}
+        <div class="w-100 h-100 {% if forloop.first %}active{% endif %}">
+          <div class="d-flex justify-content-center align-items-center w-100 h-100">
+          <img
+            src="{{ product_image.url }}"
+            alt="Product Thumbnail"
+            class="product-page-carousel-img img-fluid"
+          /></div>
         </div>
-        <button class="carousel-control-prev justify-content-start" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next justify-content-end" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+        {% endfor %}
       </div>
+
 
     </div>
 
