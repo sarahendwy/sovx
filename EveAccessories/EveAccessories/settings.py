@@ -21,11 +21,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_cleanup",
     "accessories.apps.AccessoriesConfig",
     "accounts.apps.AccountsConfig",
     "dashboard.apps.DashboardConfig",
     "orders.apps.OrdersConfig",
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [

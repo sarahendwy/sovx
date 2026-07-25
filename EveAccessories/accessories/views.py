@@ -2,23 +2,15 @@ from typing import Any
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from .models import Product
-from dashboard.models import Setting
+from dashboard.models import Section
 
 
 def index(request):
-    setting = Setting.objects.first()
-    if setting:
-        landing_image = setting.hero_image.url if setting.hero_image else ""
-    else:
-        landing_image = ""
-
-    new_products = Product.objects.order_by("updated_at")[:12]
     return render(
         request,
         "index.html",
         context={
-            "products": new_products,
-            "landing_image": landing_image,
+            "sections": Section.objects.all()
         },
     )
 

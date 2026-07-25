@@ -20,6 +20,12 @@
                 <li class="nav-item py-2">
                     <a class="nav-link ps-0 fw-bold {% if 'products' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_products' %}">Products</a>
                 </li>
+                <li class="nav-item py-2">
+                    <a class="nav-link ps-0 fw-bold {% if 'product-lists' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_product_lists' %}">Product Lists</a>
+                </li>
+                <li class="nav-item py-2">
+                    <a class="nav-link ps-0 fw-bold {% if 'sections' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_sections' %}">Sections</a>
+                </li>
                 <li class="nav-item pt-2">
                     <a class="nav-link ps-0 fw-bold {% if request.path == '/dashboard/settings/' %}ps-3 active{% endif %}" href="{% url 'admin_settings' %}">Site Settings</a>
                 </li>

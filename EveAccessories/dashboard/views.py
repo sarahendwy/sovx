@@ -7,8 +7,8 @@ from django.utils import timezone as django_timezone
 from django.db.models import Sum, Count
 
 from orders.models import Order, OrderEntry
-from .forms import ProductForm, SettingsForm
-from .models import Setting
+from .forms import ProductForm, SettingsForm, ProductListForm, SectionForm
+from .models import Setting, ProductList, Section
 from accessories.models import Product, ProductImage
 
 class DashboardView(TemplateView):
@@ -127,13 +127,6 @@ class AddProductView(CreateView):
             for f in files:
                 ProductImage.objects.create(product=self.object, image=f)
 
-        image_urls_value = form.cleaned_data.get("image_urls") or ""
-        if image_urls_value:
-            for raw_url in image_urls_value.splitlines():
-                url = raw_url.strip()
-                if url:
-                    ProductImage.objects.create(product=self.object, image_url=url)
-
         return super().form_valid(form)
 
 class EditProductView(UpdateView):
@@ -153,13 +146,6 @@ class EditProductView(UpdateView):
             for f in files:
                 ProductImage.objects.create(product=self.object, image=f)
 
-        image_urls_value = form.cleaned_data.get("image_urls") or ""
-        if image_urls_value:
-            for raw_url in image_urls_value.splitlines():
-                url = raw_url.strip()
-                if url:
-                    ProductImage.objects.create(product=self.object, image_url=url)
-
         return super().form_valid(form)
 
 class DeleteProductView(DeleteView):
@@ -174,6 +160,62 @@ class SettingsView(UpdateView):
 
     def get_object(self, queryset=None):
         return Setting.objects.first()
+
+class ProductListsView(ListView):
+    template_name = 'dashboard/product_list/product_lists.html'
+    model = ProductList
+    context_object_name = "product_lists"
+
+class AddProductListView(CreateView):
+    model = ProductList
+    form_class = ProductListForm
+    template_name = 'dashboard/product_list/add_product_list.html'
+    success_url = reverse_lazy('admin_product_lists')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get('select_all_products'):
+            self.object.product_ids.clear()
+        return response
+
+class EditProductListView(UpdateView):
+    model = ProductList
+    form_class = ProductListForm
+    template_name = 'dashboard/product_list/edit_product_list.html'
+    success_url = reverse_lazy('admin_product_lists')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get('select_all_products'):
+            self.object.product_ids.clear()
+        return response
+
+class DeleteProductListView(DeleteView):
+    model = ProductList
+    success_url = reverse_lazy('admin_product_lists')
+    template_name = "dashboard/confirm_delete.html"
+
+class SectionsView(ListView):
+    template_name = 'dashboard/section/sections.html'
+    model = Section
+    context_object_name = "sections"
+
+class AddSectionView(CreateView):
+    model = Section
+    form_class = SectionForm
+    template_name = 'dashboard/section/add_section.html'
+    success_url = reverse_lazy('admin_sections')
+
+class EditSectionView(UpdateView):
+    model = Section
+    form_class = SectionForm
+    template_name = 'dashboard/section/edit_section.html'
+    success_url = reverse_lazy('admin_sections')
+
+class DeleteSectionView(DeleteView):
+    model = Section
+    success_url = reverse_lazy('admin_sections')
+    template_name = "dashboard/confirm_delete.html"
 
 class OrdersView(TemplateView):
     template_name = 'dashboard/orders/orders.html'

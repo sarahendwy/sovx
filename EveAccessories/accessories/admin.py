@@ -6,7 +6,7 @@ from .models import Product, ProductImage
 class ImageInline(admin.StackedInline):
     model = ProductImage
     extra = 0
-    fields = ("image", "image_url")
+    fields = ("image",)
 
 
 class ProductAdmin(admin.ModelAdmin):

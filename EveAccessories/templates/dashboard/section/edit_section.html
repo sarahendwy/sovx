@@ -1,0 +1,33 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block admin_content %}
+    {% include "partials/components/form.html" with form_title="Edit Section" form_class="section-form" form_button_text="Save" %}
+
+
+    <script>
+        (function () {
+            var typeField = document.getElementById('id_type');
+            var productListField = document.getElementById('id_product_list');
+            var bannerField = document.getElementById('id_banner');
+            if (!typeField || !productListField || !bannerField) return;
+            var productListContainer = productListField.closest('.mb-3');
+            var bannerContainer = bannerField.closest('.mb-3');
+
+            function toggleProductList() {
+                productListContainer.style.display = typeField.value === 'product_list' ? '' : 'none';
+            }
+
+            function toggleBanner() {
+                bannerContainer.style.display = typeField.value === 'product_list' ? '' : 'none';
+            }
+
+            typeField.addEventListener('change', function() {
+                toggleProductList();
+                toggleBanner();
+            });
+            toggleProductList();
+            toggleBanner();
+        })();
+    </script>
+{% endblock admin_content %}

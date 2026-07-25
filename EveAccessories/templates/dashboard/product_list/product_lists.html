@@ -1,0 +1,51 @@
+{% extends 'dashboard.html' %} {% load static %}
+{% block admin_content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Manage Product Lists</h2>
+  <a class="btn btn-primary" href="{% url 'add_product_list' %}">Create New</a>
+</div>
+
+<!-- Product Lists Table -->
+<div class="overflow-x-scroll">
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Limit</th>
+      <th scope="col">Sort By</th>
+      <th scope="col">Direction</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product_list in product_lists %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ product_list.name }}</td>
+      <td>{{ product_list.limit }}</td>
+      <td>{{ product_list.get_sort_by_display }}</td>
+      <td>{{ product_list.get_sort_direction_display }}</td>
+      <td>
+        <a
+          href="{% url 'edit_product_list' product_list.id %}"
+          class="btn btn-sm btn-outline-primary">
+          Edit
+        </a>
+        <a
+          href="{% url 'delete_product_list' product_list.id %}"
+          class="btn btn-sm btn-outline-danger">
+          Delete
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6" class="text-center">No product lists found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock admin_content %}

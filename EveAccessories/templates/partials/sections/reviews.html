@@ -1,0 +1,7 @@
+<section class="py-4 my-3">
+    <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
+
+    {% if section.banner %}
+        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid" />
+    {% endif %}
+</section>

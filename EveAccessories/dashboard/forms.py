@@ -3,7 +3,7 @@ from django import forms
 from django.core.validators import validate_image_file_extension
 
 from accessories.models import Product
-from .models import Setting
+from .models import Setting, ProductList, Section
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -41,12 +41,6 @@ class ProductForm(forms.ModelForm):
     #     required=False,
     #     help_text="Upload one or more image files for this product.",
     # )
-    image_urls = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={"rows": 3}),
-        help_text="Paste image URLs here, one per line. Leave blank if not using URLs.",
-        label="Image URLs",
-    )
     clear_old_images = forms.BooleanField(
         required=False,
         label="Clear old images?",
@@ -65,4 +59,39 @@ class SettingsForm(forms.ModelForm):
 
     class Meta:
         model = Setting
+        fields = '__all__'
+
+class ProductListForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field, forms.fields.BooleanField):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+
+        if self.instance.pk and not self.instance.product_ids.exists():
+            self.fields['select_all_products'].initial = True
+
+        self.fields['limit'].widget.attrs.update({'min': 4, 'max': 16})
+        self.order_fields(['name', 'limit', 'select_all_products', 'product_ids', 'sort_by', 'sort_direction'])
+
+    select_all_products = forms.BooleanField(
+        required=False,
+        label="Select all products?",
+        help_text="Check this box to include all products instead of picking specific ones below.",
+    )
+
+    class Meta:
+        model = ProductList
+        fields = '__all__'
+
+class SectionForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = Section
         fields = '__all__'

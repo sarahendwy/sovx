@@ -1,0 +1,22 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block admin_content %}
+    {% include "partials/components/form.html" with form_title="Edit Product List" form_class="product-list-form" form_button_text="Save" %}
+
+    <script>
+        (function () {
+            var selectAllField = document.getElementById('id_select_all_products');
+            var productIdsField = document.getElementById('id_product_ids');
+            if (!selectAllField || !productIdsField) return;
+            var productIdsContainer = productIdsField.closest('.mb-3');
+
+            function toggleProductIds() {
+                productIdsContainer.style.display = selectAllField.checked ? 'none' : '';
+            }
+
+            selectAllField.addEventListener('change', toggleProductIds);
+            toggleProductIds();
+        })();
+    </script>
+{% endblock admin_content %}

@@ -6,5 +6,15 @@
 {% endblock header %}
 
 {% block content %}
-{% include "partials/layout/section.html" with products=products %}
+{% for section in sections %}
+    {% if section.type == "product_list" and section.product_list %}
+        {% include "partials/sections/product_list.html" with section=section products=section.product_list.get_products %}
+    {% elif section.type == "reviews" %}
+        {% include "partials/sections/reviews.html" with section=section %}
+    {% elif section.type == "why_choose_us" %}
+        {% include "partials/sections/why_choose_us.html" with section=section %}
+    {% elif section.type == "sell_with_us" %}
+        {% include "partials/sections/sell_with_us.html" with section=section %}
+    {% endif %}
+{% endfor %}
 {% endblock content %}
