@@ -7,9 +7,9 @@ from django.utils import timezone as django_timezone
 from django.db.models import Sum, Count
 
 from orders.models import Order, OrderEntry
-from .forms import CategoryForm, ProductForm, SettingsForm
+from .forms import ProductForm, SettingsForm
 from .models import Setting
-from accessories.models import Category, Product, ProductImage
+from accessories.models import Product, ProductImage
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
@@ -94,54 +94,11 @@ class DashboardView(TemplateView):
         
         return context
 
-class CategoriesView(ListView):
-    template_name = 'dashboard/category/categories.html'
-    model = Category
-    paginate_by = 24
-    context_object_name = "categories"
-
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["query"] = self.request.GET.get('query') or "Search categories..."
-        return context
-
-
-    def get_queryset(self):
-        query = self.request.GET.get('query')
-        queryset = self.model.objects.all()
-        if query:
-            queryset = queryset.filter(name__icontains=query)
-        return queryset.order_by('display_order', 'name')
-
-class AddCategoryView(CreateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'dashboard/category/add_category.html'
-    success_url = reverse_lazy('admin_categories')
-
-class EditCategoryView(UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'dashboard/category/add_category.html'
-    success_url = reverse_lazy('admin_categories')
-
-class DeleteCategoryView(DeleteView):
-    model = Category
-    success_url = reverse_lazy('admin_categories')
-    template_name = "dashboard/confirm_delete.html"
-
-def category_discount(request, pk):
-    category = Category.objects.get(pk=pk)
-    if request.method == 'POST':
-        discount = request.POST.get('discount')
-        if discount:
-            category.products.update(discount=discount)
-    return redirect('edit_category', pk=pk)
-
-class ProductsView(CategoriesView):
+class ProductsView(ListView):
     template_name = 'dashboard/product/products.html'
     model = Product
     context_object_name = "products"
+    paginate_by = 24
     
     def get_queryset(self):
         query = self.request.GET.get('query')
@@ -149,6 +106,12 @@ class ProductsView(CategoriesView):
         if query:
             queryset = queryset.filter(title__icontains=query)
         return queryset.order_by('-created_at')
+
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get('query') or "Search..."
+        return context
 
 class AddProductView(CreateView):
     model = Product
@@ -223,7 +186,7 @@ class OrdersView(TemplateView):
         else:
             all_orders = Order.objects.all()
 
-        context["query"] = query or "Search categories..."
+        context["query"] = query or "Search..."
         context["pending_orders"] = all_orders.filter(status="Pending Confirmation")[:50]
         context["confirmed_orders"] = all_orders.filter(status="Confirmed")[:50]
         context["in_delivery_orders"] = all_orders.filter(status="In Delivery")[:50]

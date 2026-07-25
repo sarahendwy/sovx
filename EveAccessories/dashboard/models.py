@@ -38,9 +38,7 @@ class Setting(models.Model):
     )
     payment_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
     hero_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
-    homepage_categories_count = models.PositiveIntegerField(
-        default=4, help_text="Number of categories to display on homepage"
-    )
+
     cairo_shipping = models.PositiveIntegerField(default=0)
     alexandria_shipping = models.PositiveIntegerField(default=0)
     giza_shipping = models.PositiveIntegerField(default=0)

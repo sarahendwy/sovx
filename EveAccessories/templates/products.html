@@ -7,10 +7,13 @@
 
 {% block content %}
     <div class="py-2 py-md-4">
-        <h1 class="heading-1 font-regular mb-5">All {{ category|title }} Products</h1>
+        <h1 class="heading-1 font-regular mb-5">All Products</h1>
         <div class="container text-center">
             <div class="row justify-content-center">
                 {% for product in products %}
+                    {% include "partials/components/product_card.html" with product=product %}
+                    {% include "partials/components/product_card.html" with product=product %}
+                    {% include "partials/components/product_card.html" with product=product %}
                     {% include "partials/components/product_card.html" with product=product %}
                 {% endfor %}
             </div>

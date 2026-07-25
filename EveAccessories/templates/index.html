@@ -3,7 +3,6 @@
 
 {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/product-card.css' %}" />
-<link rel="stylesheet" href="{% static 'css/components/category-card.css' %}" />
 <link rel="stylesheet" href="{% static 'css/pages/home.css' %}" />
 {% endblock header %}
 
@@ -21,6 +20,5 @@
         </a>
     </div>
 </section>
-{% include "partials/sections/categories.html" with categories=categories %}
 {% include "partials/sections/arrivals.html" with products=products %}
 {% endblock content %}

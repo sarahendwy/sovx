@@ -29,7 +29,6 @@
       <th scope="col">Price</th>
       <th scope="col">Discount</th>
       <th scope="col">Stock</th>
-      <th scope="col">Category</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -41,7 +40,6 @@
       <td>{{ product.price }}</td>
       <td>{{ product.discount }}</td>
       <td>{{ product.stock }}</td>
-      <td>{{ product.category }}</td>
       <td>
         <a
           href="{% url 'edit_product' product.id %}"

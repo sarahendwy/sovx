@@ -15,11 +15,5 @@ urlpatterns = [
     path('products/edit/<pk>', EditProductView.as_view(), name='edit_product'),
     path('products/delete/<pk>', DeleteProductView.as_view(), name='delete_product'),
 
-    path('categories/', CategoriesView.as_view(), name='admin_categories'),
-    path('categories/add', AddCategoryView.as_view(), name='add_categories'),
-    path('categories/edit/<pk>', EditCategoryView.as_view(), name='edit_category'),
-    path('categories/delete/<pk>', DeleteCategoryView.as_view(), name='delete_category'),
-    path('categories/edit/<pk>/discount', category_discount, name='category_discount'),
-
     path('settings/', SettingsView.as_view(), name='admin_settings'),
 ]

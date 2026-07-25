@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-**EveAccessories** is a server-rendered e-commerce web application for a women's jewelry/accessories store (Arabic RTL storefront branded "Eve Accessories"). It supports product browsing, a session/account-based shopping cart, checkout without payment gateway integration (Cash on Delivery / manual wallet transfer with proof-of-payment upload), and a custom admin dashboard for managing products, categories, orders, and store settings.
+**EveAccessories** is a server-rendered e-commerce web application for a women's jewelry/accessories store (Arabic RTL storefront branded "Eve Accessories"). It supports product browsing, a session/account-based shopping cart, checkout without payment gateway integration (Cash on Delivery / manual wallet transfer with proof-of-payment upload), and a custom admin dashboard for managing products, orders, and store settings.
 
 **Tech stack:**
 - **Backend:** Python 3 / Django 5.1 (monolithic MVT architecture, no DRF/API layer — server-rendered HTML)
@@ -16,20 +16,20 @@
 The repo root contains the Django project (`EveAccessories/`) plus top-level `requirements.txt`, `.venv`, and licensing/IDE files. Everything of substance lives under `EveAccessories/`, organized as one project with four apps:
 
 - **`EveAccessories/EveAccessories/`** — Project core: `settings.py`, root `urls.py`, `wsgi.py`/`asgi.py`. Wires together the four apps and static/media serving.
-- **`accessories/`** — Product catalog domain: `Category`, `Product`, `ProductImage` models; public views for home, category list, product list/detail, and add/remove-from-cart actions.
+- **`accessories/`** — Product catalog domain: `Product`, `ProductImage` models; public views for home, product list/detail, and add/remove-from-cart actions.
 - **`accounts/`** — Custom `User` model (email as username, Egyptian governorate/city/address fields, and a denormalized `cart` string field), signup/login/logout, email activation tokens, profile editing, and `RequireAdminLoginMiddleware` which gates any URL matching `ADMIN_LOGIN_REQUIRED_URLS` (i.e. `/dashboard/*`) behind `is_staff`.
 - **`orders/`** — `Order`, `OrderEntry` (line items), `OrderLog` (audit trail) models; cart view, checkout (`CreateOrder`), and order confirmation pages.
-- **`dashboard/`** — Admin-only back-office: `Setting` model (site-wide config: hero/payment images, per-governorate shipping fees, homepage category count) plus CRUD views for products, categories, order-status management, and dashboard analytics (month/year/all-time sales stats).
-- **`templates/`** — Global templates, organized into `partials/{components,icons,layout,sections}` for reusable includes (navbar, footer, product/category cards, icons) and per-feature subfolders (`orders/`, `registration/`, `dashboard/`, `auth/`).
+- **`dashboard/`** — Admin-only back-office: `Setting` model (site-wide config: hero/payment images, per-governorate shipping fees) plus CRUD views for products, order-status management, and dashboard analytics (month/year/all-time sales stats).
+- **`templates/`** — Global templates, organized into `partials/{components,icons,layout,sections}` for reusable includes (navbar, footer, product cards, icons) and per-feature subfolders (`orders/`, `registration/`, `dashboard/`, `auth/`).
 - **`static/`** — CSS, fonts, logo (served via `django.contrib.staticfiles` in dev, `STATIC_ROOT` collection in prod).
-- **`media/`** — User-uploaded content: category/product images, organized by app-defined `upload_to` paths.
+- **`media/`** — User-uploaded content: product images, organized by app-defined `upload_to` paths.
 - Each app follows standard Django layout: `models.py`, `views.py`, `urls.py`, `admin.py`, `apps.py`, `migrations/`, and (where relevant) `forms.py`.
 
 ## 3. Core Workflows
 
 **Storefront browsing → cart → checkout:**
-1. `accessories.views.index` reads the singleton `dashboard.Setting` row for hero image/category count, and renders featured categories + newest products.
-2. `ProductListView`/`ProductView` (Django generic `ListView`/`DetailView`) support category filtering and pagination.
+1. `accessories.views.index` reads the singleton `dashboard.Setting` row for hero image count, and renders newest products.
+2. `ProductListView`/`ProductView` (Django generic `ListView`/`DetailView`) support pagination.
 3. Cart state is stored as a delimited string (`"<product_id>#<variant>-<product_id>#<variant>-..."`) — persisted on `request.session['cart']` for guests, and mirrored into `User.cart` for authenticated users on every add/remove (see `ProductView.post`, `orders.views.remove_from_cart`). Out-of-stock products are blocked from being added.
 4. `orders.views.CartView` parses that string back into a `Product` queryset for display.
 5. `CreateOrder` (a `CreateView`) does the heavy lifting on submit: re-validates quantities against current stock, enforces a max-2-undelivered-orders-per-user/phone limit, decrements `Product.stock`, creates `OrderEntry` rows priced at `discounted_price`, computes `order_total` (line items + flat shipping fee), auto-confirms Cash-on-Delivery orders, logs an `OrderLog` entry, clears the cart, and redirects to an order-success page.
@@ -40,7 +40,7 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 - Successful login redirects staff/superusers to `/dashboard/`, everyone else to the homepage (or a `?next=` target).
 
 **Admin dashboard (staff-only, enforced by `RequireAdminLoginMiddleware`):**
-- CRUD for `Category`/`Product` (supports both uploaded image files and raw image URLs per `ProductImage`, plus bulk category-wide discount application).
+- CRUD for `Product` (supports both uploaded image files and raw image URLs per `ProductImage`).
 - Order pipeline management: `confirm_order` → `deliver_order` → `complete_order`, or `reject_order` (which restocks the cancelled order's items).
 - `DashboardView` aggregates month/year/all-time order counts, revenue (`Sum(order_total)`), and items-sold stats via Django ORM aggregation.
 - `SettingsView` edits the singleton `Setting` row (hero/payment images, per-governorate shipping costs).

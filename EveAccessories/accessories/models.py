@@ -1,26 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-
-# Create your models here.
-class Category(models.Model):
-    name = models.CharField(max_length=30)
-    image = models.ImageField(upload_to="categories/images/%Y/%m/%d/")
-    display_order = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first on homepage")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = "Categories"
-        ordering = ['display_order', 'name']
-
-
 class Product(models.Model):
     title = models.CharField(max_length=150)
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name="products")
     description = models.TextField()
     price = models.PositiveIntegerField(default=0)
     stock = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0)])

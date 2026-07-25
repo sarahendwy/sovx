@@ -1,61 +1,32 @@
 from typing import Any
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
-from .models import Category, Product
+from .models import Product
 from dashboard.models import Setting
 
 
 def index(request):
     setting = Setting.objects.first()
     if setting:
-        categories_count = setting.homepage_categories_count
         landing_image = setting.hero_image.url if setting.hero_image else ""
     else:
-        categories_count = 4
         landing_image = ""
 
-    top_categories = Category.objects.all()[:categories_count]
     new_products = Product.objects.order_by("updated_at")[:12]
     return render(
         request,
         "index.html",
         context={
-            "categories": top_categories,
             "products": new_products,
             "landing_image": landing_image,
         },
     )
-
-
-class CategoriesView(ListView):
-    template_name = "categories.html"
-    model = Category
-    context_object_name = "categories"
-
 
 class ProductListView(ListView):
     model = Product
     template_name = "products.html"
     context_object_name = "products"
     paginate_by = 12
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
-        category = self.request.GET.get("category", "")
-        data["category"] = category
-        return data
-
-    def get_queryset(self):
-        category = self.request.GET.get("category", "")
-        if category:
-            products = Product.objects.filter(category__name__iexact=category).order_by(
-                "-created_at"
-            )
-        else:
-            products = Product.objects.all().order_by("-created_at")
-
-        return products
-
 
 class ProductView(DetailView):
     model = Product
