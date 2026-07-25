@@ -58,7 +58,7 @@
   /* row layout comes from Bootstrap utility classes in the markup */
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 576px) {
   .order-form-product-row {
     flex-wrap: wrap;
     gap: var(--space-3);

@@ -1,10 +1,10 @@
-<section class="arrivals py-4 my-3">
-    <h1 class="heading-1 font-regular mb-3">New Arrivals</h1>
+<section class="py-4 my-3">
+    <h1 class="heading-1 font-regular mb-3">Section Title</h1>
 
     <div class="carousel-inner">
             {% if products|length > 0 %}
                 <div class="carousel-item active">
-                    <div class="row justify-content-center">
+                    <div class="row justify-content-center product-list">
                         {% for product in products|slice:"0:4" %}
                             {% include "partials/components/product_card.html" with product=product %}
                             {% include "partials/components/product_card.html" with product=product %}

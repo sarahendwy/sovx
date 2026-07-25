@@ -1,7 +1,7 @@
-<div class="product-card col-12 col-md-6 col-lg-3 mb-4">
+<div class="product-card">
   <a href="{% url 'product' pk=product.id %}" class="text-decoration-none">
     <div class="product-card-media">
-      <img src="{{product.thumbnail}}" alt="{{product.title}}" class="product-card-image" />
+      <img src="{{product.thumbnail}}" alt="{{product.title}}" class="product-card-image h-100" />
       {% if product.stock == 0 %}
       <span class="product-card-badge badge bg-danger">Sold Out</span>
       {% elif product.discount > 0 %}
@@ -12,13 +12,13 @@
 
   <div class="product-card-body">
     <div class="product-card-header">
+      <a href="{% url 'product' pk=product.id %}" class="product-card-title text-decoration-none">{{product.title}}</a>
       <div class="product-card-price">
-        {{product.discounted_price|floatformat:0}} <small>ج.م.</small>
+        {{product.discounted_price|floatformat:0}} <small>جـ . مـ</small>
         {% if product.discount %}
         <span class="product-card-price-old">{{product.price}}</span>
         {% endif %}
       </div>
-      <a href="{% url 'product' pk=product.id %}" class="product-card-title text-decoration-none">{{product.title}}</a>
     </div>
 
     <p class="product-card-description">{{product.description}}</p>
@@ -35,8 +35,8 @@
       {% csrf_token %}
       <input type="hidden" name="operation" value="add" />
       <button type="submit" class="product-card-cta">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6.3 5H21L19 12H7.4M20 16H8L6 3H3M9 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM20 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M1.5 10.5V1.5H0V0H2.25C2.44891 0 2.63968 0.0790176 2.78033 0.21967C2.92098 0.360322 3 0.551088 3 0.75V9.75H12.3285L13.8285 3.75H4.5V2.25H14.79C14.904 2.25 15.0165 2.276 15.119 2.326C15.2214 2.37601 15.3111 2.44871 15.3813 2.53859C15.4514 2.62847 15.5001 2.73315 15.5237 2.84468C15.5473 2.95622 15.5452 3.07166 15.5175 3.18225L13.6425 10.6823C13.6019 10.8444 13.5082 10.9884 13.3764 11.0913C13.2446 11.1941 13.0822 11.25 12.915 11.25H2.25C2.05109 11.25 1.86032 11.171 1.71967 11.0303C1.57902 10.8897 1.5 10.6989 1.5 10.5V10.5ZM3 15.75C2.60218 15.75 2.22064 15.592 1.93934 15.3107C1.65804 15.0294 1.5 14.6478 1.5 14.25C1.5 13.8522 1.65804 13.4706 1.93934 13.1893C2.22064 12.908 2.60218 12.75 3 12.75C3.39783 12.75 3.77936 12.908 4.06066 13.1893C4.34197 13.4706 4.5 13.8522 4.5 14.25C4.5 14.6478 4.34197 15.0294 4.06066 15.3107C3.77936 15.592 3.39783 15.75 3 15.75ZM12 15.75C11.6022 15.75 11.2206 15.592 10.9393 15.3107C10.658 15.0294 10.5 14.6478 10.5 14.25C10.5 13.8522 10.658 13.4706 10.9393 13.1893C11.2206 12.908 11.6022 12.75 12 12.75C12.3978 12.75 12.7794 12.908 13.0607 13.1893C13.342 13.4706 13.5 13.8522 13.5 14.25C13.5 14.6478 13.342 15.0294 13.0607 15.3107C12.7794 15.592 12.3978 15.75 12 15.75Z" fill="white" fill-opacity="0.96"/>
         </svg>
         أضف إلى السلة
       </button>
@@ -44,3 +44,15 @@
     {% endif %}
   </div>
 </div>
+
+<script>
+  if (!window.__productCardDescriptionInit) {
+    window.__productCardDescriptionInit = true;
+    document.addEventListener('click', function (e) {
+      const description = e.target.closest('.product-card-description');
+      if (description) {
+        description.classList.toggle('is-expanded');
+      }
+    });
+  }
+</script>
