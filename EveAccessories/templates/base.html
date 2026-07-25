@@ -24,11 +24,12 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static '/css/main.css' %}" />
+    <link rel="stylesheet" href="{% static '/css/small.css' %}" />
     <link rel="stylesheet" href="{% static '/css/styles.css' %}" />
     {% block header %} {% endblock header %}
   </head>
   <body>
-    {% include "partials/components/announcement_bar.html"%}
+    {% include "partials/components/announcement_bar.html"%} 
     {% include "partials/layout/navbar.html" %}
 
     <main class="container flex-grow-1">

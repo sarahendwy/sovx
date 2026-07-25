@@ -206,14 +206,13 @@ p {
 }
 
 .nav {
-  height: 54px;
   padding: 20px 44px;
   border-bottom: 1px solid var(--border-primary);
 }
 
 .cart {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--primary);
   border-radius: 5px;
 }
@@ -249,19 +248,4 @@ p {
   width: 80px;
   flex: 0 0 auto;
   line-height: 0;
-}
-
-@media (max-width: 575px) {
-  .nav {
-    padding: 0 12px;
-  }
-
-  .search-bar {
-    width: auto;
-    flex: 1;
-  }
-
-  .brand {
-    width: 48px;
-  }
 }
