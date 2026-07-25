@@ -107,16 +107,6 @@
       <form method="post">
         {% csrf_token %}
         <input type="hidden" name="operation" value="add" />
-        {% if product.variants > 1 %}
-          <label for="product_variant" class="form-label fw-bold">
-            Item Number
-          </label>
-          <input value="1" required
-                 class="form-control mb-2" id="product_variant"
-                 type="number" name="product_variant"
-                 min="1" max="{{product.variants}}"/>
-
-        {% endif %}
         <button
           class="btn btn-primary btn-lg mt-auto"
           type="submit"

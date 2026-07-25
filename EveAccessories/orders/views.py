@@ -85,14 +85,11 @@ class CreateOrder(CreateView):
         if cart:
             cart_set = set(cart.split("-"))
             cart_products = []
-            variants = defaultdict(lambda: 1)
             for pr in cart_set:
                 if pr:  # Skip empty strings
                     try:
                         product_id = int(pr.split("#")[0])
                         cart_products.append(product_id)
-                        if "#" in pr:
-                            variants[product_id] = pr.split("#")[1]
                     except (ValueError, IndexError):
                         continue
             products = Product.objects.filter(id__in=cart_products)
@@ -100,7 +97,6 @@ class CreateOrder(CreateView):
         else:
             products = Product.objects.none()
             stocks = {}
-            variants = {}
 
         setting = Setting.objects.first()
         if setting:
@@ -115,7 +111,6 @@ class CreateOrder(CreateView):
         
         context['products'] = products
         context['stocks'] = stocks
-        context['variants'] = variants
         return context
     
     def form_valid(self, form):
@@ -165,15 +160,12 @@ class CreateOrder(CreateView):
             cart = self.request.session.get('cart') or ""
 
         cart = cart.strip("-")
-        variants = defaultdict(lambda: 1)
         if cart:
             cart_set = set(cart.split("-"))
             for pr in cart_set:
                 if pr:  # Skip empty strings
                     try:
                         product_id = int(pr.split("#")[0])
-                        if "#" in pr:
-                            variants[product_id] = pr.split("#")[1]
                     except (ValueError, IndexError):
                         continue
 
@@ -212,8 +204,7 @@ class CreateOrder(CreateView):
             
             order_items.append({
                 'product': product,
-                'quantity': quantity,
-                'variant': variants.get(product.id, 1)
+                'quantity': quantity
             })
         
         # Check if order has any items
