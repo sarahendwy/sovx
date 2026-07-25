@@ -1,113 +1,106 @@
 {% load static %}
-<nav class="navbar navbar-expand-sm">
-  <div class="container">
-    <a class="navbar-brand  fs-1" href="/"
-      ><img src="{% static 'images/logo.svg' %}" alt="SOVX" class="img-fluid"
-    /></a>
-    <form method="get" class="d-flex" mgl-2>
-      <input type="search" name="q" placeholder="دور علي اللي نفسك فيه" />
-    </form>
-    <button
-      class="navbar-toggler border-0"
+
+<nav class="nav bg-white" aria-label="Main navigation">
+  <div class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
+    <a class="brand" href="/" aria-label="Home">
+      <img src="{% static 'images/logo.svg' %}" alt="SOVX" class="img-fluid d-block" />
+    </a>
+    <!-- <button
+      class="btn p-0 border-0 d-md-none"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
+      data-bs-target="#searchCollapse"
       aria-expanded="false"
-      aria-label="Toggle navigation"
+      aria-controls="searchCollapse"
     >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <!-- Meta Pixel Code -->
-    <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js",
-      );
-      fbq("init", "914936884034267");
-      fbq("track", "PageView");
-    </script>
-    <noscript
-      ><img
-        height="1"
-        width="1"
-        style="display: none"
-        src="https://www.facebook.com/tr?id=914936884034267&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav gap-md-3">
-        <li class="nav-item">
-          <a class="nav-link" href="/cart">
-            <img
-              src="{% static 'icons/cartlogo.svg' %}"
-              alt="Cart"
-              class="img-fluid"
-            />
-          </a>
-        </li>
-        {% if user.is_authenticated %}
-        <li class="nav-item align-self-center">
-          <div class="btn-group">
-            <button
-              class="btn btn-sm dropdown-toggle fs-6"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Hi, {{ user.first_name }}
-            </button>
-            <ul class="dropdown-menu">
-              {% if user.is_staff %}
-              <li>
-                <a class="dropdown-item" href="{% url 'admin_dashboard' %}"
-                  >Dashboard</a
-                >
-              </li>
-              {% endif %}
-              <li>
-                <a class="dropdown-item" href="{% url 'profile' %}"
-                  >My Profile</a
-                >
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li>
-                <a class="dropdown-item" href="{% url 'logout' %}">logout</a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a
-            class="nav-link fs-5 cormorant-garamond-semibold"
-            href="{% url 'login' %}"
-            >Login</a
-          >
-        </li>
-        {% endif %}
-      </ul>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="6.5" stroke="#a5a5a5" stroke-width="1.5" />
+        <path
+          d="m16 16 4 4"
+          stroke="#a5a5a5"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button> -->
+    <!-- <div class="collapse d-md-block" id="searchCollapse"> -->
+    <form
+      method="get"
+      class="search-bar position-relative ms-auto"
+      role="search"
+    >
+      <input
+        type="search"
+        name="q"
+        placeholder="دور على اللي نفسك فيه..."
+        aria-label="Search"
+        class="form-control bg-white border rounded-2 shadow-none"
+      />
+
+      <svg
+      class="position-absolute top-50 end-0 translate-middle-y me-2 pe-none"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle cx="11" cy="11" r="6.5" stroke="#a5a5a5" stroke-width="1.5" />
+        <path
+          d="m16 16 4 4"
+          stroke="#a5a5a5"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+    </form>
+    <!-- </div> -->
+    <div
+      class="d-flex align-items-center gap-2 py-4 text-nowrap"
+      aria-label="Current language: English"
+    >
+      <svg
+        class="flag d-block overflow-hidden rounded-circle"
+        viewBox="0 0 60 60"
+        aria-hidden="true"
+      >
+        <defs>
+          <clipPath id="uk-flag-circle">
+            <circle cx="30" cy="30" r="30" />
+          </clipPath>
+        </defs>
+        <g clip-path="url(#uk-flag-circle)">
+          <rect width="60" height="60" fill="#21468b" />
+          <path d="M0 0 60 60M60 0 0 60" stroke="#fff" stroke-width="13" />
+          <path d="M0 0 60 60M60 0 0 60" stroke="#cf142b" stroke-width="6" />
+          <path d="M30 0v60M0 30h60" stroke="#fff" stroke-width="19" />
+          <path d="M30 0v60M0 30h60" stroke="#cf142b" stroke-width="11" />
+        </g>
+      </svg>
+      <span class="body-small text-secondary">English</span>
     </div>
+    <a
+      class="cart position-relative d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
+      href="/cart"
+      aria-label="Shopping cart"
+    >
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M4 5h2l1.6 8.2a2 2 0 0 0 2 1.6h6.8a2 2 0 0 0 2-1.6L19.5 8H7"
+          stroke="var(--primary)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <circle cx="10" cy="18.5" r="1" fill="var(--primary)" />
+        <circle cx="17" cy="18.5" r="1" fill="var(--primary)" />
+      </svg>
+    </a>
   </div>
 </nav>
