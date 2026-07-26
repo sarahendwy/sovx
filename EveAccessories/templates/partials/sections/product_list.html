@@ -1,12 +1,10 @@
-<section class="py-4 my-3">
-    <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
-
+<section>
     {% if section.banner %}
-        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid mb-3" />
+        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid mb-3 banner" />
     {% endif %}
 
     {% if products %}
-        <div class="row justify-content-center product-list">
+        <div class="product-list">
             {% for product in products %}
                 {% include "partials/components/product_card.html" with product=product %}
             {% endfor %}

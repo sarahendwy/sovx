@@ -1,12 +1,15 @@
+<div>
 <div class="product-card">
   <a href="{% url 'product' pk=product.id %}" class="text-decoration-none">
     <div class="product-card-media">
       <img src="{{product.thumbnail}}" alt="{{product.title}}" class="product-card-image h-100" />
-      {% if product.stock == 0 %}
-      <span class="product-card-badge badge bg-danger">Sold Out</span>
-      {% elif product.discount > 0 %}
-      <span class="product-card-badge badge bg-warning">{{ product.discount }}% OFF!</span>
-      {% endif %}
+      {% comment %} 
+        {% if product.stock == 0 %}
+        <span class="product-card-badge badge bg-danger">Sold Out</span>
+        {% elif product.discount > 0 %}
+        <span class="product-card-badge badge bg-warning">{{ product.discount }}% OFF!</span>
+        {% endif %} 
+      {% endcomment %}
     </div>
   </a>
 
@@ -15,9 +18,9 @@
       <a href="{% url 'product' pk=product.id %}" class="product-card-title text-decoration-none">{{product.title}}</a>
       <div class="product-card-price">
         {{product.discounted_price|floatformat:0}} <small>جـ . مـ</small>
-        {% if product.discount %}
+        {% comment %} {% if product.discount %}
         <span class="product-card-price-old">{{product.price}}</span>
-        {% endif %}
+        {% endif %} {% endcomment %}
       </div>
     </div>
 
@@ -44,6 +47,7 @@
     {% endif %}
   </div>
 </div>
+</div>
 
 <script>
   if (!window.__productCardDescriptionInit) {
@@ -53,6 +57,37 @@
       if (description) {
         description.classList.toggle('is-expanded');
       }
+    });
+  }
+
+  if (!window.__productCardTitleFitInit) {
+    window.__productCardTitleFitInit = true;
+
+    const fitTitle = function (el) {
+      el.style.fontSize = '';
+      const baseFontSize = parseFloat(getComputedStyle(el).fontSize);
+      const minFontSize = baseFontSize * 0.7;
+      let fontSize = baseFontSize;
+      while (el.scrollWidth > el.clientWidth && fontSize > minFontSize) {
+        fontSize -= 0.5;
+        el.style.fontSize = fontSize + 'px';
+      }
+    };
+
+    const fitAllTitles = function () {
+      document.querySelectorAll('.product-card-title').forEach(fitTitle);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fitAllTitles);
+    } else {
+      fitAllTitles();
+    }
+
+    let resizeTimeout;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(fitAllTitles, 150);
     });
   }
 </script>

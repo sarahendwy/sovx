@@ -16,6 +16,10 @@ p {
   display: none;
 }
 
+main {
+  max-width: 1224px;
+}
+
 * {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
