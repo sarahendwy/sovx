@@ -12,7 +12,7 @@
             var productIdsContainer = productIdsField.closest('.mb-3');
 
             function toggleProductIds() {
-                productIdsContainer.style.display = selectAllField.checked ? 'none' : '';
+                productIdsContainer.disabled = selectAllField.checked;
             }
 
             selectAllField.addEventListener('change', toggleProductIds);
