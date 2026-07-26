@@ -1,11 +1,15 @@
 import os
+from io import BytesIO
+
+from PIL import Image
 
 from django.conf import settings
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
 from accessories.models import Product, ProductImage
-from dashboard.models import Setting
+from dashboard.models import ProductList, ProductSortField, Section, SectionType, Setting, SortDirection
 
 SAMPLE_PRODUCTS = [
     {"title": "مكسرات مشكلة فاخرة", "description": "تشكيلة فاخرة من أجود أنواع المكسرات المحمصة الطازجة.", "price": 350, "stock": 25, "discount": 10, "rating": 5},
@@ -25,26 +29,45 @@ SAMPLE_PRODUCTS = [
     {"title": "صنوبر فاخر", "description": "صنوبر فاخر نقي بطعم غني ورائحة مميزة.", "price": 600, "stock": 10, "discount": 0, "rating": 5},
 ]
 
+# Product List sections require a banner (see Section.clean). Real banner artwork is uploaded
+# later via the dashboard; seeding generates a solid-color placeholder instead of depending on
+# a file living under MEDIA_ROOT, since dashboard/sections/ has no date subfolder and any file
+# placed there directly is indistinguishable from a real upload to django-cleanup's delete signal.
+SAMPLE_SECTIONS = [
+    {"name": "وصل حديثاً", "type": SectionType.PRODUCT_LIST, "banner_color": (222, 184, 135), "list": "وصل حديثاً"},
+    {"name": "الأفضل مبيعاً", "type": SectionType.PRODUCT_LIST, "banner_color": (205, 133, 63), "list": "الأفضل مبيعاً"},
+    {"name": "ليه تختارنا", "type": SectionType.WHY_CHOOSE_US, "banner_color": None, "list": None},
+    {"name": "مختارة 1", "type": SectionType.PRODUCT_LIST, "banner_color": (160, 82, 45), "list": "مختارة"},
+    {"name": "مختارة 2", "type": SectionType.PRODUCT_LIST, "banner_color": (160, 82, 45), "list": "مختارة"},
+    {"name": "تقييمات", "type": SectionType.REVIEWS, "banner_color": None, "list": None},
+    {"name": "شاركنا", "type": SectionType.SELL_WITH_US, "banner_color": None, "list": None},
+]
+
 
 class Command(BaseCommand):
     help = "Seed the database with sample data for local development"
 
     def handle(self, *args, **options):
         self.seed_settings()
-        self.seed_products()
+        products = self.seed_products()
+        product_lists = self.seed_product_lists(products)
+        self.seed_sections(product_lists)
 
     def seed_products(self):
         Product.objects.all().delete()
 
         image_path = os.path.join(settings.MEDIA_ROOT, "products", "images", "nuts.png")
 
+        products = []
         for data in SAMPLE_PRODUCTS:
             product = Product.objects.create(**data)
             with open(image_path, "rb") as image_file:
                 product_image = ProductImage(product=product)
                 product_image.image.save("nuts.png", File(image_file), save=True)
+            products.append(product)
 
-        self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_PRODUCTS)} sample products"))
+        self.stdout.write(self.style.SUCCESS(f"Created {len(products)} sample products"))
+        return products
 
     def seed_settings(self):
         setting = Setting.objects.first()
@@ -57,3 +80,55 @@ class Command(BaseCommand):
             setting.offer_banner_text = offer_banner_text
             setting.save()
             self.stdout.write(self.style.SUCCESS("Updated site settings"))
+
+    def seed_product_lists(self, products):
+        ProductList.objects.all().delete()
+
+        recent = ProductList.objects.create(
+            name="وصل حديثاً",
+            limit=6,
+            sort_by=ProductSortField.CREATED_AT,
+            sort_direction=SortDirection.DESC,
+        )
+
+        best_selling = ProductList.objects.create(
+            name="الأفضل مبيعاً",
+            limit=5,
+            sort_by=ProductSortField.CREATED_AT,
+            sort_direction=SortDirection.DESC,
+        )
+        best_selling.product_ids.set(products[6:11])
+
+        featured = ProductList.objects.create(
+            name="مختارة",
+            limit=6,
+            sort_by=ProductSortField.CREATED_AT,
+            sort_direction=SortDirection.DESC,
+        )
+        featured.product_ids.set(products[1:11])
+
+        product_lists = {"وصل حديثاً": recent, "الأفضل مبيعاً": best_selling, "مختارة": featured}
+        self.stdout.write(self.style.SUCCESS(f"Created {len(product_lists)} product lists"))
+        return product_lists
+
+    def seed_sections(self, product_lists):
+        Section.objects.all().delete()
+
+        for order, data in enumerate(SAMPLE_SECTIONS, start=1):
+            section = Section(
+                name=data["name"],
+                type=data["type"],
+                order=order,
+                product_list=product_lists.get(data["list"]),
+            )
+            section.save()
+
+            if data["banner_color"]:
+                section.banner.save(f"placeholder_{order}.png", self._placeholder_banner(data["banner_color"]), save=True)
+
+        self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SECTIONS)} sections"))
+
+    def _placeholder_banner(self, color, size=(1200, 300)):
+        buffer = BytesIO()
+        Image.new("RGB", size, color=color).save(buffer, format="PNG")
+        return ContentFile(buffer.getvalue())
