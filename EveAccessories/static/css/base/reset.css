@@ -1,7 +1,7 @@
 body {
   min-height: 100vh;
   background-color: var(--bg-secondary);
-  color: var(--text-primary);
+  color: var(--text-dark);
   display: flex;
   flex-direction: column;
   font-family: var(--font-primary);
@@ -23,4 +23,10 @@ main {
 * {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;
+}
+
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1248px !important;
+  }
 }

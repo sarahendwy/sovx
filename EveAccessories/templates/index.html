@@ -7,15 +7,18 @@
 {% endblock header %}
 
 {% block content %}
-{% for section in sections %}
-    {% if section.type == "product_list" and section.product_list %}
-        {% include "partials/sections/product_list.html" with section=section products=section.product_list.get_products %}
-    {% elif section.type == "reviews" %}
-        {% include "partials/sections/reviews.html" with section=section %}
-    {% elif section.type == "why_choose_us" %}
-        {% include "partials/sections/why_choose_us.html" with section=section %}
-    {% elif section.type == "sell_with_us" %}
-        {% include "partials/sections/sell_with_us.html" with section=section %}
-    {% endif %}
-{% endfor %}
+    {% include "partials/layout/navbar.html" %}
+    <main class="container flex-grow-1">
+        {% for section in sections %}
+            {% if section.type == "product_list" and section.product_list %}
+                {% include "partials/sections/product_list.html" with section=section products=section.product_list.get_products %}
+            {% elif section.type == "reviews" %}
+                {% include "partials/sections/reviews.html" with section=section %}
+            {% elif section.type == "why_choose_us" %}
+                {% include "partials/sections/why_choose_us.html" with section=section %}
+            {% elif section.type == "sell_with_us" %}
+                {% include "partials/sections/sell_with_us.html" with section=section %}
+            {% endif %}
+        {% endfor %}
+    </main>
 {% endblock content %}

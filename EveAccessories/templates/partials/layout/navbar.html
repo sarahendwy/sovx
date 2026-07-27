@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav class="site-navbar bg-white" aria-label="Main navigation">
-  <div class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
+  <div id="top-bar" class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
     <a class="site-navbar-brand" href="/" aria-label="Home">
       <img
         src="{% static 'images/logo.svg' %}"
@@ -91,37 +91,11 @@
         <a class="nav-link text-secondary active" href="/"> عروضنا </a>
       </li>
 
+      {% for section in sections %}
       <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> وصل حديثًا </a>
+        <a class="nav-link text-secondary" href="#section_{{section.id}}">{{section.name}}</a>
       </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> الأفضل مبيعًا </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> ليه تختارنا؟ </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> أكياس سوفكس </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> قسم ثاني </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> قسم ثالث </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> آراء عملائنا </a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#"> تاجر معانا </a>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 </nav>
