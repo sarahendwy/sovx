@@ -1,6 +1,6 @@
 footer {
-  background-color: var(--bg-primary);
-  padding: var(--space-5) 0;
+  background-color: var(--primary);
+  padding: 20px 44px;
   color: white;
 }
 
@@ -22,4 +22,20 @@ footer a:hover {
   width: 20px;
   margin-right: var(--space-4);
   fill: white;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md, 12px);
+  transition: background-color 0.2s ease;
+}
+
+.social-icon:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.copyright {
+  font-family: "Monteserrat", sans-serif;
 }
