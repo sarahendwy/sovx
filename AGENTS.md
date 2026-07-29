@@ -8,7 +8,6 @@
 - **Backend:** Python 3 / Django 5.1 (monolithic MVT architecture, no DRF/API layer — server-rendered HTML)
 - **Database:** SQLite in development, configurable via env vars (any Django-supported engine, e.g. Postgres/MySQL) in production
 - **Frontend:** Django templates + Bootstrap 5.3 (via CDN) + Popper.js, custom CSS (`main.css`, `styles.css`), custom web fonts (Zanjabeel family) — no JS framework or bundler (no `package.json`, the root `package-lock.json` is an empty stub)
-- **Auth:** Custom email-based `User` model (`AUTH_USER_MODEL = accounts.User`), Django's built-in auth views/tokens, email verification flow via SMTP (Gmail)
 - **Other libraries:** `django-cleanup` (auto-delete orphaned media files), `python-dotenv` (env config), `Pillow` (image handling)
 
 ## 2. Architecture & Structure
@@ -17,7 +16,6 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 
 - **`EveAccessories/EveAccessories/`** — Project core: `settings.py`, root `urls.py`, `wsgi.py`/`asgi.py`. Wires together the four apps and static/media serving.
 - **`accessories/`** — Product catalog domain: `Product`, `ProductImage` models; public views for home, product list/detail, and add/remove-from-cart actions.
-- **`accounts/`** — Custom `User` model (email as username, Egyptian governorate/city/address fields, and a denormalized `cart` string field), signup/login/logout, email activation tokens, profile editing, and `RequireAdminLoginMiddleware` which gates any URL matching `ADMIN_LOGIN_REQUIRED_URLS` (i.e. `/dashboard/*`) behind `is_staff`.
 - **`orders/`** — `Order`, `OrderEntry` (line items), `OrderLog` (audit trail) models; cart view, checkout (`CreateOrder`), and order confirmation pages.
 - **`dashboard/`** — Admin-only back-office: `Setting` model (site-wide config: hero/payment images, per-governorate shipping fees) plus CRUD views for products, order-status management, and dashboard analytics (month/year/all-time sales stats).
 - **`templates/`** — Global templates, organized into `partials/{components,icons,layout,sections}` for reusable includes (navbar, footer, product cards, icons) and per-feature subfolders (`orders/`, `registration/`, `dashboard/`, `auth/`).
@@ -36,7 +34,6 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 
 **Authentication:**
 - Custom `LoginForm`/`CreateUserForm` (Egyptian phone-number regex validation) on top of Django's `AuthenticationForm`/`UserCreationForm`.
-- Signup creates an active-but-unverified account and emails a token-based activation link (`accounts/tokens.py` + `registration/acc_active_email.html`); `activate()` view validates the token and flips `is_active`.
 - Successful login redirects staff/superusers to `/dashboard/`, everyone else to the homepage (or a `?next=` target).
 
 **Admin dashboard (staff-only, enforced by `RequireAdminLoginMiddleware`):**

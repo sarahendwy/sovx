@@ -1,5 +1,4 @@
 from django.db import models
-from accounts.models import egypt_governorates
 
 orders_states = [
     ('Pending Confirmation', 'Pending Confirmation'),
@@ -18,14 +17,12 @@ class Order(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
-    governorate = models.CharField(choices=egypt_governorates, max_length=25)
+    governorate = models.CharField(choices=[("Cairo", "Cairo")], max_length=25)
     city = models.CharField(max_length=55)
     address = models.CharField(max_length=500)
     status = models.CharField(choices=orders_states, max_length=25, default="Pending Confirmation")
 
-    user = models.ForeignKey("accounts.User", on_delete=models.PROTECT, related_name="orders", null=True)
     delivered_at = models.DateTimeField(null=True, blank=True)
-
     payment_method = models.CharField(choices=payment_methods, max_length=25, default="Cash on Delivery")
     payment_account = models.CharField(max_length=255, null=True, blank=True)
     payment_proof = models.ImageField(upload_to="orders/images/%Y/%m/%d/%h/%M/%S/", null=True, blank=True)
