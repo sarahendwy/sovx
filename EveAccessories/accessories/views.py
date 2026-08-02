@@ -2,23 +2,23 @@ from typing import Any
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from .models import Product
-from dashboard.models import Section
+from dashboard.models import Section, SectionType, SellWithUsCard
 
 
 def index(request):
-    return render(
-        request,
-        "index.html",
-        context={
-            "sections": Section.objects.all()
-        },
-    )
+    sections = Section.objects.all()
+    context = {"sections": sections}
+
+    if sections.filter(type=SectionType.SELL_WITH_US).exists():
+        context["sell_with_us_cards"] = SellWithUsCard.objects.filter(disabled=False)
+
+    return render(request, "index.html", context=context)
 
 class ProductListView(ListView):
     model = Product
     template_name = "products.html"
     context_object_name = "products"
-    paginate_by = 12
+
 
 class ProductView(DetailView):
     model = Product

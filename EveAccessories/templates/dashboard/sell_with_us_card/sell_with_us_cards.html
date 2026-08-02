@@ -1,0 +1,53 @@
+{% extends 'dashboard.html' %} {% load static %}
+{% block admin_content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Manage Sell With Us Cards</h2>
+  <a class="btn btn-primary" href="{% url 'add_sell_with_us_card' %}">Create New</a>
+</div>
+
+<!-- Sell With Us Cards Table -->
+<div class="overflow-x-scroll">
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Icon</th>
+      <th scope="col">Span</th>
+      <th scope="col">Order</th>
+      <th scope="col">Disabled</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for card in sell_with_us_cards %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ card.title }}</td>
+      <td>{{ card.get_svg_display }}</td>
+      <td>{{ card.span }}</td>
+      <td>{{ card.order }}</td>
+      <td>{{ card.disabled|yesno:"Yes,No" }}</td>
+      <td>
+        <a
+          href="{% url 'edit_sell_with_us_card' card.id %}"
+          class="btn btn-sm btn-outline-primary">
+          Edit
+        </a>
+        <a
+          href="{% url 'delete_sell_with_us_card' card.id %}"
+          class="btn btn-sm btn-outline-danger">
+          Delete
+        </a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7" class="text-center">No cards found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock admin_content %}

@@ -26,4 +26,9 @@ urlpatterns = [
     path('sections/add', AddSectionView.as_view(), name='add_section'),
     path('sections/edit/<pk>', EditSectionView.as_view(), name='edit_section'),
     path('sections/delete/<pk>', DeleteSectionView.as_view(), name='delete_section'),
+
+    path('sell-with-us-cards/', SellWithUsCardsView.as_view(), name='admin_sell_with_us_cards'),
+    path('sell-with-us-cards/add', AddSellWithUsCardView.as_view(), name='add_sell_with_us_card'),
+    path('sell-with-us-cards/edit/<pk>', EditSellWithUsCardView.as_view(), name='edit_sell_with_us_card'),
+    path('sell-with-us-cards/delete/<pk>', DeleteSellWithUsCardView.as_view(), name='delete_sell_with_us_card'),
 ]

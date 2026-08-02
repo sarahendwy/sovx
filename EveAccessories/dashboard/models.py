@@ -129,3 +129,53 @@ class Section(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SellWithUsIcon(models.TextChoices):
+    GLOBE = "globe", "Globe"
+    REVENUE_GROWTH = "revenue_growth", "Revenue Growth"
+    COINS_HAND = "coins_hand", "Coins In Hand"
+    PAYMENT_PLAN = "payment_plan", "Payment Plan"
+    NUTS_BAG = "nuts_bag", "Nuts Bag"
+
+
+SELL_WITH_US_ICON_FILES = {
+    SellWithUsIcon.GLOBE: "globe.svg",
+    SellWithUsIcon.REVENUE_GROWTH: "revenue-growth.svg",
+    SellWithUsIcon.COINS_HAND: "coins-hand.svg",
+    SellWithUsIcon.PAYMENT_PLAN: "payment-plan.svg",
+    SellWithUsIcon.NUTS_BAG: "nuts-bag.png",
+}
+
+
+class SellWithUsColor(models.TextChoices):
+    YELLOW = "#fffcdd", "Yellow"
+    GREEN = "#e7ffdc", "Green"
+    PINK = "#ffecee", "Pink"
+
+
+class SellWithUsCardSpan(models.IntegerChoices):
+    SINGLE = 1, "1 Column"
+    DOUBLE = 2, "2 Columns"
+
+
+class SellWithUsCard(models.Model):
+    title = models.CharField(max_length=150)
+    svg = models.CharField(max_length=20, choices=SellWithUsIcon.choices)
+    bg_color = models.CharField(max_length=7, choices=SellWithUsColor.choices, default=SellWithUsColor.YELLOW)
+    description = models.TextField(blank=True, help_text="Optional supporting text shown below the title")
+    cta_text = models.CharField(max_length=50, blank=True, help_text="Optional call-to-action button label")
+    cta_url = models.CharField(max_length=255, blank=True, help_text="Optional call-to-action button link")
+    disabled = models.BooleanField(default=False, help_text="Hide this card from the landing page")
+    span = models.PositiveSmallIntegerField(choices=SellWithUsCardSpan.choices, default=SellWithUsCardSpan.SINGLE)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order"]
+
+    @property
+    def icon_path(self):
+        return f"images/sections/sell-with-us/{SELL_WITH_US_ICON_FILES[self.svg]}"
+
+    def __str__(self):
+        return self.title

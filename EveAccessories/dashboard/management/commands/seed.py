@@ -9,7 +9,17 @@ from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
 from accessories.models import Product, ProductImage
-from dashboard.models import ProductList, ProductSortField, Section, SectionType, Setting, SortDirection
+from dashboard.models import (
+    ProductList,
+    ProductSortField,
+    Section,
+    SectionType,
+    SellWithUsCard,
+    SellWithUsColor,
+    SellWithUsIcon,
+    Setting,
+    SortDirection,
+)
 
 SAMPLE_PRODUCTS = [
     {"title": "مكسرات مشكلة فاخرة", "description": "تشكيلة فاخرة من أجود أنواع المكسرات المحمصة الطازجة.", "price": 350, "stock": 25, "discount": 10, "rating": 5},
@@ -43,6 +53,42 @@ SAMPLE_SECTIONS = [
     {"name": "شاركنا", "type": SectionType.SELL_WITH_US, "banner_color": None, "list": None},
 ]
 
+SAMPLE_SELL_WITH_US_CARDS = [
+    {
+        "title": "حتى لو مكانك بعيد عننا؟",
+        "svg": SellWithUsIcon.GLOBE,
+        "bg_color": SellWithUsColor.YELLOW,
+        "span": 1,
+    },
+    {
+        "title": "وتعلي إيراداتك من غير تعب زيادة؟",
+        "svg": SellWithUsIcon.REVENUE_GROWTH,
+        "bg_color": SellWithUsColor.GREEN,
+        "span": 1,
+    },
+    {
+        "title": "عايز تزود ربحك من بيع المكسرات؟",
+        "svg": SellWithUsIcon.COINS_HAND,
+        "bg_color": SellWithUsColor.YELLOW,
+        "span": 1,
+    },
+    {
+        "title": "تاجر مع سوفكس",
+        "svg": SellWithUsIcon.NUTS_BAG,
+        "bg_color": SellWithUsColor.PINK,
+        "span": 2,
+        "description": "مكسرات بجودة عالية وأسعار تنافسية توصلّك لحد عندك وفي معادها.",
+        "cta_text": "اطلب من سوفكس الآن",
+        "cta_url": "#",
+    },
+    {
+        "title": "ومحتاج طلبيات توصلك في مواعيد ثابتة؟",
+        "svg": SellWithUsIcon.PAYMENT_PLAN,
+        "bg_color": SellWithUsColor.GREEN,
+        "span": 1,
+    },
+]
+
 
 class Command(BaseCommand):
     help = "Seed the database with sample data for local development"
@@ -52,6 +98,7 @@ class Command(BaseCommand):
         products = self.seed_products()
         product_lists = self.seed_product_lists(products)
         self.seed_sections(product_lists)
+        self.seed_sell_with_us_cards()
 
     def seed_products(self):
         Product.objects.all().delete()
@@ -127,6 +174,14 @@ class Command(BaseCommand):
                 section.banner.save(f"placeholder_{order}.png", self._placeholder_banner(data["banner_color"]), save=True)
 
         self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SECTIONS)} sections"))
+
+    def seed_sell_with_us_cards(self):
+        SellWithUsCard.objects.all().delete()
+
+        for order, data in enumerate(SAMPLE_SELL_WITH_US_CARDS, start=1):
+            SellWithUsCard.objects.create(order=order, **data)
+
+        self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SELL_WITH_US_CARDS)} sell with us cards"))
 
     def _placeholder_banner(self, color, size=(1200, 300)):
         buffer = BytesIO()
