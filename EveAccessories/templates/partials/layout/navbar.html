@@ -1,6 +1,6 @@
 {% load static %}
 
-<nav class="site-navbar bg-white" aria-label="Main navigation">
+<nav class="site-navbar bg-white position-sticky" aria-label="Main navigation">
   <div id="top-bar" class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
     <a class="site-navbar-brand" href="/" aria-label="Home">
       <img
@@ -83,14 +83,12 @@
     </a>
   </div>
 
+  {% if sections %}
   <div class="w-100 d-flex align-items-center">
     <ul
+      id="navbarSectionsNav"
       class="site-navbar-links navbar-nav flex-row flex-nowrap overflow-auto mb-0 "
     >
-      <li class="nav-item">
-        <a class="nav-link text-secondary active" href="/"> عروضنا </a>
-      </li>
-
       {% for section in sections %}
       <li class="nav-item">
         <a class="nav-link text-secondary" href="#section_{{section.id}}">{{section.name}}</a>
@@ -98,4 +96,5 @@
       {% endfor %}
     </ul>
   </div>
+  {% endif %}
 </nav>
