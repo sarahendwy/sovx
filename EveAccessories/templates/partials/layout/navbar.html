@@ -1,7 +1,10 @@
 {% load static %}
 
 <nav class="site-navbar bg-white position-sticky" aria-label="Main navigation">
-  <div id="top-bar" class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3">
+  <div
+    id="top-bar"
+    class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3"
+  >
     <a class="site-navbar-brand" href="/" aria-label="Home">
       <img
         src="{% static 'images/logo.svg' %}"
@@ -13,6 +16,7 @@
       method="get"
       class="site-navbar-search position-relative ms-auto"
       role="search"
+      action="{% url 'products' %}"
     >
       <input
         type="search"
@@ -87,11 +91,13 @@
   <div class="w-100 d-flex align-items-center">
     <ul
       id="navbarSectionsNav"
-      class="site-navbar-links navbar-nav flex-row flex-nowrap overflow-auto mb-0 "
+      class="site-navbar-links navbar-nav flex-row flex-nowrap overflow-auto mb-0"
     >
       {% for section in sections %}
       <li class="nav-item">
-        <a class="nav-link text-secondary" href="#section_{{section.id}}">{{section.name}}</a>
+        <a class="nav-link text-secondary" href="#section_{{section.id}}"
+          >{{section.name}}</a
+        >
       </li>
       {% endfor %}
     </ul>

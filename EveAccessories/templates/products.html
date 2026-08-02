@@ -6,6 +6,13 @@
 {% endblock header %}
 
 {% block content %}
+    {% if search_message %}
+    <div class="container mt-4">
+        <h3 class="text-muted border-bottom pb-2">
+            {{ search_message }}
+        </h3>
+    </div>
+    {% endif %}
     <div class="container py-2">
         {% include "partials/sections/product_list.html" with products=products %}
     </div>

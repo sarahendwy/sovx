@@ -2,6 +2,8 @@ from typing import Any
 from django.shortcuts import redirect, render
 from django.views.generic import ListView, DetailView
 from .models import Product
+from dashboard.models import ProductList
+
 from dashboard.models import Section, SectionType, SellWithUsCard
 
 
@@ -19,6 +21,55 @@ class ProductListView(ListView):
     template_name = "products.html"
     context_object_name = "products"
 
+    def dispatch(self, request, *args, **kwargs):
+        query = request.GET.get('q')
+
+        if 'q' in request.GET and not query.strip():
+            return redirect('index')  
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_queryset(self):
+        queryset = Product.objects.all()
+        query = self.request.GET.get('q')
+
+        if query:
+            if query.isdigit():
+                product_list_obj = ProductList.objects.filter(id=query).first()
+
+                if product_list_obj:
+                    if product_list_obj.product_ids.exists():
+                        queryset = product_list_obj.product_ids.all()
+                    else:
+                        queryset = Product.objects.all()
+                    
+                    direction = "-" if product_list_obj.sort_direction == "DESC" else ""
+                    queryset = queryset.order_by(f"{direction}{product_list_obj.sort_by}")
+                    
+                    queryset = queryset[:product_list_obj.limit]
+                else:
+                    queryset = Product.objects.none()
+
+            else:
+                queryset = queryset.filter(title__icontains=query)
+            
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q')
+
+        if query:
+            if query.isdigit():
+                product_list_obj = ProductList.objects.filter(id=query).first()
+                
+                if product_list_obj:
+                    context['search_message'] = f"عرض نتائج البحث في قائمة : {product_list_obj.name}"
+                else:
+                    context['search_message'] = f"لا توجد قائمة تحمل الرقم التعريفي: {query}"
+            else:
+                context['search_message'] = f"عرض نتائج البحث عن: {query}"
+        
+        return context
 
 class ProductView(DetailView):
     model = Product
