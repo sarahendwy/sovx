@@ -143,7 +143,7 @@ SELL_WITH_US_ICON_FILES = {
     SellWithUsIcon.GLOBE: "globe.svg",
     SellWithUsIcon.REVENUE_GROWTH: "revenue-growth.svg",
     SellWithUsIcon.COINS_HAND: "coins-hand.svg",
-    SellWithUsIcon.PAYMENT_PLAN: "payment-plan.svg",
+    SellWithUsIcon.PAYMENT_PLAN: "payment-plan.png",
     SellWithUsIcon.NUTS_BAG: "nuts-bag.png",
 }
 
