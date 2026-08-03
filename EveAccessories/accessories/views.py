@@ -63,11 +63,11 @@ class ProductListView(ListView):
                 if not results.exists():
                     context['search_message'] = f"لا توجد منتجات في قائمة: {list_obj.name}"
             else:
-                context['search_message'] = "لاتوجد منتاجات بهذا الأسم"
+                context['search_message'] = "لاتوجد منتجات بهذا الإسم"
         
         elif query:
             if not results.exists():
-                context['search_message'] = "لاتوجد منتاجات بهذا الأسم"
+                context['search_message'] = "لاتوجد منتجات بهذا الإسم"
             else:
                 context['search_message'] = f"عرض نتائج البحث عن: {query}"
         

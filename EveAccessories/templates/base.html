@@ -32,10 +32,12 @@
     <link rel="stylesheet" href="{% static 'css/components/buttons.css' %}" />
     {% block header %} {% endblock header %}
   </head>
-  <body data-bs-spy="scroll" data-bs-target="#navbarSectionsNav" tabindex="0">
+  <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#navbarSectionsNav" tabindex="0">
     {% include "partials/components/announcement_bar.html"%} 
     {% include "partials/layout/navbar.html" %}
-      {% block content %} {% endblock %}
+     <main class="flex-grow-1 mx-auto">
+        {% block content %} {% endblock %}
+    </main>
     {% include "partials/layout/footer.html" %}
 
     <script
