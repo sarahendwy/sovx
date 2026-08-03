@@ -1,17 +1,10 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block header %}
-<link rel="stylesheet" href="{% static 'css/components/order-form.css' %}" />
-{% endblock header %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block header %}
+<link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
+{% endblock header %} {% block content %}
 <div class="py-2 py-md-4">
-    <div class="container">
-        {% include "partials/components/order_form.html"%}
-        <div class="row justify-content-center gap-1">
-        </div>
-
-    </div>
+  <div class="container">
+    {% include "partials/components/order_form.html"%}
+    <div class="row justify-content-center gap-1"></div>
+  </div>
 </div>
 {% endblock content %}

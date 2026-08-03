@@ -1,48 +1,40 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block header %}
+{% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/pages/auth.css' %}" />
-{% endblock header %}
+{% endblock header %} {% block content %}
 
-{% block content %}
-
-    <div class="container py-5">
-        <form class="auth-form" method="post" enctype="multipart/form-data">
-            <h2>Edit your profile information</h2>
-            <hr>
-            {% csrf_token %}
-
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger p-3 mb-2" role="alert">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            {% for field in form %}
-                <div class="mb-3">
-                    <label for="{{ field.auto_id }}" class="form-label fw-bold">{{ field.label }}</label>
-                    {{ field }}
-                    {% for error in field.errors %}
-                        <div class="form-text">
-                            {{ error }}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary btn-block mt-4 w-50">Save Edits</button>
-            </div>
-
-
-        </form>
+<div class="container py-5">
+  <form class="auth-form" method="post" enctype="multipart/form-data">
+    <h2>Edit your profile information</h2>
+    <hr />
+    {% csrf_token %} {% if form.non_field_errors %}
+    <div class="alert alert-danger p-3 mb-2" role="alert">
+      {{ form.non_field_errors }}
     </div>
-    <script>
-        window.onload = () => {
-            document.querySelectorAll("form.auth-form input, form.auth-form select ").forEach(elem => {
-                elem.classList.add("form-control")
-            })
-        }
-    </script>
+    {% endif %} {% for field in form %}
+    <div class="mb-3">
+      <label for="{{ field.auto_id }}" class="form-label"
+        >{{ field.label }}</label
+      >
+      {{ field }} {% for error in field.errors %}
+      <div class="form-text">{{ error }}</div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary btn-block mt-4 w-50">
+        Save Edits
+      </button>
+    </div>
+  </form>
+</div>
+<script>
+  window.onload = () => {
+    document
+      .querySelectorAll("form.auth-form input, form.auth-form select ")
+      .forEach((elem) => {
+        elem.classList.add("form-control");
+      });
+  };
+</script>
 {% endblock %}

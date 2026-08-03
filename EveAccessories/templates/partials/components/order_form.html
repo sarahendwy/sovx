@@ -1,291 +1,320 @@
 {% load static %}
 
 <form method="post" enctype="multipart/form-data" novalidate>
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger p-3 mb-2" role="alert">
-        {{ form.non_field_errors }}
+  {% csrf_token %} {% if form.non_field_errors %}
+  <div class="alert alert-danger p-3 mb-2" role="alert">
+    {{ form.non_field_errors }}
+  </div>
+  {% endif %} {% for field in form %} {% for error in field.errors %}
+  <div class="alert alert-danger p-3 mb-2" role="alert">
+    <strong>{{ field.label }}:</strong> {{ error }}
+  </div>
+  {% endfor %} {% endfor %}
+  <div id="OrderFormCarousel" class="carousel slide carousel-dark">
+    <div
+      class="carousel-indicators position-relative m-2 justify-content-between"
+    >
+      {% comment %}
+      <div class="progress"></div>
+      {% endcomment %}
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="0"
+        class="active"
+        aria-current="true"
+        aria-label="Order Details"
+      >
+        {% include "partials/icons/cart.html" %}
+      </button>
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="1"
+        aria-label="Shipping Information"
+      >
+        {% include "partials/icons/truck.html" %}
+      </button>
+      <button
+        type="button"
+        data-bs-target="#OrderFormCarousel"
+        data-bs-slide-to="2"
+        aria-label="Payment Information"
+      >
+        {% include "partials/icons/credit_card.html" %}
+      </button>
     </div>
-    {% endif %}
+    <div class="carousel-inner overflow-y-visible overflow-visible">
+      <div class="carousel-item active">
+        <h2 class="m-0 mb-2">Order Summary</h2>
+        <hr />
 
-    {% for field in form %}
-        {% for error in field.errors %}
-        <div class="alert alert-danger p-3 mb-2" role="alert">
-            <strong>{{ field.label }}:</strong> {{ error }}
+        <div>
+          {% for product in products %}
+          <div
+            data-price="{{product.discounted_price}}"
+            class="order-form-product-row d-flex justify-content-between align-items-center mb-3"
+          >
+            <div class="d-flex align-items-center w-50">
+              <img
+                src="{{ product.thumbnail }}"
+                alt="{{ product.title }}"
+                class="img-thumbnail"
+                style="width: 100px; height: 100px; margin-right: 10px"
+              />
+              <div>
+                <p class="mb-0"><strong>{{ product.title }}</strong></p>
+                <small>{{ product.description }}</small>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+              <label for="quantity-{{product.id}}" class="form-label m-0"
+                >Quantity:</label
+              >
+              <input
+                style="width: 5rem"
+                value="1"
+                min="1"
+                max="{{product.stock}}"
+                type="number"
+                name="quantity-{{product.id}}"
+                class="form-control bg-transparent border-1 border-primary js-quantity"
+              />
+            </div>
+            <p class="js-price m-0">EGP {{ product.discounted_price }}</p>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-    {% endfor %}
-    <div id="OrderFormCarousel" class="carousel slide carousel-dark">
+        <div class="d-flex justify-content-end align-items-center mt-3">
+          <div class="text-end">
+            <p class="mb-1">
+              Subtotal: EGP <strong class="js-subtotal"></strong>
+            </p>
+            <p class="mb-1 pb-3 border-1 border-bottom border-primary">
+              Shipping: EGP
+              <strong class="js-shipping-cost">{{shipping_cost}}</strong>
+            </p>
+            <p class="mb-1">
+              Total: EGP <strong class="js-total-cost"></strong>
+            </p>
+            <button
+              class="btn btn-primary my-3 px-3 mb-5"
+              type="button"
+              data-bs-target="#OrderFormCarousel"
+              data-bs-slide="next"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <h2 class="m-0">Shipping Information</h2>
+        <hr />
+        <div class="row row-cols-1 row-cols-md-2">
+          {% for field in form %}
+          <div class="col">
+            <div class="mb-3">
+              <label for="{{ field.auto_id }}" class="form-label"
+                >{{ field.label }}</label
+              >
+              {{ field }} {% for error in field.errors %}
+              <div class="form-text text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end align-items-center mt-3">
+          <div class="text-end">
+            <p class="mb-1">
+              Subtotal: EGP <strong class="js-subtotal"></strong>
+            </p>
+            <p class="mb-1 pb-3 border-1 border-bottom border-primary">
+              Shipping: EGP
+              <strong class="js-shipping-cost">{{shipping_cost}}</strong>
+            </p>
+            <p class="mb-1">
+              Total: EGP <strong class="js-total-cost"></strong>
+            </p>
+            <button
+              class="btn btn-primary my-3 px-3 mb-5"
+              type="button"
+              data-bs-target="#OrderFormCarousel"
+              data-bs-slide="next"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel-item">
+        <h2 class="m-0">Payment Information</h2>
+        <hr />
         <div
-                class="carousel-indicators position-relative m-2 justify-content-between"
+          class="d-flex justify-content-between align-items-center order-form-payment-nav"
         >
-            {% comment %}
-            <div class="progress"></div>
-            {% endcomment %}
-            <button
-                    type="button"
-                    data-bs-target="#OrderFormCarousel"
-                    data-bs-slide-to="0"
-                    class="active"
-                    aria-current="true"
-                    aria-label="Order Details"
-            >
-                {% include "partials/icons/cart.html" %}
-            </button>
-            <button
-                    type="button"
-                    data-bs-target="#OrderFormCarousel"
-                    data-bs-slide-to="1"
-                    aria-label="Shipping Information"
-            >
-                {% include "partials/icons/truck.html" %}
-            </button>
-            <button
-                    type="button"
-                    data-bs-target="#OrderFormCarousel"
-                    data-bs-slide-to="2"
-                    aria-label="Payment Information"
-            >
-                {% include "partials/icons/credit_card.html" %}
-            </button>
+          <p class="my-2 fs-2">
+            Total Amount to Pay: EGP <strong class="js-total-cost"></strong>
+          </p>
+
+          <div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="payment_method"
+                id="pay_now"
+                value="Wallet"
+                checked
+              />
+              <label class="form-check-label" for="pay_now">Pay Now</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="payment_method"
+                id="pay_cod"
+                value="Cash on Delivery"
+              />
+              <label class="form-check-label" for="pay_cod"
+                >Cash on Delivery</label
+              >
+            </div>
+          </div>
         </div>
-        <div class="carousel-inner overflow-y-visible overflow-visible">
-            <div class="carousel-item active">
-                <h2 class="m-0 mb-2">Order Summary</h2>
-                <hr/>
+        <hr />
+        <div id="pay-now-details">
+          <div
+            class="d-flex justify-content-center align-items-center flex-column"
+          >
+            <img
+              src="{{payment_proof}}"
+              alt="Payment Methods"
+              class="img-fluid w-75"
+              style="max-width: 300px"
+            />
+            <h3 class="text-center mt-3">Pay with Instapay/Vodafone Cash</h3>
+            <p class="text-center p-0">
+              Complete the payment with Instapay/Vodafone Cash to get your order
+              confirmed
+            </p>
+          </div>
+          <hr />
 
-                <div>
-                    {% for product in products %}
-                    <div
-                            data-price="{{product.discounted_price}}"
-                            class="order-form-product-row d-flex justify-content-between align-items-center mb-3"
-                    >
-                        <div class="d-flex align-items-center w-50">
-                            <img
-                                    src="{{ product.thumbnail }}"
-                                    alt="{{ product.title }}"
-                                    class="img-thumbnail"
-                                    style="width: 100px; height: 100px; margin-right: 10px"
-                            />
-                            <div>
-                                <p class="mb-0"><strong>{{ product.title }}</strong></p>
-                                <small>{{ product.description }}</small>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <label for="quantity-{{product.id}}" class="form-label m-0"
-                            >Quantity:</label
-                            >
-                            <input
-                                    style="width: 5rem"
-                                    value="1"
-                                    min="1"
-                                    max="{{product.stock}}"
-                                    type="number"
-                                    name="quantity-{{product.id}}"
-                                    class="form-control bg-transparent border-1 border-primary js-quantity"
-                            />
-                        </div>
-                        <p class="js-price m-0">EGP {{ product.discounted_price }}</p>
-                    </div>
-                    {% endfor %}
+          <h3 class="mb-3">Proof of Payment</h3>
+          <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+              <div class="mb-3">
+                <label for="payment_account" class="form-label">
+                  Your instapay/vodafone payment account or phone number
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="payment_account"
+                  name="payment_account"
+                />
+                <div class="form-text">
+                  Enter your instapay account or phone number
                 </div>
-                <div class="d-flex justify-content-end align-items-center mt-3">
-                    <div class="text-end">
-                        <p class="mb-1">Subtotal: EGP <strong class="js-subtotal"></strong></p>
-                        <p class="mb-1 pb-3 border-1 border-bottom border-primary">
-                            Shipping: EGP
-                            <strong class="js-shipping-cost">{{shipping_cost}}</strong>
-                        </p>
-                        <p class="mb-1">Total: EGP <strong class="js-total-cost"></strong></p>
-                        <button
-                                class="btn btn-primary my-3 px-3 mb-5"
-                                type="button"
-                                data-bs-target="#OrderFormCarousel"
-                                data-bs-slide="next"
-                        >
-                            Continue
-                        </button>
-                    </div>
-                </div>
+              </div>
             </div>
-
-            <div class="carousel-item">
-                <h2 class="m-0">Shipping Information</h2>
-                <hr/>
-                <div class="row row-cols-1 row-cols-md-2">
-                    {% for field in form %}
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="{{ field.auto_id }}" class="form-label fw-bold"
-                            >{{ field.label }}</label
-                            >
-                            {{ field }} {% for error in field.errors %}
-                            <div class="form-text text-danger">{{ error }}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
+            <div class="col">
+              <div class="mb-3">
+                <label for="payment_proof" class="form-label">
+                  Payment Screenshot
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="form-control"
+                  id="payment_proof"
+                  name="payment_proof"
+                />
+                <div class="form-text">
+                  Upload a screenshot of the payment receipt
                 </div>
-                <div class="d-flex justify-content-end align-items-center mt-3">
-                    <div class="text-end">
-                        <p class="mb-1">Subtotal: EGP <strong class="js-subtotal"></strong></p>
-                        <p class="mb-1 pb-3 border-1 border-bottom border-primary">
-                            Shipping: EGP
-                            <strong class="js-shipping-cost">{{shipping_cost}}</strong>
-                        </p>
-                        <p class="mb-1">Total: EGP <strong class="js-total-cost"></strong></p>
-                        <button
-                                class="btn btn-primary my-3 px-3 mb-5"
-                                type="button"
-                                data-bs-target="#OrderFormCarousel"
-                                data-bs-slide="next"
-                        >
-                            Continue
-                        </button>
-                    </div>
-                </div>
-
+              </div>
             </div>
-
-            <div class="carousel-item">
-                <h2 class="m-0">Payment Information</h2>
-                <hr/>
-                <div class=" d-flex justify-content-between align-items-center order-form-payment-nav">
-                    <p class="my-2 fs-2">
-                        Total Amount to Pay: EGP <strong class="js-total-cost"></strong>
-                    </p>
-
-                    <div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_method" id="pay_now"
-                                   value="Wallet" checked>
-                            <label class="form-check-label" for="pay_now">Pay Now</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="payment_method" id="pay_cod"
-                                   value="Cash on Delivery">
-                            <label class="form-check-label" for="pay_cod">Cash on Delivery</label>
-                        </div>
-
-                    </div>
-                </div>
-                <hr/>
-                <div id="pay-now-details">
-                    <div class="d-flex justify-content-center align-items-center flex-column">
-                        <img
-                                src="{{payment_proof}}"
-                                alt="Payment Methods"
-                                class="img-fluid w-75"
-                                style="max-width: 300px"
-                        />
-                        <h3 class="text-center mt-3">Pay with Instapay/Vodafone Cash</h3>
-                        <p class="text-center p-0">
-                            Complete the payment with Instapay/Vodafone Cash to get your order confirmed
-                        </p>
-                    </div>
-                    <hr/>
-
-                    <h3 class="mb-3">Proof of Payment</h3>
-                    <div class="row row-cols-1 row-cols-md-2">
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="payment_account" class="form-label fw-bold">
-                                    Your instapay/vodafone payment account or phone number
-                                </label>
-                                <input
-                                        type="text"
-                                        class="form-control"
-                                        id="payment_account"
-                                        name="payment_account"
-                                />
-                                <div class="form-text">
-                                    Enter your instapay account or phone number
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="mb-3">
-                                <label for="payment_proof" class="form-label fw-bold">
-                                    Payment Screenshot
-                                </label>
-                                <input
-                                        type="file"
-                                        accept="image/*"
-                                        class="form-control"
-                                        id="payment_proof"
-                                        name="payment_proof"
-                                />
-                                <div class="form-text">
-                                    Upload a screenshot of the payment receipt
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-block my-4 px-5">
-                        Send Order
-                    </button>
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-block my-4 px-5">
+            Send Order
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </form>
-<div class="hidden">
-    {{ shipping_costs|json_script:"shipping_costs" }}
-</div>
+<div class="hidden">{{ shipping_costs|json_script:"shipping_costs" }}</div>
 
 <script>
-    window.onload = () => {
-        const shipping_costs = JSON.parse(document.getElementById("shipping_costs").textContent);
+  window.onload = () => {
+    const shipping_costs = JSON.parse(
+      document.getElementById("shipping_costs").textContent,
+    );
 
-        function calculate_subtotal() {
-            const products = document.querySelectorAll('.order-form-product-row');
-            const governorate = document.querySelector('select[name="governorate"]').value;
-            const shipping_cost = shipping_costs[`${governorate}_shipping`.toLocaleLowerCase()] || 50;
-            let subtotal = 0;
-            products.forEach((product) => {
-                const price = parseInt(product.dataset.price || 0);
-                const quantity = product.querySelector('.js-quantity').value;
-                subtotal += price * quantity;
-            });
-            const total = subtotal + shipping_cost;
-            document.querySelectorAll('.js-shipping-cost').forEach(e => e.textContent = shipping_cost);
-            document.querySelectorAll('.js-subtotal').forEach(e => e.textContent = subtotal);
-            document.querySelectorAll('.js-total-cost').forEach(element => element.textContent = total)
-        }
-
-        calculate_subtotal();
-
-        document.querySelectorAll('.js-quantity').forEach((quantity) => {
-            quantity.addEventListener('change', (e) => {
-                const product = e.target.closest('.order-form-product-row');
-                const price = parseInt(product.dataset.price || 0);
-                const quantity = e.target.value;
-                const total = price * quantity;
-                product.querySelector('.js-price').textContent = `EGP ${total}`;
-                calculate_subtotal();
-            });
-        });
-        document.querySelector('select[name="governorate"]').addEventListener('change', (e) => {
-            calculate_subtotal();
-        });
-
-        const payNowRadio = document.getElementById("pay_now");
-        const payCodRadio = document.getElementById("pay_cod");
-
-        payNowRadio.addEventListener("change", function () {
-            if (this.checked) {
-                document.getElementById("pay-now-details").style.display = "block";
-            }
-        });
-
-        payCodRadio.addEventListener("change", function () {
-            if (this.checked) {
-                document.getElementById("pay-now-details").style.display = "none";
-            }
-        });
+    function calculate_subtotal() {
+      const products = document.querySelectorAll(".order-form-product-row");
+      const governorate = document.querySelector(
+        'select[name="governorate"]',
+      ).value;
+      const shipping_cost =
+        shipping_costs[`${governorate}_shipping`.toLocaleLowerCase()] || 50;
+      let subtotal = 0;
+      products.forEach((product) => {
+        const price = parseInt(product.dataset.price || 0);
+        const quantity = product.querySelector(".js-quantity").value;
+        subtotal += price * quantity;
+      });
+      const total = subtotal + shipping_cost;
+      document
+        .querySelectorAll(".js-shipping-cost")
+        .forEach((e) => (e.textContent = shipping_cost));
+      document
+        .querySelectorAll(".js-subtotal")
+        .forEach((e) => (e.textContent = subtotal));
+      document
+        .querySelectorAll(".js-total-cost")
+        .forEach((element) => (element.textContent = total));
     }
+
+    calculate_subtotal();
+
+    document.querySelectorAll(".js-quantity").forEach((quantity) => {
+      quantity.addEventListener("change", (e) => {
+        const product = e.target.closest(".order-form-product-row");
+        const price = parseInt(product.dataset.price || 0);
+        const quantity = e.target.value;
+        const total = price * quantity;
+        product.querySelector(".js-price").textContent = `EGP ${total}`;
+        calculate_subtotal();
+      });
+    });
+    document
+      .querySelector('select[name="governorate"]')
+      .addEventListener("change", (e) => {
+        calculate_subtotal();
+      });
+
+    const payNowRadio = document.getElementById("pay_now");
+    const payCodRadio = document.getElementById("pay_cod");
+
+    payNowRadio.addEventListener("change", function () {
+      if (this.checked) {
+        document.getElementById("pay-now-details").style.display = "block";
+      }
+    });
+
+    payCodRadio.addEventListener("change", function () {
+      if (this.checked) {
+        document.getElementById("pay-now-details").style.display = "none";
+      }
+    });
+  };
 </script>
