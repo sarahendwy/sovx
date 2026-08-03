@@ -1,7 +1,30 @@
+{% load static %}
 <section class="py-4 my-3" id="section_{{ section.id }}">
-    <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
+    <h1 class="visually-hidden">{{ section.name }}</h1>
 
-    {% if section.banner %}
-        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid" />
-    {% endif %}
+    <div class="sell-with-us-grid">
+        {% for card in cards %}
+            <div class="swu-card {% if card.span == 2 %}swu-card--wide{% endif %}" style="background-color: {{ card.bg_color }}; --swu-span: {{ card.span }};">
+                {% if card.span == 2 %}
+                    <span class="swu-illustration">
+                        <img src="{% static card.icon_path %}" alt="" />
+                    </span>
+                    <div class="swu-content">
+                        <p class="swu-content-title" dir="auto">{{ card.title }}</p>
+                        {% if card.description %}
+                            <p class="swu-content-text" dir="auto">{{ card.description }}</p>
+                        {% endif %}
+                        {% if card.cta_text %}
+                            <a href="{{ card.cta_url|default:'#' }}" class="swu-cta">{{ card.cta_text }}</a>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p class="swu-card-title" dir="auto">{{ card.title }}</p>
+                    <span class="swu-icon">
+                        <img src="{% static card.icon_path %}" alt="" />
+                    </span>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
 </section>

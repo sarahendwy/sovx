@@ -1,0 +1,154 @@
+.sell-with-us-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(280px, 350px);
+  grid-auto-flow: row dense;
+  gap: var(--space-4);
+}
+
+.swu-card {
+  position: relative;
+  grid-column: span var(--swu-span, 1);
+  overflow: hidden;
+  border: 1px solid #000;
+  border-radius: 24px;
+}
+
+.swu-card-title {
+  position: absolute;
+  top: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84%;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  font-size: clamp(18px, 2.6vw, 32px);
+  line-height: 1.4;
+  letter-spacing: -0.32px;
+  color: var(--text-dark);
+}
+
+.swu-icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inset-inline: 8%;
+  bottom: 0;
+  max-height: 40%;
+}
+
+.swu-icon img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.swu-card--wide {
+  display: flex;
+  align-items: center;
+}
+
+.swu-illustration {
+  position: absolute;
+  top: -12%;
+  left: -15%;
+  width: 58%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+}
+
+.swu-illustration img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.swu-content {
+  position: relative;
+  z-index: 1;
+  margin-inline-end: auto;
+  width: 54%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-inline: 12px;
+  text-align: center;
+}
+
+.swu-content-title {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  font-size: clamp(20px, 2.6vw, 32px);
+  line-height: 1.4;
+  letter-spacing: -0.32px;
+  color: var(--text-dark);
+}
+
+.swu-content-text {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
+  font-size: clamp(14px, 1.8vw, 24px);
+  line-height: 1.4;
+  letter-spacing: -0.36px;
+  color: var(--text-dark);
+}
+
+.swu-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: var(--primary);
+  color: #fff;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: var(--font-medium);
+  letter-spacing: -0.084px;
+  border-radius: 2px 16px 2px 16px;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0px 1px 2px 0px rgba(89, 187, 101, 0.08);
+  transition: filter 0.2s ease;
+}
+
+.swu-cta:hover {
+  filter: brightness(0.9);
+  color: #fff;
+}
+
+@media screen and (max-width: 992px) {
+  .sell-with-us-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(240px, 300px);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .sell-with-us-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(180px, 240px);
+    gap: var(--space-3);
+  }
+
+  .swu-card {
+    border-radius: 8px;
+  }
+
+  .swu-card-title {
+    top: 16px;
+  }
+
+  .swu-content {
+    width: 68%;
+  }
+}

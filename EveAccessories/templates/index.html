@@ -4,10 +4,10 @@
 {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/product-card.css' %}" />
 <link rel="stylesheet" href="{% static 'css/layout/section.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/sell-with-us.css' %}" />
 {% endblock header %}
 
 {% block content %}
-    {% include "partials/layout/navbar.html" %}
     <main class="container flex-grow-1">
         {% for section in sections %}
             {% if section.type == "product_list" and section.product_list %}
@@ -17,8 +17,9 @@
             {% elif section.type == "why_choose_us" %}
                 {% include "partials/sections/why_choose_us.html" with section=section %}
             {% elif section.type == "sell_with_us" %}
-                {% include "partials/sections/sell_with_us.html" with section=section %}
+                {% include "partials/sections/sell_with_us.html" with section=section cards=sell_with_us_cards %}
             {% endif %}
         {% endfor %}
     </main>
+    
 {% endblock content %}

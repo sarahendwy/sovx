@@ -1,15 +1,21 @@
 import os
-from io import BytesIO
-
-from PIL import Image
 
 from django.conf import settings
 from django.core.files import File
-from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
 from accessories.models import Product, ProductImage
-from dashboard.models import ProductList, ProductSortField, Section, SectionType, Setting, SortDirection
+from dashboard.models import (
+    ProductList,
+    ProductSortField,
+    Section,
+    SectionType,
+    SellWithUsCard,
+    SellWithUsColor,
+    SellWithUsIcon,
+    Setting,
+    SortDirection,
+)
 
 SAMPLE_PRODUCTS = [
     {"title": "مكسرات مشكلة فاخرة", "description": "تشكيلة فاخرة من أجود أنواع المكسرات المحمصة الطازجة.", "price": 350, "stock": 25, "discount": 10, "rating": 5},
@@ -29,18 +35,55 @@ SAMPLE_PRODUCTS = [
     {"title": "صنوبر فاخر", "description": "صنوبر فاخر نقي بطعم غني ورائحة مميزة.", "price": 600, "stock": 10, "discount": 0, "rating": 5},
 ]
 
-# Product List sections require a banner (see Section.clean). Real banner artwork is uploaded
-# later via the dashboard; seeding generates a solid-color placeholder instead of depending on
-# a file living under MEDIA_ROOT, since dashboard/sections/ has no date subfolder and any file
-# placed there directly is indistinguishable from a real upload to django-cleanup's delete signal.
+# Product List sections require a banner (see Section.clean). Seeding copies the real artwork
+# from media/dashboard/sections/ via ImageField.save() so it's stored like a normal upload
+# (and picked up correctly by django-cleanup's delete signal).
 SAMPLE_SECTIONS = [
-    {"name": "وصل حديثاً", "type": SectionType.PRODUCT_LIST, "banner_color": (222, 184, 135), "list": "وصل حديثاً"},
-    {"name": "الأفضل مبيعاً", "type": SectionType.PRODUCT_LIST, "banner_color": (205, 133, 63), "list": "الأفضل مبيعاً"},
-    {"name": "ليه تختارنا", "type": SectionType.WHY_CHOOSE_US, "banner_color": None, "list": None},
-    {"name": "مختارة 1", "type": SectionType.PRODUCT_LIST, "banner_color": (160, 82, 45), "list": "مختارة"},
-    {"name": "مختارة 2", "type": SectionType.PRODUCT_LIST, "banner_color": (160, 82, 45), "list": "مختارة"},
-    {"name": "تقييمات", "type": SectionType.REVIEWS, "banner_color": None, "list": None},
-    {"name": "شاركنا", "type": SectionType.SELL_WITH_US, "banner_color": None, "list": None},
+    {"name": "وصل حديثاً", "type": SectionType.PRODUCT_LIST, "banner_file": "Newly_arrived.png", "list": "وصل حديثاً"},
+    {"name": "الأفضل مبيعاً", "type": SectionType.PRODUCT_LIST, "banner_file": "Best_seller.png", "list": "الأفضل مبيعاً"},
+    {"name": "ليه تختارنا؟", "type": SectionType.WHY_CHOOSE_US, "banner_file": None, "list": None},
+    {"name": "أكياس سوفكس", "type": SectionType.PRODUCT_LIST, "banner_file": "Products.png", "list": "أكياس سوفكس"},
+    {"name": "قسم ثاني", "type": SectionType.PRODUCT_LIST, "banner_file": "Products.png", "list": "قسم ثاني"},
+    {"name": "قسم ثالث", "type": SectionType.PRODUCT_LIST, "banner_file": "Products.png", "list": "قسم ثالث"},
+    {"name": "عروض رمضان", "type": SectionType.PRODUCT_LIST, "banner_file": "Products.png", "list": "عروض رمضان"},
+    {"name": "آراء عملاءنا", "type": SectionType.REVIEWS, "banner_file": None, "list": None},
+    {"name": "تاجر معانا", "type": SectionType.SELL_WITH_US, "banner_file": None, "list": None},
+]
+
+SAMPLE_SELL_WITH_US_CARDS = [
+    {
+        "title": "حتى لو مكانك بعيد عننا؟",
+        "svg": SellWithUsIcon.GLOBE,
+        "bg_color": SellWithUsColor.YELLOW,
+        "span": 1,
+    },
+    {
+        "title": "وتعلي إيراداتك من غير تعب زيادة؟",
+        "svg": SellWithUsIcon.REVENUE_GROWTH,
+        "bg_color": SellWithUsColor.GREEN,
+        "span": 1,
+    },
+    {
+        "title": "عايز تزود ربحك من بيع المكسرات؟",
+        "svg": SellWithUsIcon.COINS_HAND,
+        "bg_color": SellWithUsColor.YELLOW,
+        "span": 1,
+    },
+    {
+        "title": "تاجر مع سوفكس",
+        "svg": SellWithUsIcon.NUTS_BAG,
+        "bg_color": SellWithUsColor.PINK,
+        "span": 2,
+        "description": "مكسرات بجودة عالية وأسعار تنافسية توصلّك لحد عندك وفي معادها.",
+        "cta_text": "اطلب من سوفكس الآن",
+        "cta_url": "#",
+    },
+    {
+        "title": "ومحتاج طلبيات توصلك في مواعيد ثابتة؟",
+        "svg": SellWithUsIcon.PAYMENT_PLAN,
+        "bg_color": SellWithUsColor.GREEN,
+        "span": 1,
+    },
 ]
 
 
@@ -52,6 +95,7 @@ class Command(BaseCommand):
         products = self.seed_products()
         product_lists = self.seed_product_lists(products)
         self.seed_sections(product_lists)
+        self.seed_sell_with_us_cards()
 
     def seed_products(self):
         Product.objects.all().delete()
@@ -99,20 +143,53 @@ class Command(BaseCommand):
         )
         best_selling.product_ids.set(products[6:11])
 
-        featured = ProductList.objects.create(
-            name="مختارة",
+        bags = ProductList.objects.create(
+            name="أكياس سوفكس",
             limit=6,
             sort_by=ProductSortField.CREATED_AT,
             sort_direction=SortDirection.DESC,
         )
-        featured.product_ids.set(products[1:11])
+        bags.product_ids.set(products[0:8])
 
-        product_lists = {"وصل حديثاً": recent, "الأفضل مبيعاً": best_selling, "مختارة": featured}
+        second_section = ProductList.objects.create(
+            name="قسم ثاني",
+            limit=6,
+            sort_by=ProductSortField.CREATED_AT,
+            sort_direction=SortDirection.DESC,
+        )
+        second_section.product_ids.set(products[2:10])
+
+        third_section = ProductList.objects.create(
+            name="قسم ثالث",
+            limit=6,
+            sort_by=ProductSortField.CREATED_AT,
+            sort_direction=SortDirection.DESC,
+        )
+        third_section.product_ids.set(products[4:12])
+
+        ramadan_offers = ProductList.objects.create(
+            name="عروض رمضان",
+            limit=6,
+            sort_by=ProductSortField.DISCOUNT,
+            sort_direction=SortDirection.DESC,
+        )
+        ramadan_offers.product_ids.set(products[6:14])
+
+        product_lists = {
+            "وصل حديثاً": recent,
+            "الأفضل مبيعاً": best_selling,
+            "أكياس سوفكس": bags,
+            "قسم ثاني": second_section,
+            "قسم ثالث": third_section,
+            "عروض رمضان": ramadan_offers,
+        }
         self.stdout.write(self.style.SUCCESS(f"Created {len(product_lists)} product lists"))
         return product_lists
 
     def seed_sections(self, product_lists):
         Section.objects.all().delete()
+
+        banners_dir = os.path.join(settings.MEDIA_ROOT, "dashboard", "sections")
 
         for order, data in enumerate(SAMPLE_SECTIONS, start=1):
             section = Section(
@@ -123,12 +200,17 @@ class Command(BaseCommand):
             )
             section.save()
 
-            if data["banner_color"]:
-                section.banner.save(f"placeholder_{order}.png", self._placeholder_banner(data["banner_color"]), save=True)
+            banner_file = data["banner_file"]
+            if banner_file:
+                with open(os.path.join(banners_dir, banner_file), "rb") as image_file:
+                    section.banner.save(banner_file, File(image_file), save=True)
 
         self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SECTIONS)} sections"))
 
-    def _placeholder_banner(self, color, size=(1200, 300)):
-        buffer = BytesIO()
-        Image.new("RGB", size, color=color).save(buffer, format="PNG")
-        return ContentFile(buffer.getvalue())
+    def seed_sell_with_us_cards(self):
+        SellWithUsCard.objects.all().delete()
+
+        for order, data in enumerate(SAMPLE_SELL_WITH_US_CARDS, start=1):
+            SellWithUsCard.objects.create(order=order, **data)
+
+        self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SELL_WITH_US_CARDS)} sell with us cards"))

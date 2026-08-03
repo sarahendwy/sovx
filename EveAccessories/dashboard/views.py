@@ -7,8 +7,8 @@ from django.utils import timezone as django_timezone
 from django.db.models import Sum, Count
 
 from orders.models import Order, OrderEntry
-from .forms import ProductForm, SettingsForm, ProductListForm, SectionForm
-from .models import Setting, ProductList, Section
+from .forms import ProductForm, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm
+from .models import Setting, ProductList, Section, SellWithUsCard
 from accessories.models import Product, ProductImage
 
 class DashboardView(TemplateView):
@@ -215,6 +215,28 @@ class EditSectionView(UpdateView):
 class DeleteSectionView(DeleteView):
     model = Section
     success_url = reverse_lazy('admin_sections')
+    template_name = "dashboard/confirm_delete.html"
+
+class SellWithUsCardsView(ListView):
+    template_name = 'dashboard/sell_with_us_card/sell_with_us_cards.html'
+    model = SellWithUsCard
+    context_object_name = "sell_with_us_cards"
+
+class AddSellWithUsCardView(CreateView):
+    model = SellWithUsCard
+    form_class = SellWithUsCardForm
+    template_name = 'dashboard/sell_with_us_card/add_sell_with_us_card.html'
+    success_url = reverse_lazy('admin_sell_with_us_cards')
+
+class EditSellWithUsCardView(UpdateView):
+    model = SellWithUsCard
+    form_class = SellWithUsCardForm
+    template_name = 'dashboard/sell_with_us_card/edit_sell_with_us_card.html'
+    success_url = reverse_lazy('admin_sell_with_us_cards')
+
+class DeleteSellWithUsCardView(DeleteView):
+    model = SellWithUsCard
+    success_url = reverse_lazy('admin_sell_with_us_cards')
     template_name = "dashboard/confirm_delete.html"
 
 class OrdersView(TemplateView):

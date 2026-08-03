@@ -1,7 +1,9 @@
 <section class="py-4 my-3" id="section_{{ section.id }}">
-    <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
+  <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
 
-    {% if section.banner %}
-        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid" />
-    {% endif %}
+  {% if section.banner %}
+  <a href="{% url 'products' %}?product_list_id={{ section.product_list.id }}">
+    <img src="{{ section.banner.url }}" ... />
+  </a>
+  {% endif %}
 </section>
