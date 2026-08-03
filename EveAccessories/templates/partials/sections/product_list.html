@@ -1,6 +1,8 @@
 <section id="section_{{ section.id }}">
     {% if section.banner %}
-        <img src="{{ section.banner.url }}" alt="{{ section.name }}" class="img-fluid mb-3 banner" />
+        <a href="{% url 'products' %}?product_list_id={{ section.product_list.id }}">
+            <img src="{{ section.banner.url }}" ...>
+        </a>
     {% endif %}
 
     {% if products %}

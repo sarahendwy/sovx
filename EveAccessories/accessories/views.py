@@ -21,56 +21,58 @@ class ProductListView(ListView):
     template_name = "products.html"
     context_object_name = "products"
 
-    def dispatch(self, request, *args, **kwargs):
-        query = request.GET.get('q')
-
-        if 'q' in request.GET and not query.strip():
-            return redirect('index')  
-        return super().dispatch(request, *args, **kwargs)
-    
     def get_queryset(self):
-        queryset = Product.objects.all()
-        query = self.request.GET.get('q')
-
-        if query:
-            if query.isdigit():
-                product_list_obj = ProductList.objects.filter(id=query).first()
-
-                if product_list_obj:
-                    if product_list_obj.product_ids.exists():
-                        queryset = product_list_obj.product_ids.all()
-                    else:
-                        queryset = Product.objects.all()
-                    
-                    direction = "-" if product_list_obj.sort_direction == "DESC" else ""
-                    queryset = queryset.order_by(f"{direction}{product_list_obj.sort_by}")
-                    
-                    queryset = queryset[:product_list_obj.limit]
+        query = self.request.GET.get('query')
+        product_list_id = self.request.GET.get('product_list_id')
+        
+        if product_list_id:
+            product_list_obj = ProductList.objects.filter(id=product_list_id).first()
+            if product_list_obj:
+                if product_list_obj.product_ids.exists():
+                    queryset = product_list_obj.product_ids.all()
                 else:
-                    queryset = Product.objects.none()
+                    queryset = Product.objects.all()
 
-            else:
-                queryset = queryset.filter(title__icontains=query)
+                direction = "-" if product_list_obj.sort_direction.lower() == "desc" else ""
+                sort_field = product_list_obj.sort_by if product_list_obj.sort_by else "id"
+                
+                queryset = queryset.order_by(f"{direction}{sort_field}")
+
+                if product_list_obj.limit:
+                    queryset = queryset[:product_list_obj.limit]
+                return queryset
             
-        return queryset
-    
+            return Product.objects.none()
+
+        elif query:
+            return Product.objects.filter(title__istartswith=query)
+
+        return Product.objects.all()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('query')
+        product_list_id = self.request.GET.get('product_list_id')
+        
+        results = self.object_list
 
-        if query:
-            if query.isdigit():
-                product_list_obj = ProductList.objects.filter(id=query).first()
-                
-                if product_list_obj:
-                    context['search_message'] = f"عرض نتائج البحث في قائمة : {product_list_obj.name}"
-                else:
-                    context['search_message'] = f"لا توجد قائمة تحمل الرقم التعريفي: {query}"
+        if product_list_id:
+            list_obj = ProductList.objects.filter(id=product_list_id).first()
+            if list_obj:
+                context['search_message'] = list_obj.name
+                if not results.exists():
+                    context['search_message'] = f"لا توجد منتجات في قائمة: {list_obj.name}"
+            else:
+                context['search_message'] = "لاتوجد منتاجات بهذا الأسم"
+        
+        elif query:
+            if not results.exists():
+                context['search_message'] = "لاتوجد منتاجات بهذا الأسم"
             else:
                 context['search_message'] = f"عرض نتائج البحث عن: {query}"
         
         return context
-
+    
 class ProductView(DetailView):
     model = Product
     template_name = "product.html"
