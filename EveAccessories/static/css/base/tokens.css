@@ -9,9 +9,14 @@
   /* Text colors */
   --text-dark: #18221d;
   --text-secondary: #6a716c;
+  --text-label: #0A0D14;
+
+  /*placeholder colors*/
+  --placeholder-color: #868c98;
 
   /* Borders */
   --border-primary: #e8ecea;
+  --border-secondary: #E2E4E9;
 
   /* Fonts */
   --font-primary: "Zanjabeel", Arial, sans-serif;

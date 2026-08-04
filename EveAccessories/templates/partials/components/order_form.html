@@ -120,7 +120,9 @@
                 >{{ field.label }}</label
               >
               {{ field }} {% for error in field.errors %}
-              <div class="form-text text-danger">{{ error }}</div>
+              <div class="form-text text-danger caption font-bold">
+                {{ error }}
+              </div>
               {% endfor %}
             </div>
           </div>

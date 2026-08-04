@@ -58,6 +58,26 @@
   /* row layout comes from Bootstrap utility classes in the markup */
 }
 
+#OrderFormCarousel .form-label {
+  color: var(--text-label);
+}
+
+.order-form-input {
+  padding: 10px 10px 10px 12px;
+  gap: 8px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.form-control.order-form-input::placeholder {
+  color: var(--placeholder-color);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: var(--font-regular);
+}
+
 @media screen and (max-width: 576px) {
   .order-form-product-row {
     flex-wrap: wrap;

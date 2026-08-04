@@ -6,7 +6,7 @@ class OrderForm(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            field.widget.attrs.update({'class': 'form-control order-form-input'})
 
     class Meta:
         model = Order
@@ -24,47 +24,49 @@ class OrderForm(forms.ModelForm):
         widgets = {
             "name": forms.TextInput(
                 attrs={
-                    "class": "form-control order-form-control",
+                    "class": "form-control order-form-control order-form-input",
                     "placeholder": "اكتب اسمك",
                     "dir": "rtl",
                 }
             ),
             "store_name": forms.TextInput(
                 attrs={
-                    "class": "form-control order-form-control",
+                    "class": "form-control order-form-control order-form-input",
                     "placeholder": "اكتب اسم المحل",
                     "dir": "rtl",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "class": "form-control order-form-control",
+                    "class": "form-control order-form-control order-form-input",
                     "placeholder": "اكتب البريد الإلكتروني",
                     "dir": "rtl",
                 }
             ),
             "phone": forms.TextInput(
                 attrs={
-                    "class": "form-control order-form-control",
+                    "class": "form-control order-form-control order-form-input ",
                     "placeholder": "000-000-000-00",
-                    "dir": "ltr",
+                    "dir": "rtl",
+                    "inputmode": "tel",
+                    "autocomplete": "tel",
                 }
             ),
             "governorate": forms.Select(
                 attrs={
-                    "class": "form-select order-form-control",
+                    "class": "form-select order-form-control order-form-input",
                     "dir": "rtl",
                 }
             ),
             "city": forms.Select(
                 attrs={
-                    "class": "form-select order-form-control",
+                    "class": "form-select order-form-control order-form-input",
                     "dir": "rtl",
                 }
             ),
             "address": forms.TextInput(
                 attrs={
-                    "class": "form-control order-form-control",
+                    "class": "form-control order-form-control order-form-input",
                     "placeholder": "اكتب العنوان بالتفصيل",
                     "dir": "rtl",
                 }
