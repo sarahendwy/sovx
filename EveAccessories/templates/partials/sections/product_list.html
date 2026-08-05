@@ -1,12 +1,12 @@
 <section id="section_{{ section.id }}">
     {% if section.banner %}
         <a href="{% url 'products' %}?product_list_id={{ section.product_list.id }}">
-            <img src="{{ section.banner.url }}" ...>
+            <img src="{{ section.banner.url }}" class="w-100" ...>
         </a>
     {% endif %}
 
     {% if products %}
-        <div class="product-list">
+        <div class="product-list mt-3">
             {% for product in products %}
                 {% include "partials/components/product_card.html" with product=product %}
             {% endfor %}
