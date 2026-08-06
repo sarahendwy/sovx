@@ -7,7 +7,6 @@ from accessories.models import Product
 from django.views.generic import CreateView, TemplateView, DetailView
 from .forms import OrderForm, SellWithUsForm
 from dashboard.models import Setting
-from django.forms.models import model_to_dict
 
 
 def remove_from_cart(request, product_id):
@@ -99,16 +98,8 @@ class CreateOrder(CreateView):
             stocks = {}
 
         setting = Setting.objects.first()
-        if setting:
-            context['payment_proof'] = setting.payment_image.url if setting.payment_image else ""
-            shipping_costs = model_to_dict(setting)
-            shipping_costs.pop("payment_image", None)
-            shipping_costs.pop("hero_image", None)
-            context['shipping_costs'] = shipping_costs
-        else:
-            context['payment_proof'] = ""
-            context['shipping_costs'] = {}
-        
+        context['payment_proof'] = setting.payment_image.url if setting and setting.payment_image else ""
+
         context['products'] = products
         context['stocks'] = stocks
         return context
@@ -245,7 +236,7 @@ class CreateOrder(CreateView):
                 product=product,
                 quantity=quantity,
                 variant=variant,
-                price=product.discounted_price * quantity
+                price=product.price * quantity
             )
             order.order_total += entry.price
         

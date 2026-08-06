@@ -15,7 +15,7 @@
 The repo root contains the Django project (`EveAccessories/`) plus top-level `requirements.txt`, `.venv`, and licensing/IDE files. Everything of substance lives under `EveAccessories/`, organized as one project with four apps:
 
 - **`EveAccessories/EveAccessories/`** — Project core: `settings.py`, root `urls.py`, `wsgi.py`/`asgi.py`. Wires together the four apps and static/media serving.
-- **`accessories/`** — Product catalog domain: `Product`, `ProductImage` models; public views for home, product list/detail, and add/remove-from-cart actions.
+- **`accessories/`** — Product catalog domain: `Product`; public views for home, product list/detail, and add/remove-from-cart actions.
 - **`orders/`** — `Order`, `OrderEntry` (line items), `OrderLog` (audit trail) models; cart view, checkout (`CreateOrder`), and order confirmation pages.
 - **`dashboard/`** — Admin-only back-office: `Setting` model (site-wide config: hero/payment images, per-governorate shipping fees) plus CRUD views for products, order-status management, and dashboard analytics (month/year/all-time sales stats).
 - **`templates/`** — Global templates, organized into `partials/{components,icons,layout,sections}` for reusable includes (navbar, footer, product cards, icons) and per-feature subfolders (`orders/`, `registration/`, `dashboard/`, `auth/`).
@@ -30,14 +30,14 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 2. `ProductListView`/`ProductView` (Django generic `ListView`/`DetailView`) support pagination.
 3. Cart state is stored as a delimited string (`"<product_id>#<variant>-<product_id>#<variant>-..."`) — persisted on `request.session['cart']` for guests, and mirrored into `User.cart` for authenticated users on every add/remove (see `ProductView.post`, `orders.views.remove_from_cart`). Out-of-stock products are blocked from being added.
 4. `orders.views.CartView` parses that string back into a `Product` queryset for display.
-5. `CreateOrder` (a `CreateView`) does the heavy lifting on submit: re-validates quantities against current stock, enforces a max-2-undelivered-orders-per-user/phone limit, decrements `Product.stock`, creates `OrderEntry` rows priced at `discounted_price`, computes `order_total` (line items + flat shipping fee), auto-confirms Cash-on-Delivery orders, logs an `OrderLog` entry, clears the cart, and redirects to an order-success page.
+5. `CreateOrder` (a `CreateView`) does the heavy lifting on submit: re-validates quantities against current stock, enforces a max-2-undelivered-orders-per-user/phone limit, decrements `Product.stock`, creates `OrderEntry` rows priced, computes `order_total` (line items + flat shipping fee), auto-confirms Cash-on-Delivery orders, logs an `OrderLog` entry, clears the cart, and redirects to an order-success page.
 
 **Authentication:**
 - Custom `LoginForm`/`CreateUserForm` (Egyptian phone-number regex validation) on top of Django's `AuthenticationForm`/`UserCreationForm`.
 - Successful login redirects staff/superusers to `/dashboard/`, everyone else to the homepage (or a `?next=` target).
 
 **Admin dashboard (staff-only, enforced by `RequireAdminLoginMiddleware`):**
-- CRUD for `Product` (supports both uploaded image files and raw image URLs per `ProductImage`).
+- CRUD for `Product`
 - Order pipeline management: `confirm_order` → `deliver_order` → `complete_order`, or `reject_order` (which restocks the cancelled order's items).
 - `DashboardView` aggregates month/year/all-time order counts, revenue (`Sum(order_total)`), and items-sold stats via Django ORM aggregation.
 - `SettingsView` edits the singleton `Setting` row (hero/payment images, per-governorate shipping costs).

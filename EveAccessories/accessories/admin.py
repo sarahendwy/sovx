@@ -1,17 +1,16 @@
 from django.contrib import admin
-from .models import Product, ProductImage
+from .models import Product, ProductBuyingOption
 
 
 # Register your models here.
-class ImageInline(admin.StackedInline):
-    model = ProductImage
-    extra = 0
-    fields = ("image",)
+class ProductBuyingOptionInline(admin.StackedInline):
+    model = ProductBuyingOption
+    extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
     inlines = [
-        ImageInline,
+        ProductBuyingOptionInline,
     ]
 
 

@@ -1,9 +1,44 @@
 from typing import Any
 from django import forms
 from django.core.validators import validate_image_file_extension
+from django.forms import inlineformset_factory
 
-from accessories.models import Product
-from .models import Setting, ProductList, Section, SellWithUsCard
+from accessories.models import Product, ProductBuyingOption
+from .models import Setting, ProductList, Section, SellWithUsCard, Governorate, City, ShippingFee
+
+
+class GovernorateCityFormMixin:
+    """For forms with a `governorate` ForeignKey and a dependent `city`
+    ForeignKey: restricts governorate to the real Governorate list, and
+    scopes city's queryset to that governorate's cities so an invalid
+    combination can't validate even with JS disabled.
+
+    static/js/locations.js redoes this scoping client-side (see the
+    `data-governorate-select` / `data-city-select` attrs set below) so
+    picking a governorate repopulates the city choices without a reload.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        governorate_field = self.fields.get("governorate")
+        city_field = self.fields.get("city")
+        if governorate_field is None or city_field is None:
+            return
+
+        governorate_field.queryset = Governorate.objects.all()
+        governorate_field.widget.attrs["data-governorate-select"] = ""
+        city_field.widget.attrs["data-city-select"] = ""
+
+        if self.is_bound:
+            governorate_id = self.data.get(self.add_prefix("governorate"))
+        else:
+            governorate_id = getattr(self.instance, "governorate_id", None)
+
+        city_field.queryset = (
+            City.objects.filter(governorate_id=governorate_id) if governorate_id else City.objects.none()
+        )
+
 
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
@@ -31,25 +66,35 @@ class ProductForm(forms.ModelForm):
             else:
                 field.widget.attrs.update({'class': 'form-control'})
 
-        if self.instance.id and self.instance.images.exists():
-            self.fields['clear_old_images'].widget = forms.CheckboxInput()
-        else:
-            del self.fields['clear_old_images']
-        
-    # images = MultipleFileField(
-    #     widget=MultipleFileInput(attrs={'multiple': True, 'accept': "image/*"}),
-    #     required=False,
-    #     help_text="Upload one or more image files for this product.",
-    # )
-    clear_old_images = forms.BooleanField(
-        required=False,
-        label="Clear old images?",
-        help_text="Check this box to clear all old images before saving new ones.",
-    )
-
     class Meta:
         model = Product
         fields = '__all__'
+
+class ProductBuyingOptionForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field, forms.fields.BooleanField):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = ProductBuyingOption
+        fields = ('name', 'amount', 'unit', 'price', 'stock', 'is_default')
+
+# Every product must have at least one buying option, so the dashboard form requires
+# at least one non-deleted, filled-in option (Django ignores untouched extra forms
+# when checking min_num, so a lone blank row won't satisfy this).
+ProductBuyingOptionFormSet = inlineformset_factory(
+    Product,
+    ProductBuyingOption,
+    form=ProductBuyingOptionForm,
+    extra=0,
+    can_delete=True,
+    min_num=1,
+    validate_min=True,
+)
 
 class SettingsForm(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -107,4 +152,16 @@ class SellWithUsCardForm(forms.ModelForm):
 
     class Meta:
         model = SellWithUsCard
+        fields = '__all__'
+
+class ShippingFeeForm(GovernorateCityFormMixin, forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields['city'].required = False
+        self.fields['city'].empty_label = "All cities (governorate-wide fee)"
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = ShippingFee
         fields = '__all__'

@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from accessories.models import Product, ProductImage
+from accessories.models import Product, ProductBuyingOption
 from dashboard.models import (
     ProductList,
     ProductSortField,
@@ -17,22 +17,36 @@ from dashboard.models import (
     SortDirection,
 )
 
+# Product no longer carries its own price/stock (see ProductBuyingOption) -
+# "price" below is only a seeding reference used to derive each buying option's
+# price and is never passed to Product.objects.create().
 SAMPLE_PRODUCTS = [
-    {"title": "مكسرات مشكلة فاخرة", "description": "تشكيلة فاخرة من أجود أنواع المكسرات المحمصة الطازجة.", "price": 350, "stock": 25, "discount": 10, "rating": 5},
-    {"title": "لوز محمص", "description": "لوز محمص ومملح بعناية للحصول على قرمشة مثالية.", "price": 420, "stock": 18, "discount": 0, "rating": 4},
-    {"title": "كاجو محمص", "description": "كاجو فاخر محمص طازج بدون إضافات صناعية.", "price": 480, "stock": 30, "discount": 15, "rating": 5},
-    {"title": "فستق حلبي", "description": "فستق حلبي أصلي مقرمش ذو نكهة غنية.", "price": 550, "stock": 12, "discount": 5, "rating": 4},
-    {"title": "عين جمل", "description": "عين جمل طازج غني بالفوائد الصحية والطعم الغني.", "price": 400, "stock": 40, "discount": 0, "rating": 5},
-    {"title": "بندق محمص", "description": "بندق محمص فاخر يتميز بطعمه الغني ورائحته المميزة.", "price": 380, "stock": 20, "discount": 20, "rating": 4},
-    {"title": "فول سوداني محمص", "description": "فول سوداني محمص ومملح، وجبة خفيفة مثالية.", "price": 150, "stock": 35, "discount": 0, "rating": 3},
-    {"title": "لب سوري محمص", "description": "لب سوري محمص بالملح بنكهة مميزة.", "price": 140, "stock": 45, "discount": 10, "rating": 5},
-    {"title": "لب أبيض", "description": "بذر قرع محمص ومملح غني بالبروتين.", "price": 160, "stock": 22, "discount": 0, "rating": 4},
-    {"title": "حمص أبيض محمص", "description": "حمص محمص مقرمش، وجبة خفيفة شعبية ولذيذة.", "price": 120, "stock": 28, "discount": 25, "rating": 4},
-    {"title": "ذرة محمصة", "description": "ذرة محمصة مقرمشة بنكهة مميزة.", "price": 100, "stock": 24, "discount": 0, "rating": 5},
-    {"title": "زبيب مجفف", "description": "زبيب طبيعي مجفف بدون سكر مضاف.", "price": 180, "stock": 33, "discount": 10, "rating": 4},
-    {"title": "تمر بالمكسرات", "description": "تمر فاخر محشو بمزيج من المكسرات المختارة.", "price": 320, "stock": 15, "discount": 0, "rating": 3},
-    {"title": "مشكل فواكه مجففة ومكسرات", "description": "خليط متوازن من الفواكه المجففة والمكسرات الفاخرة.", "price": 450, "stock": 16, "discount": 15, "rating": 4},
-    {"title": "صنوبر فاخر", "description": "صنوبر فاخر نقي بطعم غني ورائحة مميزة.", "price": 600, "stock": 10, "discount": 0, "rating": 5},
+    {"title": "مكسرات مشكلة فاخرة", "description": "تشكيلة فاخرة من أجود أنواع المكسرات المحمصة الطازجة.", "price": 350, "stock": 25, "rating": 5},
+    {"title": "لوز محمص", "description": "لوز محمص ومملح بعناية للحصول على قرمشة مثالية.", "price": 420, "stock": 18, "rating": 4},
+    {"title": "كاجو محمص", "description": "كاجو فاخر محمص طازج بدون إضافات صناعية.", "price": 480, "stock": 30, "rating": 5},
+    {"title": "فستق حلبي", "description": "فستق حلبي أصلي مقرمش ذو نكهة غنية.", "price": 550, "stock": 12, "rating": 4},
+    {"title": "عين جمل", "description": "عين جمل طازج غني بالفوائد الصحية والطعم الغني.", "price": 400, "stock": 40, "rating": 5},
+    {"title": "بندق محمص", "description": "بندق محمص فاخر يتميز بطعمه الغني ورائحته المميزة.", "price": 380, "stock": 20, "rating": 4},
+    {"title": "فول سوداني محمص", "description": "فول سوداني محمص ومملح، وجبة خفيفة مثالية.", "price": 150, "stock": 35, "rating": 3},
+    {"title": "لب سوري محمص", "description": "لب سوري محمص بالملح بنكهة مميزة.", "price": 140, "stock": 45, "rating": 5},
+    {"title": "لب أبيض", "description": "بذر قرع محمص ومملح غني بالبروتين.", "price": 160, "stock": 22, "rating": 4},
+    {"title": "حمص أبيض محمص", "description": "حمص محمص مقرمش، وجبة خفيفة شعبية ولذيذة.", "price": 120, "stock": 28, "rating": 4},
+    {"title": "ذرة محمصة", "description": "ذرة محمصة مقرمشة بنكهة مميزة.", "price": 100, "stock": 24, "rating": 5},
+    {"title": "زبيب مجفف", "description": "زبيب طبيعي مجفف بدون سكر مضاف.", "price": 180, "stock": 33, "rating": 4},
+    {"title": "تمر بالمكسرات", "description": "تمر فاخر محشو بمزيج من المكسرات المختارة.", "price": 320, "stock": 15, "rating": 3},
+    {"title": "مشكل فواكه مجففة ومكسرات", "description": "خليط متوازن من الفواكه المجففة والمكسرات الفاخرة.", "price": 450, "stock": 16, "rating": 4},
+    {"title": "صنوبر فاخر", "description": "صنوبر فاخر نقي بطعم غني ورائحة مميزة.", "price": 600, "stock": 10, "rating": 5},
+]
+
+# Every product must have at least one buying option (see ProductForm's inline
+# formset, which requires >= 1). Seeding gives each product these three sizes,
+# priced as a fraction of the product's reference price above. "كيلو كامل" is
+# flagged as the default option, so product.price resolves to the same value
+# the old flat Product.price field used to hold.
+BUYING_OPTION_TEMPLATES = [
+    {"name": "ربع كيلو", "amount": 250, "unit": "g", "price_factor": 0.25, "is_default": False},
+    {"name": "نص كيلو", "amount": 500, "unit": "g", "price_factor": 0.5, "is_default": False},
+    {"name": "كيلو كامل", "amount": 1, "unit": "kg", "price_factor": 1, "is_default": True},
 ]
 
 # Product List sections require a banner (see Section.clean). Seeding copies the real artwork
@@ -76,7 +90,6 @@ SAMPLE_SELL_WITH_US_CARDS = [
         "span": 2,
         "description": "مكسرات بجودة عالية وأسعار تنافسية توصلّك لحد عندك وفي معادها.",
         "cta_text": "اطلب من سوفكس الآن",
-        "cta_url": "#",
     },
     {
         "title": "ومحتاج طلبيات توصلك في مواعيد ثابتة؟",
@@ -104,13 +117,28 @@ class Command(BaseCommand):
 
         products = []
         for data in SAMPLE_PRODUCTS:
-            product = Product.objects.create(**data)
+            product = Product.objects.create(
+                title=data["title"],
+                description=data["description"],
+                rating=data["rating"],
+            )
             with open(image_path, "rb") as image_file:
-                product_image = ProductImage(product=product)
-                product_image.image.save("nuts.png", File(image_file), save=True)
+                product.image.save("nuts.png", File(image_file), save=True)
+
+            for option in BUYING_OPTION_TEMPLATES:
+                ProductBuyingOption.objects.create(
+                    product=product,
+                    name=option["name"],
+                    amount=option["amount"],
+                    unit=option["unit"],
+                    price=round(data["price"] * option["price_factor"]),
+                    stock=data["stock"],
+                    is_default=option["is_default"],
+                )
+
             products.append(product)
 
-        self.stdout.write(self.style.SUCCESS(f"Created {len(products)} sample products"))
+        self.stdout.write(self.style.SUCCESS(f"Created {len(products)} sample products with buying options"))
         return products
 
     def seed_settings(self):
@@ -170,7 +198,7 @@ class Command(BaseCommand):
         ramadan_offers = ProductList.objects.create(
             name="عروض رمضان",
             limit=6,
-            sort_by=ProductSortField.DISCOUNT,
+            sort_by=ProductSortField.CREATED_AT,
             sort_direction=SortDirection.DESC,
         )
         ramadan_offers.product_ids.set(products[6:14])

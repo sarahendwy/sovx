@@ -1,5 +1,7 @@
 from django.db import models
 
+from dashboard.models import City, Governorate, ShippingFee
+
 orders_states = [
     ('Pending Confirmation', 'Pending Confirmation'),
     ('Confirmed', 'Confirmed'),
@@ -17,8 +19,10 @@ class Order(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
-    governorate = models.CharField(choices=[("Cairo", "Cairo")], max_length=25)
-    city = models.CharField(max_length=55)
+    # null=True keeps this column migration-safe for any pre-existing rows;
+    # forms still require a selection since blank=False (the Django default).
+    governorate = models.ForeignKey(Governorate, on_delete=models.PROTECT, null=True, related_name="orders")
+    city = models.ForeignKey(City, on_delete=models.PROTECT, null=True, related_name="orders")
     address = models.CharField(max_length=500)
     status = models.CharField(choices=orders_states, max_length=25, default="Pending Confirmation")
 
@@ -34,10 +38,7 @@ class Order(models.Model):
 
     @property
     def shipping_fees(self):
-        if self.governorate == "Cairo":
-            return 70
-        else:
-            return 70
+        return ShippingFee.get_fee(self.governorate_id, self.city_id) or 0
 
     def __str__(self):
         return f"Order id: {self.id} - {self.name}"
@@ -64,8 +65,16 @@ class SellWithUsRequest(models.Model):
     name = models.CharField(max_length=255, verbose_name="الاسم", help_text="اكتب اسمك")
     store_name = models.CharField(max_length=255, verbose_name="اسم المحل", help_text="اكتب اسم المحل")
     phone = models.CharField(max_length=20, verbose_name="رقم التليفون", help_text="000-000-000-00")
-    governorate = models.CharField(choices=[("Cairo", "Cairo")], max_length=25, verbose_name="المحافظة", help_text="اختر المحافظة")
-    city = models.CharField(max_length=55, verbose_name="المدينة", help_text="اكتب المدينة")
+    # null=True keeps this column migration-safe for any pre-existing rows;
+    # forms still require a selection since blank=False (the Django default).
+    governorate = models.ForeignKey(
+        Governorate, on_delete=models.PROTECT, null=True, related_name="sell_with_us_requests",
+        verbose_name="المحافظة", help_text="اختر المحافظة",
+    )
+    city = models.ForeignKey(
+        City, on_delete=models.PROTECT, null=True, related_name="sell_with_us_requests",
+        verbose_name="المدينة", help_text="اختر المدينة",
+    )
     address = models.CharField(max_length=500, verbose_name="العنوان بالتفصيل", help_text="اكتب العنوان بالتفصيل")
     message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنسمع رأيكم")
 

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from typing import Any
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView, FormView
@@ -7,9 +8,12 @@ from django.utils import timezone as django_timezone
 from django.db.models import Sum, Count
 
 from orders.models import Order, OrderEntry
-from .forms import ProductForm, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm
-from .models import Setting, ProductList, Section, SellWithUsCard
-from accessories.models import Product, ProductImage
+from .forms import (
+    ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
+    ShippingFeeForm,
+)
+from .models import Setting, ProductList, Section, SellWithUsCard, City, ShippingFee
+from accessories.models import Product
 
 class DashboardView(TemplateView):
     template_name = 'dashboard/main.html'
@@ -113,40 +117,42 @@ class ProductsView(ListView):
         context["query"] = self.request.GET.get('query') or "Search..."
         return context
 
-class AddProductView(CreateView):
+class ProductBuyingOptionsFormsetMixin:
+    """Adds the ProductBuyingOption inline formset to the product add/edit views
+    and requires at least one buying option before the product can be saved."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.setdefault(
+            'buying_options_formset',
+            ProductBuyingOptionFormSet(self.request.POST or None, instance=self.object),
+        )
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        buying_options_formset = context['buying_options_formset']
+
+        if not buying_options_formset.is_valid():
+            return self.form_invalid(form)
+
+        self.object = form.save()
+        buying_options_formset.instance = self.object
+        buying_options_formset.save()
+
+        return redirect(self.get_success_url())
+
+class AddProductView(ProductBuyingOptionsFormsetMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/add_product.html'
     success_url = reverse_lazy('admin_products')
 
-    def form_valid(self, form):
-        self.object = form.save()
-
-        files = self.request.FILES.getlist('images')
-        if files:
-            for f in files:
-                ProductImage.objects.create(product=self.object, image=f)
-
-        return super().form_valid(form)
-
-class EditProductView(UpdateView):
+class EditProductView(ProductBuyingOptionsFormsetMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/edit_product.html'
     success_url = reverse_lazy('admin_products')
-
-    def form_valid(self, form):
-        clear_old_images = form.cleaned_data.get("clear_old_images")
-        if clear_old_images:
-            for image in self.object.images.all():
-                image.delete()
-
-        files = self.request.FILES.getlist('images')
-        if files:
-            for f in files:
-                ProductImage.objects.create(product=self.object, image=f)
-
-        return super().form_valid(form)
 
 class DeleteProductView(DeleteView):
     model = Product
@@ -238,6 +244,64 @@ class DeleteSellWithUsCardView(DeleteView):
     model = SellWithUsCard
     success_url = reverse_lazy('admin_sell_with_us_cards')
     template_name = "dashboard/confirm_delete.html"
+
+class ShippingFeesView(ListView):
+    template_name = 'dashboard/shipping_fee/shipping_fees.html'
+    model = ShippingFee
+    context_object_name = "shipping_fees"
+
+    def get_queryset(self):
+        return super().get_queryset().select_related('governorate', 'city')
+
+class AddShippingFeeView(CreateView):
+    model = ShippingFee
+    form_class = ShippingFeeForm
+    template_name = 'dashboard/shipping_fee/add_shipping_fee.html'
+    success_url = reverse_lazy('admin_shipping_fees')
+
+class EditShippingFeeView(UpdateView):
+    model = ShippingFee
+    form_class = ShippingFeeForm
+    template_name = 'dashboard/shipping_fee/edit_shipping_fee.html'
+    success_url = reverse_lazy('admin_shipping_fees')
+
+class DeleteShippingFeeView(DeleteView):
+    model = ShippingFee
+    success_url = reverse_lazy('admin_shipping_fees')
+    template_name = "dashboard/confirm_delete.html"
+
+
+def _parse_id(value):
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return None
+    return parsed if parsed > 0 else None
+
+
+def get_cities(request):
+    """Cities belonging to `?governorate=<id>`, for the cascading
+    governorate -> city selects (see static/js/locations.js)."""
+    governorate_id = _parse_id(request.GET.get('governorate'))
+    if governorate_id is None:
+        return JsonResponse({"error": "A valid governorate id is required."}, status=400)
+
+    cities = City.objects.filter(governorate_id=governorate_id).order_by('name_en').values('id', 'name_ar', 'name_en')
+    return JsonResponse({"cities": list(cities)})
+
+
+def get_shipping_fee(request):
+    """Shipping cost for `?governorate=<id>&city=<id>` (city optional),
+    used by the calculateShippingFee() JS helper (static/js/locations.js).
+    `fee` is null when no fee has been configured for that governorate."""
+    governorate_id = _parse_id(request.GET.get('governorate'))
+    if governorate_id is None:
+        return JsonResponse({"error": "A valid governorate id is required."}, status=400)
+
+    city_param = request.GET.get('city')
+    city_id = _parse_id(city_param) if city_param else None
+
+    return JsonResponse({"fee": ShippingFee.get_fee(governorate_id, city_id)})
 
 class OrdersView(TemplateView):
     template_name = 'dashboard/orders/orders.html'

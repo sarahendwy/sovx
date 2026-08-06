@@ -16,16 +16,16 @@
       class="product-page-image d-flex justify-content-center"
     >
       <div class="w-100 h-100">
-        {% for product_image in product.images.all %}
-        <div class="w-100 h-100 {% if forloop.first %}active{% endif %}">
+        {% if product.thumbnail %}
+        <div class="w-100 h-100 active">
           <div class="d-flex justify-content-center align-items-center w-100 h-100">
           <img
-            src="{{ product_image.url }}"
+            src="{{ product.thumbnail }}"
             alt="Product Thumbnail"
             class="product-page-carousel-img img-fluid"
           /></div>
         </div>
-        {% endfor %}
+        {% endif %}
       </div>
 
 
@@ -46,14 +46,8 @@
 
       <!-- Price Section -->
       <div class="product-page-price my-3">
-        EGP {% if product.discount %}
-        <span
-          class="product-page-price-old"
+        EGP <span class="product-page-price-new ml-2"
           >{{product.price}}</span
-        >
-        {% endif %}
-        <span class="product-page-price-new ml-2"
-          >{{product.discounted_price}}</span
         >
       </div>
 

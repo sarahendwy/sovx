@@ -5,16 +5,30 @@
  * the same way the inline scripts in cart.html / product.html /
  * product_card.html already work in this project.
  *
- * Cart items snapshot product data at add-time (title/price/thumbnail/stock)
- * since there is no product JSON API to re-fetch them by id later. Calling
- * Cart.add() again for the same id refreshes that snapshot.
+ * A cart line represents a specific ProductBuyingOption (SKU) of a product —
+ * not the bare product — since price/stock live on the buying option, and a
+ * product can have several purchasable options. `id` below is the buying
+ * option's id. Items snapshot display data at add-time (title/optionName/
+ * amount/unit/price/thumbnail/stock) since there is no product JSON API to
+ * re-fetch them by id later. Calling Cart.add() again for the same option id
+ * refreshes that snapshot.
  *
  * Usage:
- *   Cart.add({ id: 12, title: 'Necklace', price: 199, thumbnail: '/media/x.jpg', stock: 5 });
- *   Cart.increment(12);
- *   Cart.decrement(12);      // quantity 0 auto-removes the item
- *   Cart.setQuantity(12, 3);
- *   Cart.remove(12);
+ *   Cart.add({
+ *     id: 34,                 // ProductBuyingOption id — the cart line's key
+ *     productId: 12,          // parent Product id, for linking back to it
+ *     title: 'Necklace',      // product title
+ *     optionName: '1 kg',     // ProductBuyingOption.name
+ *     amount: 1,              // ProductBuyingOption.amount
+ *     unit: 'kg',             // ProductBuyingOption.unit
+ *     price: 199,             // ProductBuyingOption.price
+ *     thumbnail: '/media/x.jpg',
+ *     stock: 5,                // ProductBuyingOption.stock
+ *   });
+ *   Cart.increment(34);
+ *   Cart.decrement(34);      // quantity 0 auto-removes the item
+ *   Cart.setQuantity(34, 3);
+ *   Cart.remove(34);
  *   Cart.getItems();         // -> array of items
  *   Cart.getCount();         // -> total quantity, e.g. for a navbar badge
  *   Cart.getSubtotal();      // -> sum of price * quantity
@@ -34,7 +48,8 @@
   }
 
   var STORAGE_KEY = 'sovx:cart';
-  var SCHEMA_VERSION = 1;
+  // v2: cart lines key on ProductBuyingOption id and carry productId/optionName/amount/unit.
+  var SCHEMA_VERSION = 2;
 
   /** In-memory cache of { items: [...] }. Falls back to this if localStorage is unavailable. */
   var state = null;
@@ -80,7 +95,11 @@
   function cloneItem(item) {
     return {
       id: item.id,
+      productId: item.productId,
       title: item.title,
+      optionName: item.optionName,
+      amount: item.amount,
+      unit: item.unit,
       price: item.price,
       thumbnail: item.thumbnail,
       stock: item.stock,
@@ -97,7 +116,11 @@
     if (quantity <= 0) return null;
     return {
       id: id,
+      productId: raw.productId != null ? normalizeId(raw.productId) : null,
       title: raw.title != null ? String(raw.title) : '',
+      optionName: raw.optionName != null ? String(raw.optionName) : '',
+      amount: Number.isFinite(Number(raw.amount)) ? Number(raw.amount) : 1,
+      unit: raw.unit != null ? String(raw.unit) : '',
       price: Number.isFinite(Number(raw.price)) ? Number(raw.price) : 0,
       thumbnail: raw.thumbnail != null ? String(raw.thumbnail) : '',
       stock: stock,
@@ -182,16 +205,19 @@
   // ---- public API ---------------------------------------------------------
 
   /**
-   * Add a product to the cart, or increase its quantity if it's already
-   * there. Refreshes the stored title/price/thumbnail/stock snapshot with
-   * whatever is passed; omitted fields keep their previously known value.
-   * Quantity is clamped to `product.stock` when stock is a known number.
-   * Returns the resulting item, or null if the id was invalid or the
-   * resulting quantity is 0 (e.g. stock is 0).
+   * Add a buying option to the cart, or increase its quantity if it's
+   * already there. `item.id` must be the ProductBuyingOption id — that's
+   * the cart line's key, since price/stock belong to the option, not the
+   * product. Refreshes the stored snapshot (title/productId/optionName/
+   * amount/unit/price/thumbnail/stock) with whatever is passed; omitted
+   * fields keep their previously known value. Quantity is clamped to
+   * `item.stock` when stock is a known number. Returns the resulting item,
+   * or null if the id was invalid or the resulting quantity is 0 (e.g.
+   * stock is 0).
    */
-  function add(product, quantity) {
-    if (!product || typeof product !== 'object') return null;
-    var id = normalizeId(product.id);
+  function add(item, quantity) {
+    if (!item || typeof item !== 'object') return null;
+    var id = normalizeId(item.id);
     if (id === null) return null;
 
     quantity = quantity === undefined ? 1 : quantity;
@@ -200,7 +226,7 @@
     var idx = findIndex(s.items, id);
     var existing = idx > -1 ? s.items[idx] : null;
 
-    var incomingStock = normalizeStock(product.stock);
+    var incomingStock = normalizeStock(item.stock);
     var stock = incomingStock !== null ? incomingStock : (existing ? existing.stock : null);
 
     var baseQuantity = existing ? existing.quantity : 0;
@@ -212,23 +238,27 @@
       return null;
     }
 
-    var item = {
+    var resultItem = {
       id: id,
-      title: product.title != null ? String(product.title) : (existing ? existing.title : ''),
-      price: Number.isFinite(Number(product.price)) ? Number(product.price) : (existing ? existing.price : 0),
-      thumbnail: product.thumbnail != null ? String(product.thumbnail) : (existing ? existing.thumbnail : ''),
+      productId: item.productId != null ? normalizeId(item.productId) : (existing ? existing.productId : null),
+      title: item.title != null ? String(item.title) : (existing ? existing.title : ''),
+      optionName: item.optionName != null ? String(item.optionName) : (existing ? existing.optionName : ''),
+      amount: Number.isFinite(Number(item.amount)) ? Number(item.amount) : (existing ? existing.amount : 1),
+      unit: item.unit != null ? String(item.unit) : (existing ? existing.unit : ''),
+      price: Number.isFinite(Number(item.price)) ? Number(item.price) : (existing ? existing.price : 0),
+      thumbnail: item.thumbnail != null ? String(item.thumbnail) : (existing ? existing.thumbnail : ''),
       stock: stock,
       quantity: nextQuantity,
     };
 
     if (existing) {
-      s.items[idx] = item;
+      s.items[idx] = resultItem;
     } else {
-      s.items.push(item);
+      s.items.push(resultItem);
     }
 
     persist();
-    return cloneItem(item);
+    return cloneItem(resultItem);
   }
 
   /** Removes an item entirely, regardless of its quantity. Returns true if something was removed. */
@@ -318,7 +348,7 @@
     return idx === -1 ? null : cloneItem(loadState().items[idx]);
   }
 
-  /** Whether the given product id is currently in the cart. */
+  /** Whether the given buying-option id is currently in the cart. */
   function has(id) {
     return getItem(id) !== null;
   }

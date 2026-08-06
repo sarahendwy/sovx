@@ -2,6 +2,8 @@ from typing import Any
 from .models import Order, SellWithUsRequest
 from django import forms
 
+from dashboard.forms import GovernorateCityFormMixin
+
 
 class FormControlMixin:
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -14,7 +16,7 @@ class FormControlMixin:
                 "placeholder": field.help_text
             })
 
-class OrderForm(FormControlMixin, forms.ModelForm):
+class OrderForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
     class Meta:
         model = Order
         exclude = [
@@ -38,12 +40,11 @@ SELL_WITH_US_FIELDS_ICONS = {
     "address": "images/icons/navigator.svg",
 }
 
-class SellWithUsForm(FormControlMixin, forms.ModelForm):
+class SellWithUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field_icon = SELL_WITH_US_FIELDS_ICONS.get(field_name)
-            print(f"x Field: {field_name} - Icon: {field_icon}")
             if field_icon:
                 field.widget.icon = field_icon
 

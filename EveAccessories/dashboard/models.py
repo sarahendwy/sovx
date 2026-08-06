@@ -4,36 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 from accessories.models import Product
 
-egypt_governorates = [
-    ("Cairo", "Cairo"),
-    ("Alexandria", "Alexandria"),
-    ("Giza", "Giza"),
-    ("Qalyubia", "Qalyubia"),
-    ("Port Said", "Port Said"),
-    ("Suez", "Suez"),
-    ("Dakahlia", "Dakahlia"),
-    ("Sharkia", "Sharkia"),
-    ("Monufia", "Monufia"),
-    ("Gharbia", "Gharbia"),
-    ("Kafr El Sheikh", "Kafr El Sheikh"),
-    ("Beheira", "Beheira"),
-    ("Ismailia", "Ismailia"),
-    ("Beni Suef", "Beni Suef"),
-    ("Fayoum", "Fayoum"),
-    ("Minya", "Minya"),
-    ("Assiut", "Assiut"),
-    ("Sohag", "Sohag"),
-    ("Qena", "Qena"),
-    ("Luxor", "Luxor"),
-    ("Aswan", "Aswan"),
-    ("Red Sea", "Red Sea"),
-    ("New Valley", "New Valley"),
-    ("Matruh", "Matruh"),
-    ("North Sinai", "North Sinai"),
-    ("South Sinai", "South Sinai"),
-]
-
-
 class Setting(models.Model):
     offer_banner_text = models.CharField(
         help_text="The offer text at the top of the landing page",
@@ -46,38 +16,95 @@ class Setting(models.Model):
     payment_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
     hero_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
 
-    cairo_shipping = models.PositiveIntegerField(default=0)
-    alexandria_shipping = models.PositiveIntegerField(default=0)
-    giza_shipping = models.PositiveIntegerField(default=0)
-    qalyubia_shipping = models.PositiveIntegerField(default=0)
-    port_said_shipping = models.PositiveIntegerField(default=0)
-    suez_shipping = models.PositiveIntegerField(default=0)
-    dakahlia_shipping = models.PositiveIntegerField(default=0)
-    sharkia_shipping = models.PositiveIntegerField(default=0)
-    monufia_shipping = models.PositiveIntegerField(default=0)
-    gharbia_shipping = models.PositiveIntegerField(default=0)
-    kafr_sheikh_shipping = models.PositiveIntegerField(default=0)
-    beheira_shipping = models.PositiveIntegerField(default=0)
-    ismailia_shipping = models.PositiveIntegerField(default=0)
-    benisuef_shipping = models.PositiveIntegerField(default=0)
-    fayoum_shipping = models.PositiveIntegerField(default=0)
-    minya_shipping = models.PositiveIntegerField(default=0)
-    assiut_shipping = models.PositiveIntegerField(default=0)
-    sohag_shipping = models.PositiveIntegerField(default=0)
-    qena_shipping = models.PositiveIntegerField(default=0)
-    luxor_shipping = models.PositiveIntegerField(default=0)
-    aswan_shipping = models.PositiveIntegerField(default=0)
-    red_sea_shipping = models.PositiveIntegerField(default=0)
-    new_valley_shipping = models.PositiveIntegerField(default=0)
-    matruh_shipping = models.PositiveIntegerField(default=0)
-    north_sinai_shipping = models.PositiveIntegerField(default=0)
-    south_sinai_shipping = models.PositiveIntegerField(default=0)
+
+class Governorate(models.Model):
+    name_ar = models.CharField(max_length=100)
+    name_en = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ["name_en"]
+
+    def __str__(self):
+        return self.name_en
+
+
+class City(models.Model):
+    governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE, related_name="cities")
+    name_ar = models.CharField(max_length=200)
+    name_en = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ["name_en"]
+        verbose_name_plural = "Cities"
+
+    def __str__(self):
+        return f"{self.name_en} ({self.governorate.name_en})"
+
+
+class ShippingFee(models.Model):
+    governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE, related_name="shipping_fees")
+    city = models.ForeignKey(
+        City,
+        on_delete=models.CASCADE,
+        related_name="shipping_fees",
+        null=True,
+        blank=True,
+        help_text="Leave empty to use this fee for every city in the governorate that doesn't have its own fee.",
+    )
+    cost = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        # Blocks two rows for the same (governorate, city) pair. It doesn't
+        # cover two governorate-wide rows (city=NULL) for the same
+        # governorate - NULL is never "equal" to NULL in a unique index -
+        # so that case is enforced in clean() below instead.
+        unique_together = [("governorate", "city")]
+        ordering = ["governorate__name_en", "city__name_en"]
+
+    def clean(self):
+        super().clean()
+
+        if self.city_id and self.governorate_id and self.city.governorate_id != self.governorate_id:
+            raise ValidationError({"city": "This city does not belong to the selected governorate."})
+
+        duplicates = ShippingFee.objects.filter(governorate_id=self.governorate_id, city_id=self.city_id)
+        if self.pk:
+            duplicates = duplicates.exclude(pk=self.pk)
+        if duplicates.exists():
+            scope = str(self.city) if self.city_id else "all cities (governorate-wide)"
+            raise ValidationError(f"A shipping fee for {scope} in {self.governorate} already exists.")
+
+    def __str__(self):
+        scope = self.city.name_en if self.city_id else "All cities"
+        return f"{self.governorate.name_en} - {scope}: {self.cost} EGP"
+
+    @classmethod
+    def get_fee(cls, governorate_id, city_id=None):
+        """Resolve the shipping cost for a governorate/city pair.
+
+        Prefers a fee configured for that exact city, falling back to the
+        governorate-wide fee (city=None). Returns None if neither exists.
+        """
+        if not governorate_id:
+            return None
+
+        if city_id:
+            fee = (
+                cls.objects.filter(governorate_id=governorate_id, city_id=city_id)
+                .values_list("cost", flat=True)
+                .first()
+            )
+            if fee is not None:
+                return fee
+
+        return (
+            cls.objects.filter(governorate_id=governorate_id, city__isnull=True)
+            .values_list("cost", flat=True)
+            .first()
+        )
 
 
 class ProductSortField(models.TextChoices):
-    PRICE = "price", "Price"
-    STOCK = "stock", "Stock"
-    DISCOUNT = "discount", "Discount"
     RATING = "rating", "Rating"
     CREATED_AT = "created_at", "Date Added"
 

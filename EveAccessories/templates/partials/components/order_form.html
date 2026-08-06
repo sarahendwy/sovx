@@ -52,7 +52,7 @@
         <div>
           {% for product in products %}
           <div
-            data-price="{{product.discounted_price}}"
+            data-price="{{product.price}}"
             class="order-form-product-row d-flex justify-content-between align-items-center mb-3"
           >
             <div class="d-flex align-items-center w-50">
@@ -81,7 +81,7 @@
                 class="form-control bg-transparent border-1 border-primary js-quantity"
               />
             </div>
-            <p class="js-price m-0">EGP {{ product.discounted_price }}</p>
+            <p class="js-price m-0">EGP {{ product.price }}</p>
           </div>
           {% endfor %}
         </div>
@@ -92,7 +92,7 @@
             </p>
             <p class="mb-1 pb-3 border-1 border-bottom border-primary">
               Shipping: EGP
-              <strong class="js-shipping-cost">{{shipping_cost}}</strong>
+              <strong class="js-shipping-cost">0</strong>
             </p>
             <p class="mb-1">
               Total: EGP <strong class="js-total-cost"></strong>
@@ -135,7 +135,7 @@
             </p>
             <p class="mb-1 pb-3 border-1 border-bottom border-primary">
               Shipping: EGP
-              <strong class="js-shipping-cost">{{shipping_cost}}</strong>
+              <strong class="js-shipping-cost">0</strong>
             </p>
             <p class="mb-1">
               Total: EGP <strong class="js-total-cost"></strong>
@@ -253,31 +253,26 @@
     </div>
   </div>
 </form>
-<div class="hidden">{{ shipping_costs|json_script:"shipping_costs" }}</div>
 
 <script>
   window.onload = () => {
-    const shipping_costs = JSON.parse(
-      document.getElementById("shipping_costs").textContent,
-    );
+    // Kept in sync by updateShippingCost() below, which asks the server (via
+    // Locations.calculateShippingFee, static/js/locations.js) for the real
+    // fee whenever the governorate/city selection changes.
+    let shippingCost = 0;
 
     function calculate_subtotal() {
       const products = document.querySelectorAll(".order-form-product-row");
-      const governorate = document.querySelector(
-        'select[name="governorate"]',
-      ).value;
-      const shipping_cost =
-        shipping_costs[`${governorate}_shipping`.toLocaleLowerCase()] || 50;
       let subtotal = 0;
       products.forEach((product) => {
         const price = parseInt(product.dataset.price || 0);
         const quantity = product.querySelector(".js-quantity").value;
         subtotal += price * quantity;
       });
-      const total = subtotal + shipping_cost;
+      const total = subtotal + shippingCost;
       document
         .querySelectorAll(".js-shipping-cost")
-        .forEach((e) => (e.textContent = shipping_cost));
+        .forEach((e) => (e.textContent = shippingCost));
       document
         .querySelectorAll(".js-subtotal")
         .forEach((e) => (e.textContent = subtotal));
@@ -286,7 +281,25 @@
         .forEach((element) => (element.textContent = total));
     }
 
+    function updateShippingCost(cityId) {
+      const governorateId = document.querySelector(
+        'select[name="governorate"]',
+      ).value;
+
+      if (!governorateId) {
+        shippingCost = 0;
+        calculate_subtotal();
+        return;
+      }
+
+      Locations.calculateShippingFee(governorateId, cityId).then((fee) => {
+        shippingCost = fee || 0;
+        calculate_subtotal();
+      });
+    }
+
     calculate_subtotal();
+    updateShippingCost(document.querySelector('select[name="city"]')?.value);
 
     document.querySelectorAll(".js-quantity").forEach((quantity) => {
       quantity.addEventListener("change", (e) => {
@@ -298,11 +311,17 @@
         calculate_subtotal();
       });
     });
+
+    // Governorate changes reset the city (see locations.js), so only the
+    // governorate-wide fee is known until a city is (re)picked.
     document
       .querySelector('select[name="governorate"]')
-      .addEventListener("change", (e) => {
-        calculate_subtotal();
-      });
+      .addEventListener("change", () => updateShippingCost());
+
+    const citySelect = document.querySelector('select[name="city"]');
+    if (citySelect) {
+      citySelect.addEventListener("change", (e) => updateShippingCost(e.target.value));
+    }
 
     const payNowRadio = document.getElementById("pay_now");
     const payCodRadio = document.getElementById("pay_cod");

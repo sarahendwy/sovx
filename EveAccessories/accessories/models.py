@@ -4,34 +4,43 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Product(models.Model):
     title = models.CharField(max_length=150)
     description = models.TextField()
-    price = models.PositiveIntegerField(default=0)
-    stock = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0)])
-    discount = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     rating = models.PositiveIntegerField(default=5, validators=[MinValueValidator(0), MaxValueValidator(5)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to="products/images/%Y/%m/%d/", blank=True, null=True)
 
     @property
-    def discounted_price(self):
-        return self.price - self.price * self.discount / 100
+    def default_buying_option(self):
+        return self.buying_options.filter(is_default=True).first() or self.buying_options.first()
 
     @property
-    def empty_stars(self):
-        return 5 - self.rating
+    def price(self):
+        default_option = self.default_buying_option
+        return default_option.price if default_option else 0
 
     @property
     def thumbnail(self):
-        first_image = self.images.first()
-        return first_image.url if first_image else ""
+        return self.image.url if self.image else ""
+    
+    @property
+    def empty_stars(self):
+        return 5 - self.rating
 
     def __str__(self):
         return self.title
 
 
-class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to="products/images/%Y/%m/%d/", blank=True, null=True)
+class ProductBuyingOption(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="buying_options")
+    name = models.CharField(max_length=100)
+    amount = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    unit = models.CharField(max_length=50, default="piece", choices=[("piece", "قطعة"), ("kg", "كيلوجرام"), ("g", "جرام"), ("liter", "لتر")])
+    price = models.PositiveIntegerField(default=0)
+    stock = models.PositiveIntegerField(default=1, validators=[MinValueValidator(0)])
+    is_default = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-    @property
-    def url(self):
-        return self.image.url if self.image else ""
+    def __str__(self):
+        return f"{self.product.title} - {self.name}"
+    

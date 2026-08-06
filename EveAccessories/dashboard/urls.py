@@ -31,4 +31,12 @@ urlpatterns = [
     path('sell-with-us-cards/add', AddSellWithUsCardView.as_view(), name='add_sell_with_us_card'),
     path('sell-with-us-cards/edit/<pk>', EditSellWithUsCardView.as_view(), name='edit_sell_with_us_card'),
     path('sell-with-us-cards/delete/<pk>', DeleteSellWithUsCardView.as_view(), name='delete_sell_with_us_card'),
+
+    path('shipping-fees/', ShippingFeesView.as_view(), name='admin_shipping_fees'),
+    path('shipping-fees/add', AddShippingFeeView.as_view(), name='add_shipping_fee'),
+    path('shipping-fees/edit/<pk>', EditShippingFeeView.as_view(), name='edit_shipping_fee'),
+    path('shipping-fees/delete/<pk>', DeleteShippingFeeView.as_view(), name='delete_shipping_fee'),
+
+    path('api/cities/', get_cities, name='api_cities'),
+    path('api/shipping-fee/', get_shipping_fee, name='api_shipping_fee'),
 ]

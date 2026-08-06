@@ -34,7 +34,9 @@
     {% block header %} {% endblock header %}
   </head>
   <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#navbarSectionsNav" tabindex="0">
-    {% include "partials/components/announcement_bar.html"%} 
+    <script src="{% static 'js/cart.js' %}"></script>
+    <script src="{% static 'js/locations.js' %}"></script>
+    {% include "partials/components/announcement_bar.html"%}
     {% include "partials/layout/navbar.html" %}
     {% block content %} {% endblock %}
     {% include "partials/layout/footer.html" %}
