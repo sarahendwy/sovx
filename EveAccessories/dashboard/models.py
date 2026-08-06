@@ -25,7 +25,7 @@ class Governorate(models.Model):
         ordering = ["name_en"]
 
     def __str__(self):
-        return self.name_en
+        return self.name_ar
 
 
 class City(models.Model):
@@ -38,7 +38,7 @@ class City(models.Model):
         verbose_name_plural = "Cities"
 
     def __str__(self):
-        return f"{self.name_en} ({self.governorate.name_en})"
+        return f"{self.name_ar} ({self.governorate.name_ar})"
 
 
 class ShippingFee(models.Model):

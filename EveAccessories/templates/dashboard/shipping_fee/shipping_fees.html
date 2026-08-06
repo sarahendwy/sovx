@@ -22,8 +22,8 @@
     {% for shipping_fee in shipping_fees %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ shipping_fee.governorate.name_en }}</td>
-      <td>{{ shipping_fee.city.name_en|default:"All cities (governorate-wide)" }}</td>
+      <td>{{ shipping_fee.governorate.name_ar }}</td>
+      <td>{{ shipping_fee.city.name_ar|default:"All cities (governorate-wide)" }}</td>
       <td>{{ shipping_fee.cost }}</td>
       <td>
         <a

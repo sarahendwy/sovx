@@ -100,7 +100,7 @@
     cities.forEach(function (city) {
       var option = document.createElement('option');
       option.value = city.id;
-      option.textContent = city.name_en;
+      option.textContent = city.name_ar;
       if (String(city.id) === current) option.selected = true;
       citySelect.appendChild(option);
     });
