@@ -1,6 +1,6 @@
 body {
   min-height: 100vh;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-white);
   color: var(--text-dark);
   display: flex;
   flex-direction: column;
@@ -16,7 +16,7 @@ p {
   display: none;
 }
 
-main {
+.container {
   max-width: 1224px;
 }
 
@@ -29,4 +29,8 @@ main {
   .container {
     max-width: 1248px !important;
   }
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
 }

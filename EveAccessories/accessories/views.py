@@ -129,7 +129,3 @@ class ProductView(DetailView):
 
         request.session["cart"] = cart
         return redirect(request.path)
-
-
-def about(request):
-    return render(request, "about.html")

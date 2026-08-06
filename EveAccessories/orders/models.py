@@ -59,3 +59,17 @@ class OrderLog(models.Model):
 
     def __str__(self):
         return f"{self.order} - {self.content}"
+
+class SellWithUsRequest(models.Model):
+    name = models.CharField(max_length=255, verbose_name="الاسم", help_text="اكتب اسمك")
+    store_name = models.CharField(max_length=255, verbose_name="اسم المحل", help_text="اكتب اسم المحل")
+    phone = models.CharField(max_length=20, verbose_name="رقم التليفون", help_text="000-000-000-00")
+    governorate = models.CharField(choices=[("Cairo", "Cairo")], max_length=25, verbose_name="المحافظة", help_text="اختر المحافظة")
+    city = models.CharField(max_length=55, verbose_name="المدينة", help_text="اكتب المدينة")
+    address = models.CharField(max_length=500, verbose_name="العنوان بالتفصيل", help_text="اكتب العنوان بالتفصيل")
+    message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنسمع رأيكم")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Sell With Us Request id: {self.id} - {self.name}"

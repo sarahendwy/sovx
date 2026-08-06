@@ -168,7 +168,6 @@ class SellWithUsCard(models.Model):
     bg_color = models.CharField(max_length=7, choices=SellWithUsColor.choices, default=SellWithUsColor.YELLOW)
     description = models.TextField(blank=True, help_text="Optional supporting text shown below the title")
     cta_text = models.CharField(max_length=50, blank=True, help_text="Optional call-to-action button label")
-    cta_url = models.CharField(max_length=255, blank=True, help_text="Optional call-to-action button link")
     disabled = models.BooleanField(default=False, help_text="Hide this card from the landing page")
     span = models.PositiveSmallIntegerField(choices=SellWithUsCardSpan.choices, default=SellWithUsCardSpan.SINGLE)
     order = models.PositiveIntegerField(default=0)

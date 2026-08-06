@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from .models import Order, OrderEntry, OrderLog
 from accessories.models import Product
 from django.views.generic import CreateView, TemplateView, DetailView
-from .forms import OrderForm
+from .forms import OrderForm, SellWithUsForm
 from dashboard.models import Setting
 from django.forms.models import model_to_dict
 
@@ -71,7 +71,7 @@ def order_success(request, order_id):
 class CreateOrder(CreateView):
     template_name = 'orders/create_order.html'
     form_class = OrderForm
-    success_url = "/order/success"
+    success_url = "/orders/success"
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -260,6 +260,11 @@ class CreateOrder(CreateView):
         order.save()
         return redirect(f"/order/success/{order.id}")
 
+
+class SellWithUs(CreateView):
+    template_name = 'sell_with_us.html'
+    form_class = SellWithUsForm
+    success_url = "/orders/success"
 
 
 class OrderDetails(DetailView):

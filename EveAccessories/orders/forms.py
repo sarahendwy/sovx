@@ -1,18 +1,20 @@
 from typing import Any
-from .models import Order
+from .models import Order, SellWithUsRequest
 from django import forms
 
 
-class OrderForm(forms.ModelForm):
+class FormControlMixin:
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        for name, field in self.fields.items():
+        for field in self.fields.values():
             is_select = isinstance(field.widget, forms.Select)
             field.widget.attrs.update({
                 "class": "form-select" if is_select else "form-control",
                 "dir": "rtl",
+                "placeholder": field.help_text
             })
 
+class OrderForm(FormControlMixin, forms.ModelForm):
     class Meta:
         model = Order
         exclude = [
@@ -20,36 +22,33 @@ class OrderForm(forms.ModelForm):
             "products", "quanitites", "payment_account", "payment_method",
             "payment_proof", "delivered_at",
         ]
-        labels = {
-            "name": "الاسم",
-            "store_name": "اسم المحل",
-            "email": "البريد الإلكتروني",
-            "phone": "رقم التليفون",
-            "governorate": "المحافظة",
-            "city": "المدينة",
-            "address": "العنوان بالتفصيل",
-            "message": "رسالتك",
-        }
-        widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "اكتب اسمك"}),
-            "store_name": forms.TextInput(attrs={"placeholder": "اكتب اسم المحل"}),
-            "email": forms.EmailInput(attrs={"placeholder": "اكتب البريد الإلكتروني"}),
-            "phone": forms.TextInput(attrs={
-                "placeholder": "000-000-000-00",
-                "inputmode": "tel",
-                "autocomplete": "tel",
-            }),
-            "governorate": forms.Select(),
-            "city": forms.Select(),
-            "address": forms.TextInput(attrs={"placeholder": "اكتب العنوان بالتفصيل"}),
-            "message": forms.Textarea(attrs={
-                "placeholder": "نحن هنا لنسمع رأيكم",
-                "rows": 4,
-            }),
-        }
 
     def clean_quanitites(self):
         quanitites = self.cleaned_data.get('quanitites')
         if not quanitites:
             raise forms.ValidationError("Please add products to your cart")
         return quanitites
+
+SELL_WITH_US_FIELDS_ICONS = {
+    "name": "images/icons/user.svg",
+    "store_name": "images/icons/store.svg",
+    "phone": "images/icons/phone.svg",
+    "governorate": "images/icons/location.svg",
+    "city": "images/icons/location.svg",
+    "address": "images/icons/navigator.svg",
+}
+
+class SellWithUsForm(FormControlMixin, forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field_icon = SELL_WITH_US_FIELDS_ICONS.get(field_name)
+            print(f"x Field: {field_name} - Icon: {field_icon}")
+            if field_icon:
+                field.widget.icon = field_icon
+
+    class Meta:
+        model = SellWithUsRequest
+        exclude = ["created_at"]
+
+    

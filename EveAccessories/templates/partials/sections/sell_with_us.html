@@ -15,7 +15,7 @@
                             <p class="swu-content-text" dir="auto">{{ card.description }}</p>
                         {% endif %}
                         {% if card.cta_text %}
-                            <a href="{{ card.cta_url|default:'#' }}" class="swu-cta">{{ card.cta_text }}</a>
+                            <a href="{% url 'sell_with_us' %}" class="swu-cta">{{ card.cta_text }}</a>
                         {% endif %}
                     </div>
                 {% else %}

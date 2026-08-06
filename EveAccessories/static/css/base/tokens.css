@@ -4,7 +4,8 @@
   --bg-primary: #fedbdc;
   --bg-primary-disabled: #f3d6d8;
   --bg-tertiary: #faa0a0;
-  --bg-secondary: #ffffff;
+  --bg-white: #ffffff;
+  --bg-secondary: #f6f8fa;
 
   /* Text colors */
   --text-dark: #18221d;
