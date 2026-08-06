@@ -62,20 +62,28 @@
   color: var(--text-label);
 }
 
-.order-form-input {
+#OrderFormCarousel input {
   padding: 10px 10px 10px 12px;
-  gap: 8px;
   border: 1px solid var(--border-secondary);
   border-radius: 10px;
   background-color: #ffffff;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+  box-shadow: 0 1px 2px 0 rgba(228, 229, 231, 0.24);
 }
 
-.form-control.order-form-input::placeholder {
+#OrderFormCarousel input::placeholder {
   color: var(--placeholder-color);
   font-family: var(--font-primary);
   font-size: 14px;
   font-weight: var(--font-regular);
+}
+#OrderFormCarousel input:focus {
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: none;
 }
 
 @media screen and (max-width: 576px) {
