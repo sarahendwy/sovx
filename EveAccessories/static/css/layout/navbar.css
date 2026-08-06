@@ -45,6 +45,22 @@
   height: 20px;
 }
 
+.site-navbar-cart-badge {
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary);
+  color: var(--bg-white);
+  font-size: 8px;
+  font-weight: var(--font-regular);
+  line-height: 1;
+  border-radius: var(--radius-full);
+  pointer-events: none;
+}
+
 .site-navbar-links {
   gap: 32px;
   justify-content: flex-start;

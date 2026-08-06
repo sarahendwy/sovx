@@ -84,6 +84,12 @@
         <circle cx="10" cy="18.5" r="1" fill="var(--primary)" />
         <circle cx="17" cy="18.5" r="1" fill="var(--primary)" />
       </svg>
+      <span
+        class="site-navbar-cart-badge position-absolute top-0 start-100 translate-middle"
+        data-cart-badge
+        aria-hidden="true"
+        hidden
+      >0</span>
     </a>
   </div>
 
@@ -104,3 +110,36 @@
   </div>
   {% endif %}
 </nav>
+
+<script>
+  if (!window.__navbarCartBadgeInit) {
+    window.__navbarCartBadgeInit = true;
+
+    const CART_LABEL = 'Shopping cart';
+
+    const syncCartBadge = function () {
+      if (!window.Cart) return;
+      const badge = document.querySelector('[data-cart-badge]');
+      const link = document.querySelector('.site-navbar-cart');
+      if (!badge) return;
+
+      const count = window.Cart.getCount();
+      const hasItems = count > 0;
+
+      badge.hidden = !hasItems;
+      badge.textContent = count > 99 ? '99+' : String(count);
+
+      if (link) {
+        link.setAttribute('aria-label', hasItems ? CART_LABEL + ' (' + count + ' items)' : CART_LABEL);
+      }
+    };
+
+    window.addEventListener('cart:change', syncCartBadge);
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncCartBadge);
+    } else {
+      syncCartBadge();
+    }
+  }
+</script>
