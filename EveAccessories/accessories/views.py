@@ -26,23 +26,22 @@ class ProductListView(ListView):
         product_list_id = self.request.GET.get('product_list_id')
         
         if product_list_id:
-            product_list_obj = ProductList.objects.filter(id=product_list_id).first()
-            if product_list_obj:
+            try:
+                product_list_obj = ProductList.objects.get(id=product_list_id)
+                
                 if product_list_obj.product_ids.exists():
                     queryset = product_list_obj.product_ids.all()
                 else:
                     queryset = Product.objects.all()
+                    
 
                 direction = "-" if product_list_obj.sort_direction.lower() == "desc" else ""
                 sort_field = product_list_obj.sort_by if product_list_obj.sort_by else "id"
                 
-                queryset = queryset.order_by(f"{direction}{sort_field}")
-
-                if product_list_obj.limit:
-                    queryset = queryset[:product_list_obj.limit]
-                return queryset
-            
-            return Product.objects.none()
+                return queryset.order_by(f"{direction}{sort_field}")
+                
+            except ProductList.DoesNotExist:
+                return Product.objects.none()
 
         elif query:
             return Product.objects.filter(title__istartswith=query)
@@ -97,7 +96,6 @@ class ProductView(DetailView):
         product = self.get_object()
         product_id = str(product.id)
 
-        # Prevent adding out of stock products
         if operation == "add" and product.stock == 0:
             from django.contrib import messages
 

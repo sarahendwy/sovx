@@ -40,6 +40,9 @@ class Setting(models.Model):
         default="",
         max_length=250,
     )
+    facebook_link = models.CharField(default="",max_length=50)
+    instgram_link = models.CharField(default="",max_length=50)
+    
     payment_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
     hero_image = models.ImageField(upload_to="dashboard/settings/", blank=True)
 
