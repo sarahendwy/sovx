@@ -1,119 +1,183 @@
-{% extends 'base.html' %} {% load static %}
-
-{% block header %}
+{% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
-{% endblock header %}
+{% endblock header %} {% block content %}
+<main class="product-page-container container py-4">
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb-nav mb-4" dir="rtl">
+    <a href="#">الرئيسية</a> &gt; <a href="#">اكياس سوفكس</a> &gt;
+    <span class="current">مكسرات</span>
+  </nav>
 
-{% block content %}
-<main class="flex-grow-1 mx-auto">
-<div class="py-2 py-md-4">
   <div
-    class="d-flex ps-0 gap-3 flex-column flex-md-row justify-content-between align-items-stretch my-4"
-    style="max-width: 1200px"
+    class="row flex-column-reverse flex-md-row-reverse align-items-start g-5"
+    dir="rtl"
   >
-    <!-- Product Image Section -->
-    <div
-      class="product-page-image d-flex justify-content-center"
-    >
-      <div class="w-100 h-100">
-        {% if product.thumbnail %}
-        <div class="w-100 h-100 active">
-          <div class="d-flex justify-content-center align-items-center w-100 h-100">
-          <img
-            src="{{ product.thumbnail }}"
-            alt="Product Thumbnail"
-            class="product-page-carousel-img img-fluid"
-          /></div>
+    <!-- Left Column: Details -->
+    <div class="col-lg-5 product-details-section">
+      <h1 class="product-main-title">مكسرات</h1>
+
+      <!-- Weight Selection -->
+      <div class="weight-selection-container my-4">
+        <div class="weight-card active">
+          <span class="weight-badge badge-red">الأكثر شعبية</span>
+          <div class="weight-info">
+            <span class="grams">125 جرام</span>
+            <span class="price">15 ج.م</span>
+          </div>
         </div>
-        {% endif %}
+
+        <div class="weight-card">
+          <span class="weight-badge badge-brown">وفر 20%</span>
+          <div class="weight-info">
+            <span class="grams">400 جرام</span>
+            <span class="price">30 ج.م</span>
+          </div>
+        </div>
       </div>
 
+      <!-- Actions -->
+      <div class="product-actions-row d-flex align-items-center gap-3">
+        <div class="quantity-control d-flex align-items-center">
+          <button class="qty-btn">+</button>
+          <span class="qty-number">1</span>
+          <button class="qty-btn">-</button>
+        </div>
 
+        <button class="add-to-cart-big-btn flex-grow-1">
+          أضف إلى السلة <span class="cart-icon-placeholder">🛒</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Product Details Section -->
-    <div
-      class="product-page-details"
-    >
-      <h2>{{product.title}}</h2>
-      <p class="text-muted">{{product.description}}</p>
-
-      <!-- Rating Section -->
-      <div class="product-page-rating">
-        {% for x in ""|ljust:product.rating %} &#9733; {% endfor %}
-        {% for x in ""|ljust:product.empty_stars %} &#9734; {% endfor %}
+    <!-- Right Column: Image Box -->
+    <div class="col-lg-7">
+      <div class="product-hero-image-wrapper">
+        <!-- Replace with your actual static image path -->
+        <img
+          src="{{ product.thumbnail }}"
+          alt="Product Image"
+          class="img-fluid"
+        />
       </div>
-
-      <!-- Price Section -->
-      <div class="product-page-price my-3">
-        EGP <span class="product-page-price-new ml-2"
-          >{{product.price}}</span
-        >
-      </div>
-
-      <!-- Stock and Brand -->
-      <div class="my-3">
-        {% if product.stock == 0 %}
-        <span class="badge bg-danger fs-6 mb-2">Sold Out</span>
-        {% else %}
-        <span class="product-page-stock-available"
-          >{{product.stock}} Items In Stock</span
-        >
-        {% endif %}
-      </div>
-
-      {% if in_cart %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="operation" value="remove" />
-        <button
-          id="remove_cart_button"
-          class="btn btn-primary btn-lg mt-auto"
-          type="submit"
-          style="width: 100%"
-        >
-          &#10003; Added to Cart
-        </button>
-      </form>
-      <script>
-        window.onload = function () {
-          var btn = document.querySelector("button#remove_cart_button");
-
-          btn.addEventListener("mouseover", function () {
-            this.innerHTML = "Remove from Cart";
-          });
-          btn.addEventListener("mouseout", function () {
-            this.innerHTML = "&#10003; Added to Cart";
-          });
-        };
-      </script>
-      {% else %}
-      <!-- Add to Cart Button -->
-      {% if product.stock == 0 %}
-      <button
-        class="btn btn-secondary btn-lg mt-auto"
-        type="button"
-        style="width: 100%"
-        disabled
-      >
-        Sold Out
-      </button>
-      {% else %}
-      <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="operation" value="add" />
-        <button
-          class="btn btn-primary btn-lg mt-auto"
-          type="submit"
-          style="width: 100%"
-        >
-          Add to Cart
-        </button>
-      </form>
-      {% endif %}
-      {% endif %}
     </div>
   </div>
-</div>
+
+  <!-- Tabs Section -->
+  <div class="product-info-tabs mt-5" dir="rtl">
+    <div class="tabs-header d-flex gap-4 border-bottom">
+      <button class="tab-trigger">الوصف</button>
+      <button class="tab-trigger active">المكونات</button>
+      <button class="tab-trigger">القيم الغذائية</button>
+    </div>
+
+    <div class="tab-content-panel py-4" dir="rtl">
+      <p class="nutrition-summary mb-4">متوسط القيم الغذائية لكل 100 جرام</p>
+
+      <ul class="nutrition-list p-0">
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">الطاقة:</span>
+            <span class="value">2502 كيلوجول / 597 سعر حراري</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <!-- Default Icon Placeholder (SVG) -->
+              <path
+                d="M12 8V16M8 12H16"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+        </li>
+
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">الدهون:</span>
+            <span class="value">47 جرام</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+            </svg>
+          </div>
+        </li>
+
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">منها دهون مشبعة:</span>
+            <span class="value">9.3 جرام</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+            </svg>
+          </div>
+        </li>
+
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">الكربوهيدرات:</span>
+            <span class="value">22 جرام</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              
+            </svg>
+          </div>
+        </li>
+
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">البروتين:</span>
+            <span class="value">21 جرام</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+            </svg>
+          </div>
+        </li>
+
+        <li class="nutrition-item">
+          <div class="nutrition-text">
+            <span class="label">البروتين:</span>
+            <span class="value">21 جرام</span>
+          </div>
+          <div class="nutrition-icon-wrapper">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+            </svg>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </main>
 {% endblock content %}
