@@ -1,68 +1,8 @@
-#OrderFormCarousel .carousel-indicators {
-  overflow-x: hidden;
-}
-
-#OrderFormCarousel .carousel-inner {
-  max-height: 388px;
-  overflow-y: auto;
-}
-
-#OrderFormCarousel .carousel-indicators button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  width: max(6vw, 60px) !important;
-  height: max(6vw, 60px) !important;
-  margin: 0 !important;
-}
-
-#OrderFormCarousel .carousel-indicators .progress {
-  content: "";
-  width: 100%;
-  height: 3px;
-  background-color: var(--primary);
-  z-index: -100;
-  position: absolute;
-  opacity: 50%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#OrderFormCarousel .carousel-indicators button.active,
-#OrderFormCarousel .carousel-indicators button:first-of-type,
-#OrderFormCarousel .carousel-indicators button:has(+ button.active) {
-  opacity: 100% !important;
-}
-
-#OrderFormCarousel .carousel-indicators button:not(:first-of-type).active path,
-#OrderFormCarousel
-  .carousel-indicators
-  button:not(:first-of-type):has(+ button.active)
-  path {
-  fill: white;
-}
-
-#OrderFormCarousel .carousel-indicators button:first-of-type::before,
-#OrderFormCarousel .carousel-indicators button.active::before,
-#OrderFormCarousel .carousel-indicators button:has(+ button.active)::before {
-  content: "";
-  width: 50%;
-  height: 3px;
-  background-color: var(--primary);
-  z-index: -100;
-  position: absolute;
-}
-
-.order-form-product-row {
-  /* row layout comes from Bootstrap utility classes in the markup */
-}
-
-#OrderFormCarousel .form-label {
+.form-label {
   color: var(--text-label);
 }
 
-#OrderFormCarousel input {
+input {
   padding: 10px 10px 10px 12px;
   border: 1px solid var(--border-secondary);
   border-radius: 10px;
@@ -70,13 +10,13 @@
   box-shadow: 0 1px 2px 0 rgba(228, 229, 231, 0.24);
 }
 
-#OrderFormCarousel input::placeholder {
+input::placeholder {
   color: var(--placeholder-color);
   font-family: var(--font-primary);
   font-size: 14px;
   font-weight: var(--font-regular);
 }
-#OrderFormCarousel input:focus {
+input:focus {
   border-color: var(--primary);
   box-shadow: none;
 }

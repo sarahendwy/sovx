@@ -126,6 +126,30 @@
   color: #fff;
 }
 
+#contactCarousel .carousel-indicators [data-bs-target] {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--primary);
+}
+
+#contactCarousel .carousel-indicators {
+  top: 16px;
+  bottom: auto;
+}
+
+#contactCarousel .carousel-item {
+  padding-top: 32px;
+}
+
+#contactCarousel .carousel-item p {
+  margin-bottom: 80px;
+  font-size: 24px;
+}
+h2 {
+  font-size: 40px;
+}
+
 @media screen and (max-width: 992px) {
   .sell-with-us-grid {
     grid-template-columns: repeat(2, 1fr);

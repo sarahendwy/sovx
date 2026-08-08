@@ -1,12 +1,41 @@
 {% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/sell-with-us.css' %}" />
 {% endblock header %} {% block content %}
 <main>
-<div class="split-form-container d-flex">
-  <div>
-    {% include "partials/components/form.html" with form_button_text="إرسال رسالتك" %}
+  <div class="split-form-container d-flex">
+    <div>
+      {% include "partials/components/form.html" with form_button_text="إرسال رسالتك" %}
+    </div>
+    <div
+      class="bg-secondary carousel slide position-relative"
+      id="contactCarousel"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-indicators pb-5">
+        {% for slide in slides %}
+        <button
+          type="button"
+          data-bs-target="#contactCarousel"
+          data-bs-slide-to="{{ forloop.counter0 }}"
+          class="{% if forloop.first %}active{% endif %}"
+          aria-current="{% if forloop.first %}true{% endif %}"
+          aria-label="Slide {{ forloop.counter }}"
+        ></button>
+        {% endfor %}
+      </div>
+      <div class="carousel-inner">
+        {% for slide in slides %}
+        <div
+          class="carousel-item {% if forloop.first %}active{% endif %} text-center"
+        >
+          <h2>{{ slide.title }}</h2>
+          <p class="text-secondary">{{ slide.text }}</p>
+          <img src="{% static slide.image_path %}" alt="{{ slide.title }}">
+        </div>
+        {% endfor %}
+      </div>
+    </div>
   </div>
-  <div class="bg-secondary">Second Half</div>
-</div>
 </main>
 {% endblock content %}

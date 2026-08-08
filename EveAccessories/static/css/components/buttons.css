@@ -1,12 +1,7 @@
 .btn-primary {
-  background-color: var(--bg-primary);
-  border-color: var(--bg-primary);
-  color: white;
-}
-
-.btn-primary:hover {
   background-color: var(--primary);
   border-color: var(--primary);
+  color: white;
 }
 
 .btn-primary:disabled {

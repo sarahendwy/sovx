@@ -257,8 +257,31 @@ class SellWithUs(CreateView):
     form_class = SellWithUsForm
     success_url = "/orders/success"
 
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['slides'] = CONTACT_SLIDES
+        return context
+
 
 class OrderDetails(DetailView):
     model = Order
     template_name = 'orders/order_details.html'
-    
+
+
+CONTACT_SLIDES = [
+    {
+        "title": "اطلب من أي مكان",
+        "text": "اطلب منتجاتك أونلاين من أي مكان وبأي كمية تناسب شغلك، بدون تعقيد أو التزام بحد أدنى.",
+        "image_path": "images/sections/sell-with-us/order-anywhere.png",
+    },
+    {
+        "title": "مراجعة وجودة مضمونة", 
+        "text": "كل أوردر بيتم مراجعته بعناية، ومنتجات مختارة بجودة عالية تضمن رضاك ورضا عملاءك.",
+        "image_path": "images/sections/sell-with-us/quality-review.png",
+    },
+    {
+        "title": "استلم وزوّد مبيعاتك",  
+        "text": "الأوردر بيوصلك لحد مكانك بسرعة، ويساعدك تزود مبيعاتك وتكسب ثقة عملاء أكتر.",
+        "image_path": "images/sections/sell-with-us/grow-sales.png"
+    },
+]
