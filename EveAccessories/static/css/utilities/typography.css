@@ -94,6 +94,13 @@
   line-height: 1.5;
 }
 
+.tiny {
+  font-family: var(--font-primary);
+  font-size: 8px;
+  font-weight: var(--font-regular);
+  line-height: 1.5;
+}
+
 .bg-tertiary {
   background-color: var(--bg-tertiary) !important;
 }

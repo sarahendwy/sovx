@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{% static 'css/base/fonts.css' %}" />
     <link rel="stylesheet" href="{% static 'css/base/reset.css' %}" />
     <link rel="stylesheet" href="{% static 'css/base/main.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/pages/cart.css' %}" />
     <link rel="stylesheet" href="{% static 'css/utilities/typography.css' %}" />
     <link rel="stylesheet" href="{% static 'css/layout/navbar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/layout/footer.css' %}" />
@@ -38,6 +39,7 @@
     <script src="{% static 'js/locations.js' %}"></script>
     {% include "partials/components/announcement_bar.html"%}
     {% include "partials/layout/navbar.html" %}
+    {% include "partials/components/cart_offcanvas.html" %}
     {% block content %} {% endblock %}
     {% include "partials/layout/footer.html" %}
 

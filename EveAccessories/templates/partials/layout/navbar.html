@@ -70,7 +70,10 @@
     </div>
     <a
       class="site-navbar-cart position-relative d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
-      href="{% url 'cart' %}"
+      role="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#cartOffcanvas"
+      aria-controls="cartOffcanvas"
       aria-label="Shopping cart"
     >
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -144,12 +144,17 @@ class Command(BaseCommand):
     def seed_settings(self):
         setting = Setting.objects.first()
         offer_banner_text = "اطلب قبل 18 ديسمبر علشان توصلك الأوردرات قبل الكريسماس 🎄🎁"
+        default_shipping_fees = 50
 
         if setting is None:
-            setting = Setting.objects.create(offer_banner_text=offer_banner_text)
+            setting = Setting.objects.create(
+                offer_banner_text=offer_banner_text,
+                default_shipping_fees=default_shipping_fees,
+            )
             self.stdout.write(self.style.SUCCESS("Created site settings"))
         else:
             setting.offer_banner_text = offer_banner_text
+            setting.default_shipping_fees = default_shipping_fees
             setting.save()
             self.stdout.write(self.style.SUCCESS("Updated site settings"))
 

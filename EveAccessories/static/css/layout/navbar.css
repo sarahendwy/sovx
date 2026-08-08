@@ -59,6 +59,7 @@
   line-height: 1;
   border-radius: var(--radius-full);
   pointer-events: none;
+  padding-top: 5px;
 }
 
 .site-navbar-links {

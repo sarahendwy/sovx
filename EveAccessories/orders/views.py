@@ -4,65 +4,9 @@ from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from .models import Order, OrderEntry, OrderLog
 from accessories.models import Product
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.views.generic import CreateView, DetailView
 from .forms import OrderForm, SellWithUsForm
 from dashboard.models import Setting
-
-
-def remove_from_cart(request, product_id):
-    if request.user.is_authenticated:
-        cart = request.user.cart or ""
-    else:
-        cart = request.session.get('cart') or ""
-
-    cart = set(cart.strip("-").split("-"))
-
-    for pr in list(cart):
-        pr_id = pr.split("#")[0]
-        if str(product_id) == pr_id:
-            cart.remove(pr)
-
-    cart = "-".join(list(cart))
-
-    if request.user.is_authenticated:
-        request.user.cart = cart
-        request.user.save()
-
-    request.session['cart'] = cart
-
-    return JsonResponse({"status": "ok"}, status=200)
-
-
-class CartView(TemplateView):
-    template_name = 'cart.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            cart = self.request.user.cart or ""
-        else:
-            cart = self.request.session.get('cart') or ""
-
-        cart = cart.strip("-")
-
-        products = []
-
-        if cart:
-            product_ids = []
-            
-            for pr in cart.split("-"):
-                if not pr:
-                    continue
-                
-                product_id = pr.split("#")[0]
-                
-                if product_id.isdigit():
-                    product_ids.append(int(product_id))
-
-            products = Product.objects.filter(id__in=product_ids)
-
-        context['products'] = products
-        return context
 
 def order_success(request, order_id):
     return render(request, 'orders/order_success.html', context={'order_id': order_id})
@@ -98,7 +42,6 @@ class CreateOrder(CreateView):
             stocks = {}
 
         setting = Setting.objects.first()
-        context['payment_proof'] = setting.payment_image.url if setting and setting.payment_image else ""
 
         context['products'] = products
         context['stocks'] = stocks

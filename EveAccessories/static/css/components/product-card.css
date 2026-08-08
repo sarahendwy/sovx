@@ -165,6 +165,43 @@
   cursor: not-allowed;
 }
 
+/* In-cart state: lighter brand surface instead of the solid CTA red, with
+   readable text/icon on top of it. Shows "Added" by default, swaps to
+   "Remove ×" on hover/focus. */
+.product-card-cta.is-in-cart,
+.product-card-cta.is-in-cart:hover,
+.product-card-cta.is-in-cart:focus-visible {
+  background-color: var(--bg-primary);
+  color: var(--primary);
+}
+
+.product-card-cta.is-in-cart svg path {
+  fill: var(--primary);
+}
+
+.product-card-cta .js-add-to-cart-added-label,
+.product-card-cta .js-add-to-cart-remove-label {
+  display: none;
+}
+
+.product-card-cta.is-in-cart .js-add-to-cart-label {
+  display: none;
+}
+
+.product-card-cta.is-in-cart .js-add-to-cart-added-label {
+  display: inline;
+}
+
+.product-card-cta.is-in-cart:hover .js-add-to-cart-added-label,
+.product-card-cta.is-in-cart:focus-visible .js-add-to-cart-added-label {
+  display: none;
+}
+
+.product-card-cta.is-in-cart:hover .js-add-to-cart-remove-label,
+.product-card-cta.is-in-cart:focus-visible .js-add-to-cart-remove-label {
+  display: inline;
+}
+
 @media screen and (max-width: 992px) {
   .product-list {
     grid-template-columns: repeat(3, minmax(200px, 288px));

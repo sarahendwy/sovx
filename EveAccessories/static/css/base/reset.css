@@ -34,3 +34,19 @@ p {
 .bg-secondary {
   background-color: var(--bg-secondary) !important;
 }
+
+.bg-weak {
+  background-color: var(--bg-weak) !important;
+}
+
+.text-gray {
+  color: var(--text-gray) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.text-dark {
+  color: var(--text-dark) !important;
+}

@@ -4,6 +4,12 @@
   color: white;
 }
 
+.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
 .btn-primary:disabled {
   opacity: 0.65;
   background-color: var(--bg-primary-disabled) !important;
