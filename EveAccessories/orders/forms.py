@@ -1,5 +1,5 @@
 from typing import Any
-from .models import Order, SellWithUsRequest
+from .models import Order, SellWithUsRequest, ContactUsRequest
 from django import forms
 
 from dashboard.forms import GovernorateCityFormMixin
@@ -31,20 +31,21 @@ class OrderForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
             raise forms.ValidationError("Please add products to your cart")
         return quanitites
 
-SELL_WITH_US_FIELDS_ICONS = {
+FIELDS_ICONS = {
     "name": "images/icons/user.svg",
     "store_name": "images/icons/store.svg",
     "phone": "images/icons/phone.svg",
     "governorate": "images/icons/location.svg",
     "city": "images/icons/location.svg",
     "address": "images/icons/navigator.svg",
+    "email": "images/icons/email.svg",
 }
 
 class SellWithUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field_icon = SELL_WITH_US_FIELDS_ICONS.get(field_name)
+            field_icon = FIELDS_ICONS.get(field_name)
             if field_icon:
                 field.widget.icon = field_icon
 
@@ -52,16 +53,16 @@ class SellWithUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm
         model = SellWithUsRequest
         exclude = ["created_at"]
 
-class ContactUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
+class ContactUsForm(SellWithUsForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field_icon = SELL_WITH_US_FIELDS_ICONS.get(field_name)
+            field_icon = FIELDS_ICONS.get(field_name)
             if field_icon:
                 field.widget.icon = field_icon
 
     class Meta:
-        model = SellWithUsRequest
+        model = ContactUsRequest
         exclude = ["created_at"]
 
     

@@ -76,9 +76,23 @@ class SellWithUsRequest(models.Model):
         verbose_name="المدينة", help_text="اختر المدينة",
     )
     address = models.CharField(max_length=500, verbose_name="العنوان بالتفصيل", help_text="اكتب العنوان بالتفصيل")
-    message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنسمع رأيكم")
+    message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنستمع إليكم")
+
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Sell With Us Request id: {self.id} - {self.name}"
+
+class ContactUsRequest(models.Model):
+    name = models.CharField(max_length=255, verbose_name="الاسم", help_text="اكتب اسمك")
+    email = models.CharField(max_length=255, verbose_name="البريد الإلكتروني  (اختياري)", help_text="hello@kkesh.sa.com")
+    phone = models.CharField(max_length=20, verbose_name="رقم التليفون", help_text="000-000-000-00")
+    # null=True keeps this column migration-safe for any pre-existing rows;
+    # forms still require a selection since blank=False (the Django default).
+    message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنستمع إليكم")
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Contact Us Request id: {self.id} - {self.name}"
