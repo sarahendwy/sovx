@@ -52,4 +52,16 @@ class SellWithUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm
         model = SellWithUsRequest
         exclude = ["created_at"]
 
+class ContactUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field_icon = SELL_WITH_US_FIELDS_ICONS.get(field_name)
+            if field_icon:
+                field.widget.icon = field_icon
+
+    class Meta:
+        model = SellWithUsRequest
+        exclude = ["created_at"]
+
     

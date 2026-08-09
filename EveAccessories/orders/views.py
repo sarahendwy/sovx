@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from .models import Order, OrderEntry, OrderLog
 from accessories.models import Product
 from django.views.generic import CreateView, DetailView
-from .forms import OrderForm, SellWithUsForm
+from .forms import OrderForm, SellWithUsForm, ContactUsForm
 from dashboard.models import Setting
 
 def order_success(request, order_id):
@@ -204,6 +204,11 @@ class SellWithUs(CreateView):
         context = super().get_context_data(**kwargs)
         context['slides'] = CONTACT_SLIDES
         return context
+
+class ContactUs(CreateView):
+    template_name = 'contact_us.html'
+    form_class = ContactUsForm
+    success_url = "/orders/success"
 
 
 class OrderDetails(DetailView):
