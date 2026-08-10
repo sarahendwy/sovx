@@ -3,33 +3,15 @@
 {% endblock header %} {% block content %}
 <main>
   <div class="split-form-container d-flex">
-    <div
-      class="bg-secondary carousel slide position-relative"
-      id="contactCarousel"
-      data-bs-ride="carousel"
-    >
-      <div class="carousel-indicators pb-5">
-        {% for slide in slides %}
-        <button
-          type="button"
-          data-bs-target="#contactCarousel"
-          data-bs-slide-to="{{ forloop.counter0 }}"
-          class="{% if forloop.first %}active{% endif %}"
-          aria-current="{% if forloop.first %}true{% endif %}"
-          aria-label="Slide {{ forloop.counter }}"
-        ></button>
-        {% endfor %}
+    <div class="bg-secondary carousel slide position-relative">
+      <div class="mb-4">
+        <h2>عندك سؤال؟ يلا نتكلم!</h2>
+        <p class="text-secondary pt-2">
+          إحنا هنا علشان نساعدك. اتواصل معانا وحنرد عليك بالإجابات والدعم.
+        </p>
       </div>
-      <div class="carousel-inner">
-        {% for slide in slides %}
-        <div
-          class="carousel-item {% if forloop.first %}active{% endif %} text-center"
-        >
-          <h2>{{ slide.title }}</h2>
-          <p class="text-secondary">{{ slide.text }}</p>
-          <img src="{% static slide.image_path %}" alt="{{ slide.title }}" />
-        </div>
-        {% endfor %}
+      <div class="mt-2">
+        <img src="{% static 'images/sections/sell-with-us/map.png' %}" alt="Map" />
       </div>
     </div>
     <div>
