@@ -1,263 +1,384 @@
-/* 1. Layout Container */
-.product-page-container {
+/* breadcrumbs */
+.breadcrumbs {
+  margin-bottom: var(--space-4);
+  padding: 0;
+
+}
+
+.breadcrumb-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  /* Space between icon and text */
+  text-decoration: none;
+  color: #6A716C;
+  /* Figma Color */
+  font-size: 14px;
+}
+
+.breadcrumb-icon svg {
+  color: #6A716C;
+  /* Ensures the stroke color matches */
+  vertical-align: middle;
+  margin-bottom: 2px;
+  /* Slight adjustment for baseline alignment */
+}
+
+.label-small {
   font-family: var(--font-primary);
-  max-width: 1200px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.006em;
+  color: var(--text-secondary);
+  font-style: normal;
+  text-decoration: none;
+  margin: 6px;
+}
+
+.current {
+  margin: 6px;
+  letter-spacing: -0.006em;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Container & Main Layout */
+
+
+.product-main-container {
+  /* width: 1009px;
+  height: 400px;
+  background: var(--bg-white);
+  border-radius: 20px;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); */
+  overflow: hidden;
+  */ max-width: 1009px;
+  /* Changed from width to max-width */
+  width: 100%;
+  height: auto;
+  /* Changed from 400px to auto to allow vertical growth */
+  min-height: 400px;
+  background: var(--bg-white);
+  border-radius: 20px;
+  overflow: hidden;
   margin: 0 auto;
 }
 
-/* 2. Breadcrumbs */
-.breadcrumb-nav {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.breadcrumb-nav a {
-  text-decoration: none;
-  color: var(--primary);
-  transition: opacity 0.2s;
-}
-
-.breadcrumb-nav a:hover {
-  opacity: 0.8;
-}
-
-.breadcrumb-nav .current {
-  color: var(--text-dark);
-  font-weight: var(--font-bold);
-}
-
-/* 3. Hero Section (Image and Basic Info) */
-.product-hero-image-wrapper {
-  background-color: var(--bg-primary);
-  border-radius: var(--radius-lg);
-  padding: var(--space-8);
+/* Image Section */
+.product-image-box {
+  /* background-color: var(--bg-primary);
+  ;
+  /* Light pink from design */
+  /* height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 450px;
-  border: 1px solid var(--border-primary);
-}
-
-.product-hero-image-wrapper img {
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.product-main-title {
-  font-size: 3.5rem;
-  font-weight: var(--font-bold);
-  color: var(--text-dark);
-  margin-bottom: var(--space-4);
-}
-
-/* 4. Weight Selection Cards */
-.weight-selection-container {
+  border-radius: 0 20px 20px 0; */
+  /* Rounded corners on the right */
+  background-color: var(--bg-primary);
+  height: 100%;
+  min-height: 300px;
+  /* Ensures space on mobile */
   display: flex;
-  gap: var(--space-4);
+  justify-content: center;
+  align-items: center;
+  border-radius: 0 20px 20px 0;
+  /* Desktop: Rounded on right (RTL) */
 }
 
-.weight-card {
-  flex: 1;
-  border: 1px solid var(--border-secondary);
-  border-radius: var(--radius-md);
-  padding: var(--space-5) var(--space-3);
-  text-align: center;
-  position: relative;
-  background: var(--bg-white);
-  cursor: pointer;
-  transition: all 0.3s ease;
+.product-image-box img {
+  max-height: 350px;
+  width: 100%;
+  object-fit: contain;
+  padding: 20px;
+  /* height: 100%;
+  object-fit: contain; */
 }
 
-.weight-card.active {
-  border: 2px solid var(--primary);
-  box-shadow: 0 4px 12px rgba(223, 28, 65, 0.1);
-}
-
-.weight-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: white;
-  padding: 2px 12px;
-  border-radius: var(--radius-sm);
-  white-space: nowrap;
+/* Details Section */
+.product-title {
+  font-family: var(--font-primary);
+  font-size: 28px;
   font-weight: var(--font-medium);
-}
-
-.badge-red {
-  background-color: var(--primary);
-}
-
-.badge-brown {
-  background-color: #a04e5a;
-}
-
-.weight-info .grams {
-  display: block;
-  font-weight: var(--font-bold);
-  font-size: 1.2rem;
+  margin-top: 20px;
   color: var(--text-dark);
+  /* font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: var(--font-medium);
+  line-height: var(--space-8);
+  letter-spacing: -0.015em;
+  color: var(--text-dark);
+  text-align: right; */
 }
 
-.weight-info .price {
+/* Weight Cards */
+.weight-options-row {
+  /* width: 385px; */
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--space-4)
+}
+
+.weight-item {
+  border: 1.5px solid #eee;
+  border-radius: 12px;
+  flex: 1;
+  /* Allows cards to share space equally */
+  min-width: 140px;
+  transition: 0.3s;
+  /* border: 1.5px solid #eee;
+  border-radius: 12px;
+  min-width: 180px;
+  min-height: 116px;
+
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s; */
+}
+
+.weight-item.active {
+  border-color: #E02020;
+}
+
+.weight-header {
+  font-size: var(--space-3);
+  color: var(--bg-primary-disabled);
+  padding: 8px;
+  font-weight: bold;
+  line-height: var(--sapce-4);
+}
+
+.bg-red {
+  background-color: #E13E3E;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.bg-brown {
+  background-color: #A54B51;
+  border-radius: 10px 10px 0px 0px;
+}
+
+.weight-body {
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.weight-val {
+  font-weight: bold;
+  color: #333;
+}
+
+.light-black {
   color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 11px;
 }
 
-/* 5. Quantity & Add to Cart */
-.quantity-control {
-  border: 1px solid var(--border-secondary);
-  border-radius: var(--radius-md);
-  padding: var(--space-1);
-  background: var(--bg-white);
+.price-val {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* Action Buttons */
+.qty-selector {
+  width: 113px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .qty-btn {
   background: none;
   border: none;
-  color: var(--primary);
-  font-size: 1.5rem;
-  padding: 0 var(--space-4);
-  cursor: pointer;
-  font-weight: var(--font-bold);
-}
-
-.qty-number {
-  font-weight: var(--font-bold);
-  padding: 0 var(--space-3);
   font-size: 1.2rem;
-  color: var(--text-dark);
+  color: var(--primary);
+  padding: 0 10px;
 }
 
-.add-to-cart-big-btn {
+.qty-btn {
+  border: var(--primary) 1px solid;
+  border-radius: 2px 16px;
+  width: 100%;
+  height: 40px;
+}
+
+.qty-val {
+  font-weight: bold;
+  padding: 0 15px;
+  line-height: 50px;
+  font-size: 14px;
+}
+
+.btn-add-cart {
   background-color: var(--primary);
   color: white;
   border: none;
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-  font-weight: var(--font-bold);
-  font-size: 1.2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: var(--space-3);
-  transition: transform 0.2s, background-color 0.2s;
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 10px 20px;
+  transition: background 0.3s;
+  font-size: 14px;
+  border-radius: 2px 16px;
+  width: 100%;
 }
 
-.add-to-cart-big-btn:hover {
-  background-color: #c4183a;
-  transform: translateY(-2px);
+
+/* Tabs Styling */
+.custom-product-tabs {
+  border-bottom: 1px solid #eee;
 }
 
-/* 6. Tabs Navigation */
-.product-info-tabs {
-  margin-top: var(--space-8);
+.custom-product-tabs {
+  padding-right: 0 !important;
 }
 
-.tabs-header {
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.tab-trigger {
-  background: none;
+.custom-product-tabs .nav-link {
   border: none;
-  padding: var(--space-3) 0;
-  color: var(--text-secondary);
-  font-size: 1.3rem;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.2s;
+  color: #999;
+  font-size: 1.1rem;
+  padding: 20px 0px;
+  background: transparent;
+  padding-left: 20px !important;
 }
 
-.tab-trigger.active {
-  color: var(--text-dark);
-  font-weight: var(--font-bold);
+.custom-product-tabs .nav-link.active {
+  color: #333 !important;
+  font-weight: bold;
+  border-bottom: 3px solid #E02020 !important;
 }
 
-.tab-trigger.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background-color: var(--primary);
+#ing {
+  direction: rtl;
+  /* Crucial for Arabic layout */
+  text-align: right;
+  padding: 20px 0;
+}
 
-  /* 7. Nutrition List (Specific Design) */
-  .nutrition-summary {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
+.nutrition-header {
+  color: #999;
+  /* Light gray for the header */
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  font-weight: 400;
+}
+
+.nutrition-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nutrition-details-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  /* Consistent spacing */
+}
+
+.nutrition-icon {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  /* Space to the left of the icon in RTL */
+}
+
+.nutrition-label {
+  font-weight: 800;
+  /* Extra bold black for the label */
+  color: #000;
+  font-size: 1.15rem;
+  margin-left: 8px;
+  /* Small gap before the value */
+}
+
+.nutrition-value {
+  color: #777;
+  /* Gray color for the numbers/units */
+  font-weight: 400;
+  font-size: 1.15rem;
+}
+
+/* Optional: To make it look even more premium, use a font like 'Cairo' or 'Tajawal' */
+/* Responsive */
+@media (max-width: 1024px) {
+  .product-main-container {
+    width: 95%;
+    height: auto;
   }
 
-  .nutrition-list {
-    list-style: none;
-    max-width: 500px;
+  .weight-options-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-main-container {
+    border-radius: 15px;
   }
 
-  .nutrition-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: var(--space-3);
-    padding: var(--space-3) 0;
-    border-bottom: 1px dashed var(--border-primary);
+  /* Stack columns vertically */
+  .product-image-box {
+    border-radius: 20px 20px 0 0;
+    /* Round only the top corners on mobile */
+    min-height: 250px;
   }
 
-  .nutrition-text {
-    display: flex;
-    gap: var(--space-2);
-    font-size: 1.1rem;
+  /* Details padding */
+  .col-md-5.px-4 {
+    padding: 25px !important;
+    align-items: center !important;
+    /* Center content on mobile */
+    text-align: center;
   }
 
-  .nutrition-text .label {
-    color: var(--text-dark);
-    font-weight: var(--font-bold);
+  .product-title {
+    text-align: center;
+    width: 100%;
   }
 
-  .nutrition-text .value {
-    color: var(--text-secondary);
+  /* Make weight cards stack or fit better */
+  .weight-options-row {
+    flex-direction: row;
+    /* Keep them side by side if small */
+    width: 100%;
+    gap: 10px !important;
   }
 
-  .nutrition-icon-wrapper {
-    color: var(--primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .weight-item {
+    min-width: unset;
+    width: 50%;
   }
 
-  .nutrition-icon-wrapper svg {
-    width: 22px;
-    height: 22px;
+  /* Actions Row stacking */
+  .actions-container {
+    flex-direction: column-reverse;
+    /* Add to cart button first */
+    gap: 15px !important;
+    width: 100%;
   }
 
-  /* 8. Responsive Adjustments */
-  @media (max-width: 992px) {
-    .product-main-title {
-      font-size: 2.5rem;
-      text-align: center;
-    }
-
-    .weight-selection-container {
-      flex-direction: column;
-      gap: var(--space-5);
-    }
-
-    .product-hero-image-wrapper {
-      min-height: 300px;
-      padding: var(--space-4);
-    }
+  .qty-selector {
+    width: 100% !important;
+    justify-content: space-between;
   }
 
-  @media (max-width: 576px) {
-    .product-actions-row {
-      flex-direction: column-reverse;
-      align-items: stretch !important;
-    }
+  .btn-add-cart {
+    width: 100%;
+    height: 50px;
+    font-size: 16px;
+  }
 
-    .quantity-control {
-      justify-content: space-between;
-    }
-  }}
+  /* Tabs responsiveness */
+  .custom-product-tabs {
+    justify-content: space-around;
+  }
+
+  .custom-product-tabs .nav-link {
+    font-size: 0.95rem;
+    padding: 15px 5px !important;
+  }
+}
