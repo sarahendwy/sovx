@@ -1,0 +1,76 @@
+.contact-container > .contact-card {
+  position: absolute;
+
+  bottom: 24px;
+  left: 16px;
+  right: 16px;
+
+  border-radius: 16px;
+
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.05);
+}
+.contact-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px 24px;
+  background-color: #ffffff;
+
+  color: inherit;
+  text-decoration: none;
+}
+
+.contact-icon,
+.contant-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-icon img,
+.contant-links img {
+  width: 36px;
+  height: 36px;
+}
+
+.contact-content {
+  flex: 1;
+}
+
+.contact-label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.contact-text {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: var(--font-medium);
+}
+
+.contact-group {
+  margin-top: 24px;
+
+  background-color: #ffffff;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.05);
+}
+
+
+.contact-group .contact-card:not(:last-child) {
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+.contact-holidays {
+  margin: 0;
+  padding-inline-start: 20px;
+}
+

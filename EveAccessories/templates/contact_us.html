@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/contact-us.css' %}" />
 {% endblock header %} {% block content %}
 <main>
   <div class="split-form-container d-flex">
@@ -7,11 +8,88 @@
       <div class="mb-4">
         <h2>عندك سؤال؟ يلا نتكلم!</h2>
         <p class="text-secondary pt-2">
-          إحنا هنا علشان نساعدك. اتواصل معانا وحنرد عليك بالإجابات والدعم.
+          إحنا هنا علشان نساعدك. اتواصل معانا وهنرد عليك بالإجابات والدعم.
         </p>
       </div>
-      <div class="mt-2">
-        <img src="{% static 'images/sections/sell-with-us/map.png' %}" alt="Map" />
+      <div class="mt-2 position-relative contact-container">
+        <img
+          src="{% static 'images/sections/contact-us/map.png' %}"
+          alt="خريطة موقعنا"
+          class="img-fluid w-100 rounded-4"
+        />
+
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=New+Damietta,+Egypt"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="contact-card text-decoration-none pe-auto"
+        >
+          <div class="contact-icon">
+            <img
+              src="{% static 'images/sections/contact-us/location.png' %}"
+              alt=""
+            />
+          </div>
+
+          <div class="contact-content">
+            <span class="contact-label">الموقع</span>
+
+            <p class="contact-text">دمياط الجديدة، محافظة دمياط، مصر</p>
+          </div>
+
+          <div class="contant-links">
+            <img
+              src="{% static 'images/sections/contact-us/direction.png' %}"
+              alt="الاتجاهات"
+            />
+          </div>
+        </a>
+      </div>
+      <div class="contact-group">
+        <div class="contact-card">
+          <div class="contact-icon">
+            <img
+              src="{% static 'images/sections/contact-us/time.png' %}"
+              alt=""
+            />
+          </div>
+          <div class="contact-content">
+            <span class="contact-label">ساعات العمل</span>
+
+            <p class="contact-text">
+              الأحد - الخميس | 9:00 صباحًا - 5:00 مساءً
+            </p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-icon">
+            <img
+              src="{% static 'images/sections/contact-us/vacation.png' %}"
+              alt=""
+            />
+          </div>
+          <div class="contact-content">
+            <span class="contact-label"> العطلات</span>
+
+            <ul class="contact-holidays">
+              <li class="contact-text">
+                عيد الفطر:
+                1 شوال
+                <span class="text-secondary">
+                  (يختلف · بناءً على رؤية الهلال)
+                </span>
+              </li>
+
+              <li class="contact-text">
+                عيد الأضحى:
+                10 ذو الحجة
+                <span class="text-secondary">
+                  (يختلف · بناءً على رؤية الهلال)
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
     <div>
