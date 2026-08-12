@@ -1,8 +1,6 @@
-# EveAccessories — Codebase Summary
+# SOVX — Codebase Summary
 
 ## 1. Overview
-
-**EveAccessories** is a server-rendered e-commerce web application for a women's jewelry/accessories store (Arabic RTL storefront branded "Eve Accessories"). It supports product browsing, a session/account-based shopping cart, checkout without payment gateway integration (Cash on Delivery / manual wallet transfer with proof-of-payment upload), and a custom admin dashboard for managing products, orders, and store settings.
 
 **Tech stack:**
 - **Backend:** Python 3 / Django 5.1 (monolithic MVT architecture, no DRF/API layer — server-rendered HTML)
@@ -12,10 +10,10 @@
 
 ## 2. Architecture & Structure
 
-The repo root contains the Django project (`EveAccessories/`) plus top-level `requirements.txt`, `.venv`, and licensing/IDE files. Everything of substance lives under `EveAccessories/`, organized as one project with four apps:
+The repo root contains the Django project (`SOVX/`) plus top-level `requirements.txt`, `.venv`, and licensing/IDE files. Everything of substance lives under `SOVX/`, organized as one project with four apps:
 
-- **`EveAccessories/EveAccessories/`** — Project core: `settings.py`, root `urls.py`, `wsgi.py`/`asgi.py`. Wires together the four apps and static/media serving.
-- **`accessories/`** — Product catalog domain: `Product`; public views for home, product list/detail, and add/remove-from-cart actions.
+- **`SOVX/SOVX/`** — Project core: `settings.py`, root `urls.py`, `wsgi.py`/`asgi.py`. Wires together the four apps and static/media serving.
+- **`products/`** — Product catalog domain: `Product`; public views for home, product list/detail, and add/remove-from-cart actions.
 - **`orders/`** — `Order`, `OrderEntry` (line items), `OrderLog` (audit trail) models; cart view, checkout (`CreateOrder`), and order confirmation pages.
 - **`dashboard/`** — Admin-only back-office: `Setting` model (site-wide config: hero/payment images, per-governorate shipping fees) plus CRUD views for products, order-status management, and dashboard analytics (month/year/all-time sales stats).
 - **`templates/`** — Global templates, organized into `partials/{components,icons,layout,sections}` for reusable includes (navbar, footer, product cards, icons) and per-feature subfolders (`orders/`, `registration/`, `dashboard/`, `auth/`).
@@ -26,7 +24,7 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 ## 3. Core Workflows
 
 **Storefront browsing → cart → checkout:**
-1. `accessories.views.index` reads the singleton `dashboard.Setting` row for hero image count, and renders newest products.
+1. `products.views.index` reads the singleton `dashboard.Setting` row for hero image count, and renders newest products.
 2. `ProductListView`/`ProductView` (Django generic `ListView`/`DetailView`) support pagination.
 3. Cart state is stored as a delimited string (`"<product_id>#<variant>-<product_id>#<variant>-..."`) — persisted on `request.session['cart']` for guests, and mirrored into `User.cart` for authenticated users on every add/remove (see `ProductView.post`, `orders.views.remove_from_cart`). Out-of-stock products are blocked from being added.
 4. `orders.views.CartView` parses that string back into a `Product` queryset for display.
@@ -58,9 +56,9 @@ The repo root contains the Django project (`EveAccessories/`) plus top-level `re
 
 ## 5. Configuration & Setup
 
-- **Environment-driven settings** (`EveAccessories/settings.py`, loaded via `python-dotenv`): `SECRET_KEY`, `DEBUG`, `DJANGO_ALLOWED_HOSTS`, `DEVELOPMENT` (toggles SQLite + local static dirs vs. production DB config), `DB_ENGINE`/`DB_NAME`/`DB_USER`/`DB_HOST`/`DB_PASSWORD`, `EMAIL_HOST_USER`/`EMAIL_HOST_PASSWORD` (Gmail SMTP for verification emails). No committed `.env`/`.env.example` — one must be created locally.
-- **Database:** SQLite (`db.sqlite3`) when `DEVELOPMENT` is set; otherwise a fully env-configured external database. Migrations exist for both `accessories` and other apps (4 migrations tracked for `accessories`).
+- **Environment-driven settings** (`SOVX/settings.py`, loaded via `python-dotenv`): `SECRET_KEY`, `DEBUG`, `DJANGO_ALLOWED_HOSTS`, `DEVELOPMENT` (toggles SQLite + local static dirs vs. production DB config), `DB_ENGINE`/`DB_NAME`/`DB_USER`/`DB_HOST`/`DB_PASSWORD`, `EMAIL_HOST_USER`/`EMAIL_HOST_PASSWORD` (Gmail SMTP for verification emails). No committed `.env`/`.env.example` — one must be created locally.
+- **Database:** SQLite (`db.sqlite3`) when `DEVELOPMENT` is set; otherwise a fully env-configured external database. Migrations exist for both `products` and other apps (4 migrations tracked for `products`).
 - **Static/media:** `STATICFILES_DIRS` in dev, `STATIC_ROOT` collection (`collectstatic`) in prod; `MEDIA_ROOT`/`MEDIA_URL` served directly by Django's URL conf via `static()` helpers (fine for dev, would typically be fronted by a CDN/object storage in real production).
 - **Sessions/security:** Signed-cookie session backend, HttpOnly session cookies, standard Django security middleware stack, plus the custom `RequireAdminLoginMiddleware` gating `/dashboard/*`.
-- **Running locally:** standard Django workflow — `pip install -r requirements.txt`, create `.env` with the vars above, `python manage.py migrate`, `python manage.py runserver` (from `EveAccessories/manage.py`). No Docker, CI, or process-manager config (e.g. Procfile) is present in the repo.
+- **Running locally:** standard Django workflow — `pip install -r requirements.txt`, create `.env` with the vars above, `python manage.py migrate`, `python manage.py runserver` (from `SOVX/manage.py`). No Docker, CI, or process-manager config (e.g. Procfile) is present in the repo.
 - **No test suite is implemented** — each app has a stub `tests.py` but no actual test cases were found.
