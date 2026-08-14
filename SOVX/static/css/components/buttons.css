@@ -2,9 +2,13 @@
   background-color: var(--primary);
   border-color: var(--primary);
   color: white;
+  border-radius: 2px 16px !important;
+  width: 100% !important; ;
 }
 
-.btn-primary:hover, .btn-primary:active, .btn-primary:focus {
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
   background-color: var(--primary);
   border-color: var(--primary);
   color: white;
