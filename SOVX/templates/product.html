@@ -4,41 +4,22 @@
 <main class="product-page-wrapper py-5 container">
   <!-- Breadcrumbs (Right Aligned) -->
   <div class="breadcrumbs container" dir="rtl" style="max-width: 1009px">
-    <nav class="breadcrumb-nav">
-      <svg
-        width="18"
-        height="18"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M3 10.182V20.5C3 21.3284 3.67157 22 4.5 22H19.5C20.3284 22 21 21.3284 21 20.5V10.182C21 9.48597 20.7577 8.81221 20.3164 8.27402L13.3164 2.27402C12.5651 1.63666 11.4349 1.63666 10.6836 2.27402L3.68359 8.27402C3.24232 8.81221 3 9.48597 3 10.182Z"
-          stroke="#6A716C"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M9 14C9.5 15.5 14.5 15.5 15 14"
-          stroke="#6A716C"
-          stroke-width="2"
-          stroke-linecap="round"
-        />
-      </svg>
+    <nav class="breadcrumb-nav body-small">
       <a class="label-small" href="#"
         ><i class="bi bi-house-door"></i> الرئيسية</a
       >
-      &gt; <a class="label-small" href="#">اكياس سوفكس</a> &gt;
-      <span class="current">مكسرات</span>
+      <span class="arrow">&gt;</span>
+      <a class="body-small label-small" href="#">اكياس سوفكس</a>
+      <span class="arrow">&gt;</span>
+      <span class="current label-small">مكسرات</span>
     </nav>
   </div>
 
   <!-- Main Product Card -->
   <div class="product-main-container" dir="rtl">
-    <div class="row g-0 h-100">
+    <div class="buying-section row g-0 h-100">
       <!-- Right Side: Image Box (Pink Background) -->
-      <div class="col-md-7 h-100">
+      <div class="right-col col-md-7 col-sm-12 h-100">
         <div class="product-image-box">
           <img
             src="{{ product.thumbnail }}"
@@ -50,17 +31,17 @@
 
       <!-- Left Side: Product Details -->
       <div
-        class="col-md-5 h-100 px-4 d-flex flex-column justify-content-start align-items-start"
+        class="left-col col-sm-12 h-100 px-4 d-flex flex-column justify-content-start align-items-start"
       >
-        <h1 class="product-title">مكسرات</h1>
+        <h1 class="heading-3 product-title">مكسرات</h1>
 
         <!-- Weight Cards Row -->
         <div class="weight-options-row d-flex gap-3 mb-4 w-100">
           <!-- Card 1 -->
           <div class="weight-item active">
-            <div class="weight-header bg-red">الأكثر شعبية</div>
+            <div class="caption weight-header bg-red">الأكثر شعبية</div>
             <div class="weight-body">
-              <span class="weight-val">
+              <span class="weight-val body-regular font-medium">
                 125
                 <span class="light-black">جرام</span>
               </span>
@@ -72,9 +53,9 @@
           </div>
           <!-- Card 2 -->
           <div class="weight-item">
-            <div class="weight-header bg-brown">وفر 20%</div>
+            <div class="caption weight-header bg-brown">وفر 20%</div>
             <div class="weight-body">
-              <span class="weight-val">
+              <span class="weight-val weight-val body-regular font-medium">
                 400
                 <span class="light-black">جرام</span>
               </span>
@@ -87,7 +68,7 @@
         </div>
 
         <!-- Actions Row -->
-        <div class="actions-container d-flex gap-4 w-100">
+        <div class="actions-container d-flex gap-2 w-100">
           <div class="qty-selector d-flex align-items-center">
             <button class="qty-btn">+</button>
             <span class="qty-val">1</span>
@@ -126,7 +107,7 @@
       id="productTabs"
       role="tablist"
     >
-      <li class="nav-item">
+      <li class="nav-item body-regular font-medium ">
         <button
           class="nav-link"
           id="desc-tab"
@@ -137,7 +118,7 @@
           الوصف
         </button>
       </li>
-      <li class="nav-item">
+      <li class="nav-item body-regular font-medium ">
         <button
           class="nav-link active"
           id="ing-tab"
@@ -148,7 +129,7 @@
           المكونات
         </button>
       </li>
-      <li class="nav-item">
+      <li class="nav-item body-regular font-medium ">
         <button
           class="nav-link"
           id="nutr-tab"
@@ -161,9 +142,8 @@
       </li>
     </ul>
 
-    
     <div class="tab-pane fade show active" id="ing">
-      <p class="nutrition-header">متوسط القيم الغذائية لكل 100 جرام</p>
+      <p class="nutrition-header  body-small ">متوسط القيم الغذائية لكل 100 جرام</p>
 
       <ul class="nutrition-details-list">
         <li>
@@ -210,7 +190,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">الطاقة:</span>
+          <span class="nutrition-label font-medium">الطاقة:</span>
           <span class="nutrition-value">2502 كيلوجول / 597 سعر حراري</span>
         </li>
         <li>
@@ -257,7 +237,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">الدهون:</span>
+          <span class="nutrition-label font-medium">الدهون:</span>
           <span class="nutrition-value">47 جرام</span>
         </li>
         <li>
@@ -304,7 +284,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">منها دهون مشبعة:</span>
+          <span class="nutrition-label font-medium">منها دهون مشبعة:</span>
           <span class="nutrition-value">9.3 جرام</span>
         </li>
         <li>
@@ -351,7 +331,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">الكربوهيدرات:</span>
+          <span class="nutrition-label font-medium">الكربوهيدرات:</span>
           <span class="nutrition-value">22 جرام</span>
         </li>
 
@@ -399,7 +379,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">البروتين:</span>
+          <span class="nutrition-label font-medium">البروتين:</span>
           <span class="nutrition-value">21 جرام</span>
         </li>
 
@@ -447,7 +427,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">الملح:</span>
+          <span class="nutrition-label font-medium">الملح:</span>
           <span class="nutrition-value">0 جرام</span>
         </li>
 
@@ -495,7 +475,7 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label">منها سكر:</span>
+          <span class="nutrition-label font-medium">منها سكر:</span>
           <span class="nutrition-value">6.2 جرام</span>
         </li>
       </ul>

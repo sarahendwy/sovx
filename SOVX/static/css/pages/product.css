@@ -11,105 +11,89 @@
   gap: 6px;
   /* Space between icon and text */
   text-decoration: none;
-  color: #6A716C;
-  /* Figma Color */
-  font-size: 14px;
+  color: var(--text-secondary);
 }
 
-.breadcrumb-icon svg {
-  color: #6A716C;
-  /* Ensures the stroke color matches */
-  vertical-align: middle;
-  margin-bottom: 2px;
-  /* Slight adjustment for baseline alignment */
-}
+
 
 .label-small {
   font-family: var(--font-primary);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+  font-weight: var(--font-medium);
+  line-height: var(--space-9);
   letter-spacing: -0.006em;
   color: var(--text-secondary);
   font-style: normal;
   text-decoration: none;
-  margin: 6px;
+  margin-left: 6px;
+}
+
+.arrow {
+  /* padding: 20px 20px;*/
+  font-weight: var(--font-medium);
+  margin-left: 6px;
+  width: var(--space-9);
+  height: var(--space-9);
+  display: inline-block;
+  text-align: center;
 }
 
 .current {
-  margin: 6px;
   letter-spacing: -0.006em;
-  font-size: 14px;
-  line-height: 20px;
+  line-height: var(--space-9);
+  color: var(--text-primary) !important;
+
 }
+
 
 /* Container & Main Layout */
 
 
 .product-main-container {
-  /* width: 1009px;
-  height: 400px;
-  background: var(--bg-white);
-  border-radius: 20px;
-  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); */
-  overflow: hidden;
-  */ max-width: 1009px;
-  /* Changed from width to max-width */
-  width: 100%;
-  height: auto;
-  /* Changed from 400px to auto to allow vertical growth */
-  min-height: 400px;
-  background: var(--bg-white);
-  border-radius: 20px;
-  overflow: hidden;
-  margin: 0 auto;
+
+  height: 400px !important;
+  width: 1009px !important;
+
 }
 
 /* Image Section */
+.right-col {
+  width: 600px !important;
+  height: 100%;
+
+
+}
+
+.left-col {
+  width: 409px !important;
+  padding-right: var(--space-5) !important;
+}
+
 .product-image-box {
-  /* background-color: var(--bg-primary);
-  ;
-  /* Light pink from design */
-  /* height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0 20px 20px 0; */
-  /* Rounded corners on the right */
+
   background-color: var(--bg-primary);
   height: 100%;
-  min-height: 300px;
+  width: 600px !important;
   /* Ensures space on mobile */
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0 20px 20px 0;
+  border-radius: 20px 20px;
   /* Desktop: Rounded on right (RTL) */
 }
 
 .product-image-box img {
-  max-height: 350px;
-  width: 100%;
+  height: 328px;
+  /* width: 244px; */
   object-fit: contain;
-  padding: 20px;
   /* height: 100%;
   object-fit: contain; */
+  padding: 0;
 }
 
 /* Details Section */
 .product-title {
-  font-family: var(--font-primary);
-  font-size: 28px;
-  font-weight: var(--font-medium);
-  margin-top: 20px;
-  color: var(--text-dark);
-  /* font-family: var(--font-primary);
-  font-size: 24px;
-  font-weight: var(--font-medium);
-  line-height: var(--space-8);
-  letter-spacing: -0.015em;
-  color: var(--text-dark);
-  text-align: right; */
+  margin-bottom: var(--space-4) !important;
+  line-height: 32px;
 }
 
 /* Weight Cards */
@@ -117,38 +101,29 @@
   /* width: 385px; */
   justify-content: center;
   align-items: center;
-  border-radius: var(--space-4)
 }
 
 .weight-item {
-  border: 1.5px solid #eee;
-  border-radius: 12px;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--space-4);
   flex: 1;
-  /* Allows cards to share space equally */
   min-width: 140px;
   transition: 0.3s;
-  /* border: 1.5px solid #eee;
-  border-radius: 12px;
-  min-width: 180px;
-  min-height: 116px;
 
-  overflow: hidden;
+}
+
+.weight-header {
+  padding: 8px 47px;
   text-align: center;
-  cursor: pointer;
-  transition: 0.3s; */
+  line-height: 16px;
+  color: var(--border-primary);
 }
 
 .weight-item.active {
   border-color: #E02020;
 }
 
-.weight-header {
-  font-size: var(--space-3);
-  color: var(--bg-primary-disabled);
-  padding: 8px;
-  font-weight: bold;
-  line-height: var(--sapce-4);
-}
+
 
 .bg-red {
   background-color: #E13E3E;
@@ -168,50 +143,44 @@
 }
 
 .weight-val {
-  font-weight: bold;
-  color: #333;
+  color: var(--text-dark);
 }
 
 .light-black {
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: var(--space-4);
 }
 
-.price-val {
-  font-size: 0.9rem;
-  color: #777;
-}
 
 /* Action Buttons */
-.qty-selector {
-  width: 113px;
+.actions-container {
+  width: 385px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-content: center;
+  gap: 1px;
+
 }
 
-.qty-btn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  color: var(--primary);
-  padding: 0 10px;
+
+.qty-val {
+  color: var(--text-dark);
 }
 
 .qty-btn {
   border: var(--primary) 1px solid;
   border-radius: 2px 16px;
-  width: 100%;
+  width: 40px;
   height: 40px;
+  display: inline-block;
+  background: none;
+  font-size: 1.2rem;
+  color: var(--primary);
+  padding: 0 10px;
+  margin-inline: 8px;
 }
 
-.qty-val {
-  font-weight: bold;
-  padding: 0 15px;
-  line-height: 50px;
-  font-size: 14px;
-}
 
 .btn-add-cart {
   background-color: var(--primary);
@@ -228,6 +197,8 @@
 
 
 /* Tabs Styling */
+
+
 .custom-product-tabs {
   border-bottom: 1px solid #eee;
 }
@@ -240,7 +211,7 @@
   border: none;
   color: #999;
   font-size: 1.1rem;
-  padding: 20px 0px;
+  padding: 20px 20px;
   background: transparent;
   padding-left: 20px !important;
 }
@@ -259,9 +230,8 @@
 }
 
 .nutrition-header {
-  color: #999;
-  /* Light gray for the header */
-  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-size: 14px;
   margin-bottom: 25px;
   font-weight: 400;
 }
@@ -276,109 +246,22 @@
   display: flex;
   align-items: center;
   margin-bottom: 18px;
-  /* Consistent spacing */
 }
 
 .nutrition-icon {
   display: flex;
   align-items: center;
   margin-left: 12px;
-  /* Space to the left of the icon in RTL */
 }
 
 .nutrition-label {
-  font-weight: 800;
-  /* Extra bold black for the label */
   color: #000;
-  font-size: 1.15rem;
-  margin-left: 8px;
-  /* Small gap before the value */
+  font-size: var(--space-4);
+  margin-left: var(--space-2);
 }
 
 .nutrition-value {
   color: #777;
-  /* Gray color for the numbers/units */
   font-weight: 400;
   font-size: 1.15rem;
-}
-
-/* Optional: To make it look even more premium, use a font like 'Cairo' or 'Tajawal' */
-/* Responsive */
-@media (max-width: 1024px) {
-  .product-main-container {
-    width: 95%;
-    height: auto;
-  }
-
-  .weight-options-row {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 767px) {
-  .product-main-container {
-    border-radius: 15px;
-  }
-
-  /* Stack columns vertically */
-  .product-image-box {
-    border-radius: 20px 20px 0 0;
-    /* Round only the top corners on mobile */
-    min-height: 250px;
-  }
-
-  /* Details padding */
-  .col-md-5.px-4 {
-    padding: 25px !important;
-    align-items: center !important;
-    /* Center content on mobile */
-    text-align: center;
-  }
-
-  .product-title {
-    text-align: center;
-    width: 100%;
-  }
-
-  /* Make weight cards stack or fit better */
-  .weight-options-row {
-    flex-direction: row;
-    /* Keep them side by side if small */
-    width: 100%;
-    gap: 10px !important;
-  }
-
-  .weight-item {
-    min-width: unset;
-    width: 50%;
-  }
-
-  /* Actions Row stacking */
-  .actions-container {
-    flex-direction: column-reverse;
-    /* Add to cart button first */
-    gap: 15px !important;
-    width: 100%;
-  }
-
-  .qty-selector {
-    width: 100% !important;
-    justify-content: space-between;
-  }
-
-  .btn-add-cart {
-    width: 100%;
-    height: 50px;
-    font-size: 16px;
-  }
-
-  /* Tabs responsiveness */
-  .custom-product-tabs {
-    justify-content: space-around;
-  }
-
-  .custom-product-tabs .nav-link {
-    font-size: 0.95rem;
-    padding: 15px 5px !important;
-  }
 }
