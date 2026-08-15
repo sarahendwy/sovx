@@ -6,7 +6,6 @@
   right: 16px;
 
   border-radius: 16px;
-
   box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.05);
 }
 .contact-card {
@@ -22,17 +21,47 @@
 }
 
 .contact-icon,
-.contant-links {
+.contant-links,
+.contant-links a {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  border-radius: 2px 16px;
+}
+
+.contant-links {
   gap: 14px;
 }
 
-.contact-icon img,
-.contant-links img {
-  width: 36px;
-  height: 36px;
+.contact-icon {
+  padding: 10px;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-secondary);
+}
+
+.contact-icon img {
+  width: 24px;
+  height: 24px;
+
+  display: block;
+}
+
+.contant-links a {
+  padding: 8px;
+  background: var(--bg-secondary);
+}
+
+.contant-links a img {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+}
+
+.contact-container > .contact-card > .contant-links {
+  padding: 8px;
+  background: var(--bg-secondary);
 }
 
 .contact-content {
@@ -72,4 +101,39 @@
 .contact-holidays {
   margin: 0;
   padding-inline-start: 20px;
+}
+
+.contact-time {
+  color: var(--text-secondary);
+}
+
+@media screen and (max-width: 992px) {
+  .contact-label {
+    font-size: 12px;
+  }
+
+  .contact-text {
+    font-size: 14px;
+  }
+  h2 {
+    font-size: 28px;
+  }
+  p {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .contact-label {
+    font-size: 10px;
+  }
+  .contact-text {
+    font-size: 12px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  p {
+    font-size: 12px;
+  }
 }
