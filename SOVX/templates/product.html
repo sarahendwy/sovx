@@ -1,16 +1,24 @@
 {% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
 {% endblock header %} {% block content %}
-<main class="product-page-wrapper py-5 container">
+<main class="py-5 container">
   <!-- Breadcrumbs (Right Aligned) -->
   <div class="breadcrumbs container" dir="rtl" style="max-width: 1009px">
-    <nav class="breadcrumb-nav body-small">
+    <nav class="breadcrumb-nav body-small d-flex gap-1">
       <a class="label-small" href="#"
         ><i class="bi bi-house-door"></i> الرئيسية</a
       >
-      <span class="arrow">&gt;</span>
+      <img
+        src="{% static 'images/icons/arrow.svg' %}"
+        alt="SOVX"
+        class="img-fluid d-block"
+      />
       <a class="body-small label-small" href="#">اكياس سوفكس</a>
-      <span class="arrow">&gt;</span>
+      <img
+        src="{% static 'images/icons/arrow.svg' %}"
+        alt="SOVX"
+        class="img-fluid d-block"
+      />
       <span class="current label-small">مكسرات</span>
     </nav>
   </div>
@@ -31,45 +39,45 @@
 
       <!-- Left Side: Product Details -->
       <div
-        class="left-col col-sm-12 h-100 px-4 d-flex flex-column justify-content-start align-items-start"
+        class="left-col col-md-5 col-sm-12 h-100 px-4 d-flex flex-column justify-content-start align-items-start"
       >
         <h1 class="heading-3 product-title">مكسرات</h1>
 
         <!-- Weight Cards Row -->
-        <div class="weight-options-row d-flex gap-3 mb-4 w-100">
+        <div class="weight-options-row d-flex gap-3 mb-4 w-100 font-medium ">
           <!-- Card 1 -->
           <div class="weight-item active">
             <div class="caption weight-header bg-red">الأكثر شعبية</div>
-            <div class="weight-body">
-              <span class="weight-val body-regular font-medium">
+            <div class="weight-body gap-1">
+              <span class="value-unit-pair">
                 125
-                <span class="light-black">جرام</span>
+                <span class="unit">جرام</span>
               </span>
-              <span class="weight-val">
+              <span class="value-unit-pair">
                 15
-                <span class="light-black">ج.م</span>
+                <span class="unit">جـ . مـ</span>
               </span>
             </div>
           </div>
           <!-- Card 2 -->
           <div class="weight-item">
             <div class="caption weight-header bg-brown">وفر 20%</div>
-            <div class="weight-body">
-              <span class="weight-val weight-val body-regular font-medium">
+            <div class="weight-body gap-1">
+              <span class="value-unit-pair">
                 400
-                <span class="light-black">جرام</span>
+                <span class="unit">جرام</span>
               </span>
-              <span class="weight-val">
+              <span class="value-unit-pair">
                 30
-                <span class="light-black">ج.م</span>
+                <span class="unit">جـ . مـ</span>
               </span>
             </div>
           </div>
         </div>
 
         <!-- Actions Row -->
-        <div class="actions-container d-flex gap-2 w-100">
-          <div class="qty-selector d-flex align-items-center">
+        <div class="actions-container d-flex gap-3 w-100 font-medium">
+          <div class="qty-selector d-flex align-items-center gap-2">
             <button class="qty-btn">+</button>
             <span class="qty-val">1</span>
             <button class="qty-btn">-</button>
@@ -103,7 +111,7 @@
   <!-- Tabs Section -->
   <div class="tabs-wrapper mt-4" style="max-width: 1009px" dir="rtl">
     <ul
-      class="nav nav-tabs custom-product-tabs"
+      class="nav nav-tabs custom-product-tabs text-secondary"
       id="productTabs"
       role="tablist"
     >
@@ -146,7 +154,7 @@
       <p class="nutrition-header  body-small ">متوسط القيم الغذائية لكل 100 جرام</p>
 
       <ul class="nutrition-details-list">
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -190,10 +198,10 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">الطاقة:</span>
-          <span class="nutrition-value">2502 كيلوجول / 597 سعر حراري</span>
+          <span class="nutrition-label ms-2">الطاقة:</span>
+          <span class="nutrition-value text-secondary">2502 كيلوجول / 597 سعر حراري</span>
         </li>
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -237,10 +245,10 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">الدهون:</span>
-          <span class="nutrition-value">47 جرام</span>
+          <span class="nutrition-label ms-2">الدهون:</span>
+          <span class="nutrition-value text-secondary">47 جرام</span>
         </li>
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -284,10 +292,10 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">منها دهون مشبعة:</span>
-          <span class="nutrition-value">9.3 جرام</span>
+          <span class="nutrition-label ms-2">منها دهون مشبعة:</span>
+          <span class="nutrition-value text-secondary">9.3 جرام</span>
         </li>
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -331,59 +339,11 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">الكربوهيدرات:</span>
-          <span class="nutrition-value">22 جرام</span>
-        </li>
-
-        <li>
-          <span class="nutrition-icon">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <!-- Peanut Shape (Behind) -->
-              <path
-                d="M11.5 4.5c-2-1.5-5-1-6.5.5-1.5 1.5-1.5 4 0 5.5.5.5 1 1 1 2s-.5 1.5-1 2c-1.5 1.5-1.5 4 0 5.5 1.5 1.5 4.5 1.5 6.5.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <!-- Peanut texture dashes -->
-              <path
-                d="M7 6l1.5-1.5M9 8l1.5-1.5M6.5 9l1.5-1.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-
-              <!-- Nut Shape (Front) -->
-              <path
-                d="M21.5 15.5c0-3-2.5-5-5.5-5s-5.5 2-5.5 5c0 3.5 2.5 6 5.5 6s5.5-2.5 5.5-6z"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <!-- Nut base line -->
-              <path
-                d="M11.5 17.5c1.5 1.5 4 2 6.5 1.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <span class="nutrition-label font-medium">البروتين:</span>
-          <span class="nutrition-value">21 جرام</span>
+          <span class="nutrition-label ms-2">الكربوهيدرات:</span>
+          <span class="nutrition-value text-secondary">22 جرام</span>
         </li>
 
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -427,11 +387,11 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">الملح:</span>
-          <span class="nutrition-value">0 جرام</span>
+          <span class="nutrition-label ms-2">البروتين:</span>
+          <span class="nutrition-value text-secondary">21 جرام</span>
         </li>
 
-        <li>
+        <li class="nutrition-detail font-medium">
           <span class="nutrition-icon">
             <svg
               width="24"
@@ -475,8 +435,56 @@
               />
             </svg>
           </span>
-          <span class="nutrition-label font-medium">منها سكر:</span>
-          <span class="nutrition-value">6.2 جرام</span>
+          <span class="nutrition-label ms-2">الملح:</span>
+          <span class="nutrition-value text-secondary">0 جرام</span>
+        </li>
+
+        <li class="nutrition-detail font-medium">
+          <span class="nutrition-icon">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <!-- Peanut Shape (Behind) -->
+              <path
+                d="M11.5 4.5c-2-1.5-5-1-6.5.5-1.5 1.5-1.5 4 0 5.5.5.5 1 1 1 2s-.5 1.5-1 2c-1.5 1.5-1.5 4 0 5.5 1.5 1.5 4.5 1.5 6.5.5"
+                stroke="#e61e3c"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <!-- Peanut texture dashes -->
+              <path
+                d="M7 6l1.5-1.5M9 8l1.5-1.5M6.5 9l1.5-1.5"
+                stroke="#e61e3c"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+
+              <!-- Nut Shape (Front) -->
+              <path
+                d="M21.5 15.5c0-3-2.5-5-5.5-5s-5.5 2-5.5 5c0 3.5 2.5 6 5.5 6s5.5-2.5 5.5-6z"
+                stroke="#e61e3c"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <!-- Nut base line -->
+              <path
+                d="M11.5 17.5c1.5 1.5 4 2 6.5 1.5"
+                stroke="#e61e3c"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="nutrition-label ms-2">منها سكر:</span>
+          <span class="nutrition-value text-secondary">6.2 جرام</span>
         </li>
       </ul>
     </div>

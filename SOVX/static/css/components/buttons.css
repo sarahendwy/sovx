@@ -3,7 +3,9 @@
   border-color: var(--primary);
   color: white;
   border-radius: 2px 16px !important;
-  width: 100% !important; ;
+  width: 100% !important;
+  padding-block: 14px;
+  font-size: 14px;
 }
 
 .btn-primary:hover,

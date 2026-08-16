@@ -55,24 +55,10 @@
 
 }
 
-/* Image Section */
-.right-col {
-  width: 600px !important;
-  height: 100%;
-
-
-}
-
-.left-col {
-  width: 409px !important;
-  padding-right: var(--space-5) !important;
-}
-
 .product-image-box {
 
   background-color: var(--bg-primary);
   height: 100%;
-  width: 600px !important;
   /* Ensures space on mobile */
   display: flex;
   justify-content: center;
@@ -82,11 +68,7 @@
 }
 
 .product-image-box img {
-  height: 328px;
-  /* width: 244px; */
   object-fit: contain;
-  /* height: 100%;
-  object-fit: contain; */
   padding: 0;
 }
 
@@ -113,7 +95,7 @@
 }
 
 .weight-header {
-  padding: 8px 47px;
+  padding-block: 8px;
   text-align: center;
   line-height: 16px;
   color: var(--border-primary);
@@ -142,30 +124,18 @@
   text-align: right;
 }
 
-.weight-val {
-  color: var(--text-dark);
-}
-
-.light-black {
+.value-unit-pair .unit {
   color: var(--text-secondary);
-  font-size: var(--space-4);
+  font-size: 11px;
 }
-
 
 /* Action Buttons */
 .actions-container {
-  width: 385px;
-  height: 40px;
   display: flex;
   justify-content: center;
   align-content: center;
   gap: 1px;
 
-}
-
-
-.qty-val {
-  color: var(--text-dark);
 }
 
 .qty-btn {
@@ -178,7 +148,6 @@
   font-size: 1.2rem;
   color: var(--primary);
   padding: 0 10px;
-  margin-inline: 8px;
 }
 
 
@@ -187,9 +156,7 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
   padding: 10px 20px;
-  transition: background 0.3s;
   font-size: 14px;
   border-radius: 2px 16px;
   width: 100%;
@@ -209,12 +176,16 @@
 
 .custom-product-tabs .nav-link {
   border: none;
-  color: #999;
-  font-size: 1.1rem;
+  color: var(--text-secondary);
   padding: 20px 20px;
   background: transparent;
-  padding-left: 20px !important;
+  padding-left: 20px;
 }
+
+.custom-product-tabs li:first-child .nav-link {
+  padding-inline-start: 0;
+}
+
 
 .custom-product-tabs .nav-link.active {
   color: #333 !important;
@@ -254,18 +225,6 @@
   margin-left: 12px;
 }
 
-.nutrition-label {
-  color: #000;
-  font-size: var(--space-4);
-  margin-left: var(--space-2);
-}
-
-.nutrition-value {
-  color: #777;
-  font-weight: 400;
-  font-size: 1.15rem;
-}
-
 @media (max-width:888px) {
 
   .right-col,
@@ -278,8 +237,16 @@
   }
 
   .btn-add-cart {
-    font-size: 8px;
+    font-size: 12px;
     padding: 0;
+  }
+
+  .nutrition-value {
+    font-size: 12px;
+  }
+
+  .unit {
+    font-size: 10px;
   }
 }
 
