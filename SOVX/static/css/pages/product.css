@@ -78,20 +78,30 @@
   line-height: 32px;
 }
 
-/* Weight Cards */
+
+/* Weight Cards Row */
 .weight-options-row {
-  /* width: 385px; */
-  justify-content: center;
-  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.weight-options-row::-webkit-scrollbar {
+  display: none;
 }
 
 .weight-item {
   border: 1px solid var(--border-secondary);
-  border-radius: var(--space-4);
-  flex: 1;
+  border-radius: 10px 10px 0px 0px;
+  flex: 0 0 auto;
   min-width: 140px;
   transition: 0.3s;
-
+  border-color: #A54B51;
+  cursor: pointer;
 }
 
 .weight-header {
@@ -99,22 +109,17 @@
   text-align: center;
   line-height: 16px;
   color: var(--border-primary);
+  background-color: #A54B51;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .weight-item.active {
-  border-color: #E02020;
+  border-color: var(--primary);
 }
 
 
-
-.bg-red {
-  background-color: #E13E3E;
-  border-radius: 10px 10px 0px 0px;
-}
-
-.bg-brown {
-  background-color: #A54B51;
-  border-radius: 10px 10px 0px 0px;
+.weight-item.active .weight-header {
+  background-color: var(--primary);
 }
 
 .weight-body {
@@ -251,9 +256,10 @@
 }
 
 @media (max-width:790px) {
-  .product-main-container{
+  .product-main-container {
     display: contents;
   }
+
   .buying-section {
     display: flex;
     justify-content: center;
@@ -262,12 +268,14 @@
     column-gap: 20px;
     text-align: center;
   }
- .right-col {
+
+  .right-col {
     width: 100% !important;
     margin: auto;
     display: flex;
     justify-content: center;
   }
+
   .left-col {
     margin-top: var(--space-4);
     width: 100% !important;
