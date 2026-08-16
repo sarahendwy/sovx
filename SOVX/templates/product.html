@@ -19,7 +19,7 @@
         alt="SOVX"
         class="img-fluid d-block"
       />
-      <span class="current label-small">مكسرات</span>
+      <span class="current label-small">{{product.title}}</span>
     </nav>
   </div>
 
@@ -41,13 +41,14 @@
       <div
         class="left-col col-md-5 col-sm-12 h-100 px-4 d-flex flex-column justify-content-start align-items-start"
       >
-        <h1 class="heading-3 product-title">مكسرات</h1>
+        <h1 class="heading-3 product-title">{{product.title}}</h1>
 
         <!-- Weight Cards Row -->
         <div class="weight-options-row d-flex gap-3 mb-4 w-100 font-medium ">
           <!-- Card 1 -->
+          {% for buying_option in product.buying_options.all %}
           <div class="weight-item active">
-            <div class="caption weight-header bg-red">الأكثر شعبية</div>
+            <div class="caption weight-header bg-red">{{buying_option.name}}</div>
             <div class="weight-body gap-1">
               <span class="value-unit-pair">
                 125
@@ -59,6 +60,7 @@
               </span>
             </div>
           </div>
+          {% endfor %}
           <!-- Card 2 -->
           <div class="weight-item">
             <div class="caption weight-header bg-brown">وفر 20%</div>

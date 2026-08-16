@@ -3,7 +3,7 @@ from django import forms
 from django.core.validators import validate_image_file_extension
 from django.forms import inlineformset_factory
 
-from products.models import Product, ProductBuyingOption
+from products.models import Product, ProductBuyingOption, NutritionalValue
 from .models import Setting, ProductList, Section, SellWithUsCard, Governorate, City, ShippingFee
 
 
@@ -39,7 +39,6 @@ class GovernorateCityFormMixin:
             City.objects.filter(governorate_id=governorate_id) if governorate_id else City.objects.none()
         )
 
-
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
     
@@ -57,7 +56,7 @@ class MultipleFileField(forms.FileField):
             result = single_file_clean(data, initial)
         return result
 
-class ProductForm(forms.ModelForm):
+class FormControlMixin(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
@@ -66,22 +65,21 @@ class ProductForm(forms.ModelForm):
             else:
                 field.widget.attrs.update({'class': 'form-control'})
 
+
+class ProductForm(FormControlMixin):
     class Meta:
         model = Product
         fields = '__all__'
 
-class ProductBuyingOptionForm(forms.ModelForm):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            if isinstance(field, forms.fields.BooleanField):
-                field.widget.attrs.update({'class': 'form-check-input'})
-            else:
-                field.widget.attrs.update({'class': 'form-control'})
-
+class ProductBuyingOptionForm(FormControlMixin):
     class Meta:
         model = ProductBuyingOption
         fields = ('name', 'amount', 'unit', 'price', 'stock', 'is_default')
+
+class ProductNutritionsValueForm(FormControlMixin):
+    class Meta:
+        model = NutritionalValue
+        fields = ('name', 'description')
 
 # Every product must have at least one buying option, so the dashboard form requires
 # at least one non-deleted, filled-in option (Django ignores untouched extra forms
@@ -90,6 +88,16 @@ ProductBuyingOptionFormSet = inlineformset_factory(
     Product,
     ProductBuyingOption,
     form=ProductBuyingOptionForm,
+    extra=0,
+    can_delete=True,
+    min_num=1,
+    validate_min=True,
+)
+
+ProductNutritionsValueFormSet = inlineformset_factory(
+    Product,
+    NutritionalValue,
+    form=ProductNutritionsValueForm,
     extra=0,
     can_delete=True,
     min_num=1,

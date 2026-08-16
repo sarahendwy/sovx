@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 
-from products.models import Product, ProductBuyingOption
+from products.models import Product, ProductBuyingOption, NutritionalValue
 from dashboard.models import (
     ProductList,
     ProductSortField,
@@ -47,6 +47,14 @@ BUYING_OPTION_TEMPLATES = [
     {"name": "ربع كيلو", "amount": 250, "unit": "g", "price_factor": 0.25, "is_default": False},
     {"name": "نص كيلو", "amount": 500, "unit": "g", "price_factor": 0.5, "is_default": False},
     {"name": "كيلو كامل", "amount": 1, "unit": "kg", "price_factor": 1, "is_default": True},
+]
+
+# Every product gets this same reference nutritional label (per 100g) for seeding purposes.
+NUTRITIONAL_VALUE_TEMPLATES = [
+    {"name": "الطاقة", "description": "2502 كيلوجول / 597 سعر حراري"},
+    {"name": "الدهون", "description": "47 جرام"},
+    {"name": "الكربوهيدرات", "description": "22 جرام"},
+    {"name": "البروتين", "description": "21 جرام"},
 ]
 
 # Product List sections require a banner (see Section.clean). Seeding copies the real artwork
@@ -134,6 +142,13 @@ class Command(BaseCommand):
                     price=round(data["price"] * option["price_factor"]),
                     stock=data["stock"],
                     is_default=option["is_default"],
+                )
+
+            for value in NUTRITIONAL_VALUE_TEMPLATES:
+                NutritionalValue.objects.create(
+                    product=product,
+                    name=value["name"],
+                    description=value["description"],
                 )
 
             products.append(product)

@@ -43,4 +43,8 @@ class ProductBuyingOption(models.Model):
 
     def __str__(self):
         return f"{self.product.title} - {self.name}"
-    
+
+class NutritionalValue(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="nutritional_values")
+    name = models.CharField(max_length=50, help_text="الطاقة:")
+    description = models.CharField(max_length=100, help_text="2502 كيلوجول / 597 سعر حراري")

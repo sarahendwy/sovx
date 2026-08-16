@@ -3,14 +3,14 @@ from typing import Any
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView, FormView
+from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView
 from django.utils import timezone as django_timezone
-from django.db.models import Sum, Count
+from django.db.models import Sum
 
 from orders.models import Order, OrderEntry
 from .forms import (
     ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
-    ShippingFeeForm,
+    ShippingFeeForm, ProductNutritionsValueFormSet
 )
 from .models import Setting, ProductList, Section, SellWithUsCard, City, ShippingFee
 from products.models import Product
@@ -142,13 +142,38 @@ class ProductBuyingOptionsFormsetMixin:
 
         return redirect(self.get_success_url())
 
-class AddProductView(ProductBuyingOptionsFormsetMixin, CreateView):
+class ProductNutritionsValueFormsetMixin:
+    """Adds the ProductBuyingOption inline formset to the product add/edit views
+    and requires at least one buying option before the product can be saved."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.setdefault(
+            'nutrition_values_formset',
+            ProductNutritionsValueFormSet(self.request.POST or None, instance=self.object),
+        )
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data(form=form)
+        nutrition_values_formset = context['nutrition_values_formset']
+
+        if not nutrition_values_formset.is_valid():
+            return self.form_invalid(form)
+
+        self.object = form.save()
+        nutrition_values_formset.instance = self.object
+        nutrition_values_formset.save()
+
+        return redirect(self.get_success_url())
+
+class AddProductView(ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/add_product.html'
     success_url = reverse_lazy('admin_products')
 
-class EditProductView(ProductBuyingOptionsFormsetMixin, UpdateView):
+class EditProductView(ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/edit_product.html'
