@@ -113,92 +113,117 @@
 
   <!-- Tabs Section -->
   <div class="tabs-wrapper mt-4" style="max-width: 1009px" dir="rtl">
+    <!-- Nav Tabs -->
     <ul
       class="nav nav-tabs custom-product-tabs text-secondary"
       id="productTabs"
       role="tablist"
     >
-      <li class="nav-item body-regular font-medium">
+      <li class="nav-item body-regular font-medium" role="presentation">
         <button
           class="nav-link"
           id="desc-tab"
           data-bs-toggle="tab"
-          data-bs-target="#desc"
+          data-bs-target="#desc-pane"
           type="button"
+          role="tab"
+          aria-controls="desc-pane"
+          aria-selected="false"
         >
           الوصف
         </button>
       </li>
-      <li class="nav-item body-regular font-medium">
+      <li class="nav-item body-regular font-medium" role="presentation">
         <button
           class="nav-link active"
           id="ing-tab"
           data-bs-toggle="tab"
-          data-bs-target="#ing"
+          data-bs-target="#ing-pane"
           type="button"
+          role="tab"
+          aria-controls="ing-pane"
+          aria-selected="true"
         >
           القيم الغذائية
         </button>
       </li>
     </ul>
 
-    <div class="tab-pane fade show active" id="ing">
-      <p class="nutrition-header body-small">
-        متوسط القيم الغذائية لكل 100 جرام
-      </p>
+    <!-- Tab Content Wrapper -->
+    <div class="tab-content" id="productTabsContent">
+      <!-- Nutritional Values Pane (Active by default based on your button class) -->
+      <div
+        class="tab-pane fade show active"
+        id="ing-pane"
+        role="tabpanel"
+        aria-labelledby="ing-tab"
+      >
+        <p class="nutrition-header body-small mt-3">
+          متوسط القيم الغذائية لكل 100 جرام
+        </p>
 
-      <ul class="nutrition-details-list">
-        {% for nutrition in product.nutritional_values.all %}
-        <li class="nutrition-detail font-medium">
-          <span class="nutrition-icon">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <!-- Peanut Shape (Behind) -->
-              <path
-                d="M11.5 4.5c-2-1.5-5-1-6.5.5-1.5 1.5-1.5 4 0 5.5.5.5 1 1 1 2s-.5 1.5-1 2c-1.5 1.5-1.5 4 0 5.5 1.5 1.5 4.5 1.5 6.5.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <!-- Peanut texture dashes -->
-              <path
-                d="M7 6l1.5-1.5M9 8l1.5-1.5M6.5 9l1.5-1.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <!-- Nut Shape (Front) -->
-              <path
-                d="M21.5 15.5c0-3-2.5-5-5.5-5s-5.5 2-5.5 5c0 3.5 2.5 6 5.5 6s5.5-2.5 5.5-6z"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <!-- Nut base line -->
-              <path
-                d="M11.5 17.5c1.5 1.5 4 2 6.5 1.5"
-                stroke="#e61e3c"
-                stroke-width="1.2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <span class="nutrition-label ms-2">{{ nutrition.name }}</span>
-          <span class="nutrition-value text-secondary"
-            >{{ nutrition.description }}</span
+        <ul class="nutrition-details-list p-0">
+          {% for nutrition in product.nutritional_values.all %}
+          <li
+            class="nutrition-detail font-medium d-flex align-items-center mb-2"
           >
-        </li>
-        {% endfor %}
-      </ul>
+            <span class="nutrition-icon">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11.5 4.5c-2-1.5-5-1-6.5.5-1.5 1.5-1.5 4 0 5.5.5.5 1 1 1 2s-.5 1.5-1 2c-1.5 1.5-1.5 4 0 5.5 1.5 1.5 4.5 1.5 6.5.5"
+                  stroke="#e61e3c"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M7 6l1.5-1.5M9 8l1.5-1.5M6.5 9l1.5-1.5"
+                  stroke="#e61e3c"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21.5 15.5c0-3-2.5-5-5.5-5s-5.5 2-5.5 5c0 3.5 2.5 6 5.5 6s5.5-2.5 5.5-6z"
+                  stroke="#e61e3c"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M11.5 17.5c1.5 1.5 4 2 6.5 1.5"
+                  stroke="#e61e3c"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span class="nutrition-label ms-2">{{ nutrition.name }}</span>
+            <span class="nutrition-value text-secondary ms-auto"
+              >{{ nutrition.description }}</span
+            >
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div
+        class="tab-pane fade"
+        id="desc-pane"
+        role="tabpanel"
+        aria-labelledby="desc-tab"
+      >
+        <div class="description-content body-small mt-3">
+          {{ product.description|safe }}
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -254,18 +279,17 @@
     const itemData = {
       id: parseInt(activeOption.getAttribute("data-id")),
       productId: "{{ product.id }}",
-      title: "{{ product.title }}", 
+      title: "{{ product.title }}",
       optionName: activeOption.getAttribute("data-name"),
       amount: activeOption.getAttribute("data-amount"),
       unit: activeOption.getAttribute("data-unit"),
       price: parseFloat(activeOption.getAttribute("data-price")),
-      thumbnail: "{{ product.thumbnail }}", 
+      thumbnail: "{{ product.thumbnail }}",
       stock: currentMaxStock,
     };
 
     Cart.remove(itemData.id);
     Cart.add(itemData, currentQty);
-
   }
 
   const scrollContainer = document.querySelector(".weight-options-row");
