@@ -1,49 +1,103 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block header %}
+{% extends 'base.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/layout/admin-sidebar.css' %}" />
 <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}" />
-{% endblock header %}
-
-{% block content %}
-<main class="flex-grow-1 mx-auto">
-    <div class="d-flex flex-column flex-md-row" style="min-height: 80vh">
-        <!-- Sidebar -->
-        <div class="py-3 text-primary admin-sidebar" style="width: 250px;">
-            <ul class="nav flex-row flex-md-column border-end border-3 border-primary">
-                <li class="nav-item pb-2">
-                    <a class="nav-link ps-0 fw-bold {% if request.path == '/dashboard/' %}ps-3 active{% endif %}" href="{% url 'admin_dashboard' %}">Dashboard</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if request.path == '/dashboard/orders/' %}ps-3 active{% endif %}" href="{% url 'admin_orders' %}">Orders</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if 'products' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_products' %}">Products</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if 'product-lists' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_product_lists' %}">Product Lists</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if 'sections' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_sections' %}">Sections</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if 'sell-with-us-cards' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_sell_with_us_cards' %}">Sell With Us Cards</a>
-                </li>
-                <li class="nav-item py-2">
-                    <a class="nav-link ps-0 fw-bold {% if 'shipping-fees' in request.path %}ps-3 active{% endif %}" href="{% url 'admin_shipping_fees' %}">Shipping Fees</a>
-                </li>
-                <li class="nav-item pt-2">
-                    <a class="nav-link ps-0 fw-bold {% if request.path == '/dashboard/settings/' %}ps-3 active{% endif %}" href="{% url 'admin_settings' %}">Site Settings</a>
-                </li>
-            </ul>
+{% endblock header %} {% block content %}
+<main class="flex-grow-1">
+  <div class="d-flex flex-column flex-md-row admin-layout" dir="ltr">
+    <div class="admin-sidebar d-flex flex-column">
+      <div class="admin-sidebar-header d-flex align-items-center">
+        <div
+          class="admin-logo d-flex align-items-center justify-content-center"
+        >
+          <span>S</span>
         </div>
 
-        <!-- Page Content Placeholder -->
-        <div class="flex-grow-1 p-2 p-md-4 pe-0">
-            {% block admin_content %}
-            {% endblock admin_content %}
+        <div>
+          <h3 class="admin-brand-name">SOVX</h3>
+          <p class="admin-brand-subtitle">ADMIN PANEL</p>
         </div>
+      </div>
+
+      <nav class="admin-sidebar-nav flex-grow-1">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}"
+              href="{% url 'admin_dashboard' %}"
+            >
+              <span>Dashboard</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == '/dashboard/orders/' %}active{% endif %}"
+              href="{% url 'admin_orders' %}"
+            >
+              <span>Orders</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'products' in request.path %}active{% endif %}"
+              href="{% url 'admin_products' %}"
+            >
+              <span>Products</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'product-lists' in request.path %}active{% endif %}"
+              href="{% url 'admin_product_lists' %}"
+            >
+              <span>Product Lists</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'sections' in request.path %}active{% endif %}"
+              href="{% url 'admin_sections' %}"
+            >
+              <span>Sections</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'sell-with-us-cards' in request.path %}active{% endif %}"
+              href="{% url 'admin_sell_with_us_cards' %}"
+            >
+              <span>Sell With Us</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'shipping-fees' in request.path %}active{% endif %}"
+              href="{% url 'admin_shipping_fees' %}"
+            >
+              <span>Shipping Fees</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.path == '/dashboard/settings/' %}active{% endif %}"
+              href="{% url 'admin_settings' %}"
+            >
+              <span>Site Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
+
+    <div class="flex-grow-1 ">
+      {% block admin_content %} {% endblock admin_content %}
+    </div>
+  </div>
 </main>
 {% endblock content %}

@@ -1,124 +1,122 @@
-{% extends 'dashboard.html' %}
-{% load static %}
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
+<div class="dashboard-overview">
+  <div class="dashboard-header">
+    <div>
+      <h2 class="dashboard-title">Dashboard Overview</h2>
+      <p class="dashboard-subtitle">SOVX Commerce·{% now "M d, Y" %}</p>
+    </div>
 
-{% block admin_content %}
-<!-- Period Selector -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Dashboard Overview</h2>
-    <div class="form-group">
-        <label for="period-select" class="form-label me-2">Time Period:</label>
-        <select id="period-select" class="form-select" style="width: auto; display: inline-block;">
-            <option value="month" selected>Month</option>
-            <option value="year">Year</option>
-            <option value="all-time">All Time</option>
-        </select>
+    <div class="dashboard-period">
+      <select id="period-select" class="dashboard-period-select">
+        <option value="month" selected>Month</option>
+        <option value="year">Year</option>
+        <option value="all-time">All Time</option>
+      </select>
     </div>
-</div>
+  </div>
 
-<!-- Statistics Cards -->
-<div class="row mb-4">
-    <div class="col-md-4 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Total Orders Created</h5>
-                <h2 class="text-primary" id="orders-created">{{ month_orders_created }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Total Orders Completed</h5>
-                <h2 class="text-success" id="orders-completed">{{ month_orders_completed }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Total Order Value</h5>
-                <h2 class="text-info" id="order-value">EGP {{ month_order_value }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
+  <div class="dashboard-stats">
+    <div class="dashboard-stat-card">
+      <span class="dashboard-stat-title">Total Orders Created</span>
 
-<div class="row mb-4">
-    <div class="col-md-6 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Pending Orders</h5>
-                <h2 class="text-warning" id="pending-orders">{{ pending_orders }}</h2>
-            </div>
-        </div>
+      <p class="dashboard-stat-value" id="orders-created">
+        {{ month_orders_created }}
+      </p>
     </div>
-    <div class="col-md-6 mb-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Items Sold Count</h5>
-                <h2 class="text-secondary" id="items-sold">{{ month_items_sold }}</h2>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Latest Completed Orders -->
-<div class="mt-5">
-    <h3 class="mb-4">Latest Completed Orders</h3>
-    {% if latest_completed_orders %}
-        {% include "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
+    <div class="dashboard-stat-card">
+      <span class="dashboard-stat-title">Total Orders Completed</span>
+
+      <p class="dashboard-stat-value" id="orders-completed">
+        {{ month_orders_completed }}
+      </p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <span class="dashboard-stat-title">Total Order Value</span>
+
+      <p class="dashboard-stat-value" id="order-value">
+        EGP {{ month_order_value }}
+      </p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <span class="dashboard-stat-title">Pending Orders</span>
+
+      <p class="dashboard-stat-value" id="pending-orders">
+        {{ pending_orders }}
+      </p>
+    </div>
+
+    <div class="dashboard-stat-card">
+      <span class="dashboard-stat-title">Items Sold Count</span>
+
+      <p class="dashboard-stat-value" id="items-sold">{{ month_items_sold }}</p>
+    </div>
+  </div>
+
+  <section class="dashboard-orders">
+    <div class="dashboard-orders-header">
+      <h3>Latest Completed Orders</h3>
+
+      <a href="{% url 'admin_orders' %}" class="btn dashboard-btn">
+        View All Orders
+      </a>
+    </div>
+
+    {% if latest_completed_orders %} {% include
+    "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
     {% else %}
-        <div class="alert alert-info">
-            No completed orders yet.
-        </div>
+    <div class="dashboard-empty">No completed orders yet.</div>
     {% endif %}
+  </section>
 </div>
 
 <script>
-    // Statistics data
-    const statistics = {
-        month: {
-            ordersCreated: {{ month_orders_created }},
-            ordersCompleted: {{ month_orders_completed }},
-            orderValue: {{ month_order_value }},
-            itemsSold: {{ month_items_sold }},
-            pendingOrders: {{ pending_orders }}
-        },
-        year: {
-            ordersCreated: {{ year_orders_created }},
-            ordersCompleted: {{ year_orders_completed }},
-            orderValue: {{ year_order_value }},
-            itemsSold: {{ year_items_sold }},
-            pendingOrders: {{ pending_orders }}
-        },
-        'all-time': {
-            ordersCreated: {{ all_time_orders_created }},
-            ordersCompleted: {{ all_time_orders_completed }},
-            orderValue: {{ all_time_order_value }},
-            itemsSold: {{ all_time_items_sold }},
-            pendingOrders: {{ pending_orders }}
-        }
-    };
+  // Statistics data
+  const statistics = {
+      month: {
+          ordersCreated: {{ month_orders_created }},
+          ordersCompleted: {{ month_orders_completed }},
+          orderValue: {{ month_order_value }},
+          itemsSold: {{ month_items_sold }},
+          pendingOrders: {{ pending_orders }}
+      },
+      year: {
+          ordersCreated: {{ year_orders_created }},
+          ordersCompleted: {{ year_orders_completed }},
+          orderValue: {{ year_order_value }},
+          itemsSold: {{ year_items_sold }},
+          pendingOrders: {{ pending_orders }}
+      },
+      'all-time': {
+          ordersCreated: {{ all_time_orders_created }},
+          ordersCompleted: {{ all_time_orders_completed }},
+          orderValue: {{ all_time_order_value }},
+          itemsSold: {{ all_time_items_sold }},
+          pendingOrders: {{ pending_orders }}
+      }
+  };
 
-    // Update statistics based on selected period
-    function updateStatistics(period) {
-        const data = statistics[period];
-        document.getElementById('orders-created').textContent = data.ordersCreated.toLocaleString();
-        document.getElementById('orders-completed').textContent = data.ordersCompleted.toLocaleString();
-        document.getElementById('order-value').textContent = 'EGP ' + data.orderValue.toLocaleString();
-        document.getElementById('pending-orders').textContent = data.pendingOrders.toLocaleString();
-        document.getElementById('items-sold').textContent = data.itemsSold.toLocaleString();
-    }
+  // Update statistics based on selected period
+  function updateStatistics(period) {
+      const data = statistics[period];
+      document.getElementById('orders-created').textContent = data.ordersCreated.toLocaleString();
+      document.getElementById('orders-completed').textContent = data.ordersCompleted.toLocaleString();
+      document.getElementById('order-value').textContent = 'EGP ' + data.orderValue.toLocaleString();
+      document.getElementById('pending-orders').textContent = data.pendingOrders.toLocaleString();
+      document.getElementById('items-sold').textContent = data.itemsSold.toLocaleString();
+  }
 
-    // Handle period selection change
-    document.getElementById('period-select').addEventListener('change', function(e) {
-        updateStatistics(e.target.value);
-    });
+  // Handle period selection change
+  document.getElementById('period-select').addEventListener('change', function(e) {
+      updateStatistics(e.target.value);
+  });
 
-    // Format initial values on page load
-    window.addEventListener('DOMContentLoaded', function() {
-        updateStatistics('month');
-    });
+  // Format initial values on page load
+  window.addEventListener('DOMContentLoaded', function() {
+      updateStatistics('month');
+  });
 </script>
 
 {% endblock admin_content %}

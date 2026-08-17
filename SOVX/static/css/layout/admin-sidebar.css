@@ -1,21 +1,96 @@
-.admin-sidebar .nav-link.active {
+.admin-sidebar {
+  width: 280px;
+  min-height: 100vh;
+  background-color: var(--text-label);
+  color: var(--bg-white);
+}
+
+.admin-sidebar-header {
+  gap: var(--space-3);
+  padding: 36px var(--space-5) 28px;
+  border-bottom: 1px solid var(--border-secondary);
+}
+
+.admin-logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 10px;
   background-color: var(--primary);
-  color: white;
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+  color: var(--bg-white);
+  font-size: 18px;
+  font-weight: var(--font-bold);
+}
+
+.admin-brand-name {
+  margin: 0;
+  color: var(--bg-white);
+  font-size: 20px;
+  font-weight: var(--font-bold);
+}
+
+.admin-brand-subtitle {
+  margin: var(--space-1) 0 0;
+  color: var(--text-gray);
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.admin-sidebar-nav {
+  padding: var(--space-9);
+}
+
+.admin-sidebar .nav {
+  gap: var(--space-1);
+}
+
+.admin-sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px var(--space-3);
+  border-radius: 10px;
+  color: var(--text-gray);
+  font-size: 15px;
+  font-weight: var(--font-medium);
+}
+
+.admin-sidebar .nav-link:hover {
+  color: var(--bg-white);
+  background-color: #121419;
+}
+
+.admin-sidebar .nav-link.active {
+  color: var(--primary);
+  background-color: rgba(223, 28, 65, 0.18);
 }
 
 @media screen and (max-width: 768px) {
   .admin-sidebar {
-    width: 100% !important;
+    width: 100%;
+    min-height: auto;
+    border-radius: 0;
   }
 
-  .admin-sidebar ul {
-    align-items: baseline;
-    width: 100% !important;
-    border-width: 0 !important;
+  .admin-sidebar-header {
+    padding: var(--space-9);
   }
 
-  .admin-sidebar .nav-link.active {
-    border-radius: var(--radius-lg);
+  .admin-sidebar-nav {
+    padding: var(--space-3);
+  }
+
+  .admin-sidebar .nav {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .admin-sidebar .nav-item {
+    flex-shrink: 0;
+  }
+
+  .admin-sidebar .nav-link {
+    padding: 10px 14px;
   }
 }
