@@ -1,14 +1,15 @@
 .admin-sidebar {
   width: 280px;
   min-height: 100vh;
-  background-color: var(--text-label);
+  background-color: var(--bg-dark);
   color: var(--bg-white);
+  border-right: 1px solid var(--border-dark);
 }
 
 .admin-sidebar-header {
   gap: var(--space-3);
   padding: 36px var(--space-5) 28px;
-  border-bottom: 1px solid var(--border-secondary);
+  border-bottom: 1px solid var(--border-dark);
 }
 
 .admin-logo {

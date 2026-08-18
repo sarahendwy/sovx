@@ -1,31 +1,32 @@
-.dashboard-overview {
+.overview,
+.admin-orders-page {
   min-height: 100vh;
-  padding: var(--space-6);
   background-color: var(--bg-dark);
+  color: var(--bg-white);
 }
 
-.dashboard-header {
-  display: flex;
-  align-items: center;
+.overview {
+  padding: var(--space-6);
+}
+
+.header {
   justify-content: space-between;
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
 
-.dashboard-title {
+.title {
   margin: 0;
   color: var(--bg-white);
-  font-size: 32px;
-  font-weight: var(--font-bold);
 }
 
-.dashboard-subtitle {
+.subtitle {
   margin: var(--space-2) 0 0;
   color: var(--text-gray);
   font-size: 14px;
 }
 
-.dashboard-period-select {
+.select {
   padding: 10px var(--space-4);
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-md);
@@ -33,45 +34,45 @@
   color: var(--bg-white);
 }
 
-.dashboard-stats {
+.stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-7);
 }
 
-.dashboard-stat-card {
-  min-height: 180px;
-  padding: var(--space-5);
+.stat-card {
+  min-height: 130px;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-lg);
   background-color: var(--bg-dark-secondary);
 }
 
-.dashboard-stat-title {
-  display: block;
-  margin-bottom: var(--space-4);
+.stat-title {
   color: var(--text-gray);
   font-size: 14px;
   font-weight: var(--font-medium);
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-.dashboard-stat-value {
-  margin: 0;
+.stat-value {
+  margin: auto 0 0;
   color: var(--bg-white);
-  font-size: 32px;
-  font-weight: var(--font-bold);
+  text-align: left;
 }
 
-.dashboard-orders {
+.orders {
   overflow: hidden;
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-lg);
   background-color: var(--bg-dark-secondary);
 }
 
-.dashboard-orders-header {
+.orders-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -79,40 +80,92 @@
   border-bottom: 1px solid var(--border-dark);
 }
 
-.dashboard-orders-header h3 {
+.orders-header h3 {
   margin: 0;
   color: var(--bg-white);
   font-size: 18px;
   font-weight: var(--font-semibold);
 }
 
-.dashboard-empty {
+.No-completed {
   padding: var(--space-5);
   color: var(--text-gray);
 }
 
 .dashboard-btn {
   width: auto;
-
   padding: 10px 18px;
-
   border: 0;
   border-radius: var(--radius-md);
-
   background-color: var(--primary);
   color: var(--bg-white);
-
   font-size: 14px;
   font-weight: var(--font-semibold);
-
   text-decoration: none;
-
   flex-shrink: 0;
 }
 
 .dashboard-btn:hover {
   background-color: var(--bg-primary);
   color: var(--primary);
+}
+
+.summary-card,
+.admin-input {
+  background: var(--bg-dark-secondary);
+  color: var(--bg-white);
+  border-color: var(--border-dark);
+  border: 1px solid var(--border-dark) !important;
+}
+
+.admin-input {
+  border-right: 0 !important;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg) !important;
+}
+
+.summary-card {
+  border-radius: var(--radius-lg);
+}
+
+.summary-card span:first-child {
+  color: var(--text-gray);
+  font-weight: var(--font-medium);
+}
+
+.summary-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+}
+
+.admin-input::placeholder {
+  color: var(--text-gray);
+}
+
+.admin-input:focus {
+  background: var(--bg-dark-secondary);
+  color: var(--bg-white);
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+.status-filter .btn {
+  padding: 10px 20px;
+  border: 1px solid var(--border-dark);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-gray);
+}
+
+.status-filter .btn:hover {
+  color: var(--bg-white);
+  border-color: var(--primary);
+}
+
+.status-filter .btn.active {
+  background: var(--primary);
+  color: var(--bg-white);
+  border-color: var(--primary);
 }
 
 @media screen and (max-width: 1200px) {
@@ -122,26 +175,26 @@
 }
 
 @media screen and (max-width: 768px) {
-  .dashboard-overview {
+  .overview {
     padding: var(--space-4);
   }
 
-  .dashboard-stats {
+  .stats {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .dashboard-stat-value {
+  .stat-value {
     font-size: 24px;
   }
 }
 
 @media screen and (max-width: 576px) {
-  .dashboard-header {
+  .header {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .dashboard-stats {
+  .stats {
     grid-template-columns: 1fr;
   }
 }

@@ -1,13 +1,13 @@
 {% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
-<div class="dashboard-overview">
-  <div class="dashboard-header">
+<div class="overview">
+  <div class="header d-flex align-items-center">
     <div>
-      <h2 class="dashboard-title">Dashboard Overview</h2>
-      <p class="dashboard-subtitle">SOVX Commerce·{% now "M d, Y" %}</p>
+      <h2 class="title heading-2">Dashboard Overview</h2>
+      <p class="subtitle">SOVX Commerce·{% now "M d, Y" %}</p>
     </div>
 
-    <div class="dashboard-period">
-      <select id="period-select" class="dashboard-period-select">
+    <div class="period">
+      <select id="period-select" class="select">
         <option value="month" selected>Month</option>
         <option value="year">Year</option>
         <option value="all-time">All Time</option>
@@ -15,48 +15,48 @@
     </div>
   </div>
 
-  <div class="dashboard-stats">
-    <div class="dashboard-stat-card">
-      <span class="dashboard-stat-title">Total Orders Created</span>
+  <div class="stats">
+    <div class="stat-card">
+      <span class="stat-title">Total Orders Created</span>
 
-      <p class="dashboard-stat-value" id="orders-created">
+      <p class="stat-value heading-3" id="orders-created">
         {{ month_orders_created }}
       </p>
     </div>
 
-    <div class="dashboard-stat-card">
-      <span class="dashboard-stat-title">Total Orders Completed</span>
+    <div class="stat-card">
+      <span class="stat-title">Total Orders Completed</span>
 
-      <p class="dashboard-stat-value" id="orders-completed">
+      <p class="stat-value heading-3" id="orders-completed">
         {{ month_orders_completed }}
       </p>
     </div>
 
-    <div class="dashboard-stat-card">
-      <span class="dashboard-stat-title">Total Order Value</span>
+    <div class="stat-card">
+      <span class="stat-title">Total Order Value</span>
 
-      <p class="dashboard-stat-value" id="order-value">
+      <p class="stat-value heading-3" id="order-value">
         EGP {{ month_order_value }}
       </p>
     </div>
 
-    <div class="dashboard-stat-card">
-      <span class="dashboard-stat-title">Pending Orders</span>
+    <div class="stat-card">
+      <span class="stat-title">Pending Orders</span>
 
-      <p class="dashboard-stat-value" id="pending-orders">
+      <p class="stat-value heading-3" id="pending-orders">
         {{ pending_orders }}
       </p>
     </div>
 
-    <div class="dashboard-stat-card">
-      <span class="dashboard-stat-title">Items Sold Count</span>
+    <div class="stat-card">
+      <span class="stat-title">Items Sold Count</span>
 
-      <p class="dashboard-stat-value" id="items-sold">{{ month_items_sold }}</p>
+      <p class="stat-value heading-3" id="items-sold">{{ month_items_sold }}</p>
     </div>
   </div>
 
-  <section class="dashboard-orders">
-    <div class="dashboard-orders-header">
+  <section class="orders">
+    <div class="orders-header">
       <h3>Latest Completed Orders</h3>
 
       <a href="{% url 'admin_orders' %}" class="btn dashboard-btn">
@@ -67,7 +67,7 @@
     {% if latest_completed_orders %} {% include
     "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
     {% else %}
-    <div class="dashboard-empty">No completed orders yet.</div>
+    <div class="No-completed">No completed orders yet.</div>
     {% endif %}
   </section>
 </div>

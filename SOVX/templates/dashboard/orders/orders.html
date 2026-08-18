@@ -1,36 +1,118 @@
-{% extends 'dashboard.html' %} {% load static %} 
-{% block admin_content %}
-<!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h2>Manage Orders</h2>
-</div>
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
 
-<!-- Search Bar -->
-<form method="get" class="input-group mb-3 gap-3">
-  <input
-    type="text"
-    name="query"
-    class="form-control"
-    placeholder="Search products..."
-  />
-  <div class="input-group-append">
-    <button class="btn btn-outline-primary" type="submit">Search</button>
+<div class="admin-orders-page  p-4">
+  <div class="mb-4">
+    <h2 class="mb-1 pe-1">Manage Orders</h2>
+    <p class="text-secondary mb-0">Search and manage customer orders</p>
   </div>
-</form>
 
-{% if pending_orders %}
-<h3 class="my-4">Pending Orders</h3>
-{% include "dashboard/orders/orders_table.html" with orders=pending_orders %}
-{% endif %}
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="summary-card h-100 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span>Total Orders</span>
+          <span class="summary-dot bg-info"></span>
+        </div>
 
-{% if confirmed_orders %}
-<h3 class="my-4">Confirmed Orders</h3>
-{% include "dashboard/orders/orders_table.html" with orders=confirmed_orders %}
-{% endif %}
+        <h2 class="mb-0 text-info">{{ total_orders }}</h2>
+      </div>
+    </div>
 
-{% if in_delivery_orders %}
-<h3 class="my-4">In Delivery Orders</h3>
-{% include "dashboard/orders/orders_table.html" with orders=in_delivery_orders %}
-{% endif %}
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="summary-card h-100 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span>Completed</span>
+          <span class="summary-dot bg-success"></span>
+        </div>
+
+        <h2 class="mb-0 text-success">{{ completed_orders_count }}</h2>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="summary-card h-100 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span>Pending</span>
+          <span class="summary-dot bg-warning"></span>
+        </div>
+
+        <h2 class="mb-0 text-warning">{{ pending_orders_count }}</h2>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+      <div class="summary-card h-100 p-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <span>Cancelled</span>
+          <span class="summary-dot bg-danger"></span>
+        </div>
+
+        <h2 class="mb-0 text-danger">{{ cancelled_orders_count }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="d-flex flex-wrap gap-2 mb-3 status-filter">
+      <a
+        href="?status=all"
+        class="btn {% if not request.GET.status or request.GET.status == 'all' %}active{% endif %}"
+      >
+        All
+      </a>
+
+      <a
+        href="?status=completed"
+        class="btn {% if request.GET.status == 'completed' %}active{% endif %}"
+      >
+        Completed
+      </a>
+
+      <a
+        href="?status=pending"
+        class="btn {% if request.GET.status == 'pending' %}active{% endif %}"
+      >
+        Pending
+      </a>
+
+      <a
+        href="?status=cancelled"
+        class="btn {% if request.GET.status == 'cancelled' %}active{% endif %}"
+      >
+        Cancelled
+      </a>
+    </div>
+
+    <form method="get" class="input-group  w-100">
+      {% if request.GET.status %}
+      <input type="hidden" name="status" value="{{ request.GET.status }}" />
+      {% endif %}
+
+      <input
+        type="search"
+        name="query"
+        value="{{ request.GET.query }}"
+        class="form-control admin-input"
+        placeholder="Search orders..."
+      />
+
+      <button class="btn dashboard-btn px-4" type="submit">Search</button>
+    </form>
+  </div>
+
+  {% if pending_orders %}
+  <h3 class="my-4">Pending Orders</h3>
+
+  {% include "dashboard/orders/orders_table.html" with orders=pending_orders %}
+  {% endif %} {% if confirmed_orders %}
+  <h3 class="my-4">Confirmed Orders</h3>
+
+  {% include "dashboard/orders/orders_table.html" with orders=confirmed_orders
+  %} {% endif %} {% if in_delivery_orders %}
+  <h3 class="my-4">In Delivery Orders</h3>
+
+  {% include "dashboard/orders/orders_table.html" with orders=in_delivery_orders
+  %} {% endif %}
+</div>
 
 {% endblock admin_content %}
