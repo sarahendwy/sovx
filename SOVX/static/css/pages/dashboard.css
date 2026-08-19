@@ -168,6 +168,60 @@
   border-color: var(--primary);
 }
 
+.admin-products-page {
+  background: var(--bg-dark);
+  color: var(--bg-white);
+}
+
+.admin-table-wrapper {
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-lg);
+  background: var(--bg-dark-secondary);
+  overflow: hidden;
+}
+
+.admin-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--bg-white);
+  --bs-table-border-color: var(--border-dark);
+}
+
+.admin-table thead th {
+  padding: var(--space-4);
+  color: var(--text-gray);
+  font-size: 12px;
+  font-weight: var(--font-semibold);
+  text-transform: uppercase;
+}
+
+.admin-table tbody td {
+  padding: var(--space-4);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-action-btn {
+  border: 1px solid var(--border-dark);
+  color: var(--text-gray);
+}
+
+.admin-action-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.admin-action-btn.danger {
+  color: var(--primary);
+}
+
+.admin-action-btn.danger:hover {
+  background: var(--primary);
+  color: var(--bg-white);
+}
+
+
 @media screen and (max-width: 1200px) {
   .dashboard-stats {
     grid-template-columns: repeat(3, 1fr);

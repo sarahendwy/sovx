@@ -1,63 +1,86 @@
-{% extends 'dashboard.html' %} {% load static %} 
-{% block admin_content %}
-<!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h2>Manage Products</h2>
-  <a class="btn dashboard-btn" href="{% url 'add_products' %}">Create New</a>
-</div>
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
 
-<!-- Search Bar -->
-<form method="get" class="input-group mb-3 gap-3">
-  <input
-    type="text"
-    name="query"
-    class="form-control"
-    placeholder="Search products..."
-  />
-  <div class="input-group-append">
-    <button class="btn btn-outline-primary" type="submit">Search</button>
+<div class="admin-products-page min-vh-100 p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">Manage Products</h2>
+      <p class="text-secondary mb-0">Search and manage your products</p>
+    </div>
+
+    <a class="btn dashboard-btn" href="{% url 'add_products' %}">
+      Create New
+    </a>
   </div>
-</form>
 
-<!-- Products Table -->
-<div class="overflow-x-scroll">
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Product Name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Stock</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for product in products %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ product.title }}</td>
-      <td>{{ product.price }}</td>
-      <td>{{ product.stock }}</td>
-      <td>
-        <a
-          href="{% url 'edit_product' product.id %}"
-          class="btn btn-sm btn-outline-primary"> 
-          Edit
-        </a>
-        <a
-          href="{% url 'delete_product' product.id %}"
-          class="btn btn-sm btn-outline-danger"> 
-          Delete
-        </a>
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="6" class="text-center">No products found.</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-    {% include 'partials/layout/paginator.html' %}
+  <form method="get" class="input-group mb-4">
+    <input
+      type="search"
+      name="query"
+      value="{{ request.GET.query }}"
+      class="form-control admin-input"
+      placeholder="Search products..."
+    />
+
+    <button class="btn dashboard-btn px-4" type="submit">Search</button>
+  </form>
+
+  <div class="admin-table-wrapper table-responsive">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for product in products %}
+
+        <tr>
+          <td>{{ forloop.counter }}</td>
+
+          <td>{{ product.title }}</td>
+
+          <td>EGP {{ product.price }}</td>
+
+          <td>{{ product.stock }}</td>
+
+          <td>
+            <div class="d-flex gap-2">
+              <a
+                href="{% url 'edit_product' product.id %}"
+                class="btn btn-sm admin-action-btn"
+              >
+                Edit
+              </a>
+
+              <a
+                href="{% url 'delete_product' product.id %}"
+                class="btn btn-sm admin-action-btn danger"
+              >
+                Delete
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+          <td colspan="5" class="text-center py-4 text-secondary">
+            No products found.
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">{% include 'partials/layout/paginator.html' %}</div>
 </div>
+
 {% endblock admin_content %}
