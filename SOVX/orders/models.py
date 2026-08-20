@@ -3,16 +3,16 @@ from django.db import models
 from dashboard.models import City, Governorate, ShippingFee
 
 orders_states = [
-    ('Pending Confirmation', 'Pending Confirmation'),
-    ('Confirmed', 'Confirmed'),
-    ('Cancelled', 'Cancelled'),
-    ('In Delivery', 'In Delivery'),
-    ('Delivered', 'Delivered')
+    ('Pending Confirmation', 'قيد التأكيد'),
+    ('Confirmed', 'تم التأكيد'),
+    ('Cancelled', 'ملغي'),
+    ('In Delivery', 'قيد التوصيل'),
+    ('Delivered', 'تم التوصيل'),
 ]
 
 payment_methods = [
-    ('Cash on Delivery', 'Cash on Delivery'),
-    ('Wallet', 'Wallet'),
+    ('Cash on Delivery', 'الدفع عند الاستلام'),
+    ('Wallet', 'محفظة إلكترونية'),
 ]
 
 class Order(models.Model):

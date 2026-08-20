@@ -4,12 +4,12 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Order ID</th>
-          <th scope="col">Customer</th>
-          <th scope="col">Price</th>
-          <th scope="col">Status</th>
-          <th scope="col">Created at</th>
-          <th scope="col">Actions</th>
+          <th scope="col">رقم الطلب</th>
+          <th scope="col">العميل</th>
+          <th scope="col">السعر</th>
+          <th scope="col">الحالة</th>
+          <th scope="col">تاريخ الإنشاء</th>
+          <th scope="col">الإجراءات</th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -20,50 +20,50 @@
           <td>{{ order.name }}</td>
           <td>{{ order.id }}</td>
           <td>{{ order.order_total }}</td>
-          <td>{{ order.status }}</td>
+          <td>{{ order.get_status_display }}</td>
           <td>{{ order.created_at|date }}</td>
           <td>
             {% if order.status == "Pending Confirmation" %}
             <a
               href="{% url 'confirm_order' order.id %}"
-              class="btn btn-sm btn-primary"> 
-              Confirm Payment
+              class="btn btn-sm btn-primary">
+              تأكيد الدفع
             </a>
             <a
               href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary"> 
-              Cancel Order
+              class="btn btn-sm btn-outline-primary">
+              إلغاء الطلب
             </a>
             {% elif order.status == "Confirmed" %}
             <a
               href="{% url 'deliver_order' order.id %}"
-              class="btn btn-sm btn-primary"> 
-              Start Delivery
+              class="btn btn-sm btn-primary">
+              بدء التوصيل
             </a>
             <a
               href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary"> 
-              Cancel Order
+              class="btn btn-sm btn-outline-primary">
+              إلغاء الطلب
             </a>
             {% elif order.status == "In Delivery" %}
             <a
               href="{% url 'complete_order' order.id %}"
-              class="btn btn-sm btn-primary"> 
-              Delivered
+              class="btn btn-sm btn-primary">
+              تم التوصيل
             </a>
             <a
               href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary"> 
-              Cancel Order
+              class="btn btn-sm btn-outline-primary">
+              إلغاء الطلب
             </a>
             {% endif %}
           </td>
-          <td class="text-center"><a href="{% url 'order_details' order.id %}">View Details</a></td>
-    
+          <td class="text-center"><a href="{% url 'order_details' order.id %}">عرض التفاصيل</a></td>
+
         </tr>
         {% empty %}
         <tr>
-          <td colspan="7" class="text-center">No products found.</td>
+          <td colspan="7" class="text-center">لا توجد طلبات.</td>
         </tr>
         {% endfor %}
       </tbody>

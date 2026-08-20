@@ -1,9 +1,9 @@
-{% extends 'base.html' %} {% load static %} {% block header %}
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/pages/product.css' %}" />
-{% endblock header %} {% block content %}
+{% endblock header %} {% block pages_content %}
 <main class="py-5 container">
   <!-- Breadcrumbs (Right Aligned) -->
-  <div class="breadcrumbs container" dir="rtl" style="max-width: 1009px">
+  <div class="breadcrumbs container" dir="rtl">
     <nav class="breadcrumb-nav body-small d-flex gap-1">
       <a class="label-small" href="#"
         ><i class="bi bi-house-door"></i> الرئيسية</a
@@ -44,10 +44,11 @@
         <h1 class="heading-3 product-title">{{product.title}}</h1>
 
         <!-- Weight Cards Row -->
+        {% with buying_options=product.buying_options.all %}
         <div
-          class="weight-options-row d-flex flex-nowrap gap-3 mb-4 w-100 font-medium overflow-auto pb-2"
+          class="weight-options-row d-flex flex-nowrap gap-3 mb-4 w-100 font-medium overflow-auto pb-2 {% if buying_options|length > 2 %}weight-options-row--scrollable{% endif %}"
         >
-          {% for buying_option in product.buying_options.all %}
+          {% for buying_option in buying_options %}
           <!-- أضفنا onclick="selectOption(this)" -->
           <div
             class="weight-item {% if buying_option.is_default %}active{% endif %}"
@@ -67,7 +68,7 @@
             <div class="weight-body gap-1">
               <span class="value-unit-pair">
                 {{buying_option.amount}}
-                <span class="unit">{{buying_option.unit}}</span>
+                <span class="unit">{{buying_option.unit_label}}</span>
               </span>
               <span class="value-unit-pair">
                 {{buying_option.price}}
@@ -77,6 +78,7 @@
           </div>
           {% endfor %}
         </div>
+        {% endwith %}
 
         <!-- Actions Row -->
         <div class="actions-container d-flex gap-3 w-100 font-medium">
@@ -311,4 +313,4 @@
     }
   });
 </script>
-{% endblock content %}
+{% endblock pages_content %}

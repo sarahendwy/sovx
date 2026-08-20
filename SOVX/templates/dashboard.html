@@ -3,18 +3,24 @@
 <link rel="stylesheet" href="{% static 'css/pages/dashboard.css' %}" />
 {% endblock header %} {% block content %}
 <main class="flex-grow-1">
-  <div class="d-flex flex-column flex-md-row admin-layout" dir="ltr">
+  <div class="d-flex flex-column flex-md-row admin-layout" dir="rtl">
     <div class="admin-sidebar d-flex flex-column">
       <div class="admin-sidebar-header d-flex align-items-center">
-        <div
-          class="admin-logo d-flex align-items-center justify-content-center"
+        <a
+          href="{% url 'index' %}"
+          class="admin-logo-link d-flex align-items-center"
+          aria-label="الذهاب للصفحة الرئيسية"
         >
-          <span>S</span>
-        </div>
+          <img
+            src="{% static 'images/logo.svg' %}"
+            alt="SOVX"
+            class="admin-logo-img"
+          />
+        </a>
 
         <div>
           <h3 class="admin-brand-name">SOVX</h3>
-          <p class="admin-brand-subtitle">ADMIN PANEL</p>
+          <p class="admin-brand-subtitle">لوحة الإدارة</p>
         </div>
       </div>
 
@@ -25,7 +31,7 @@
               class="nav-link {% if request.path == '/dashboard/' %}active{% endif %}"
               href="{% url 'admin_dashboard' %}"
             >
-              <span>Dashboard</span>
+              <span>لوحة التحكم</span>
             </a>
           </li>
 
@@ -34,16 +40,38 @@
               class="nav-link {% if request.path == '/dashboard/orders/' %}active{% endif %}"
               href="{% url 'admin_orders' %}"
             >
-              <span>Orders</span>
+              <span>الطلبات</span>
             </a>
           </li>
 
           <li class="nav-item">
             <a
+              class="nav-link {% if 'contact-requests' in request.path %}active{% endif %}"
+              href="{% url 'admin_contact_requests' %}"
+            >
+              <span>رسائل تواصل معنا</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'sell-with-us-requests' in request.path %}active{% endif %}"
+              href="{% url 'admin_sell_with_us_requests' %}"
+            >
+              <span>طلبات تاجر معنا</span>
+            </a>
+          </li>
+        </ul>
+
+        <hr class="admin-sidebar-divider" />
+
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a
               class="nav-link {% if 'products' in request.path %}active{% endif %}"
               href="{% url 'admin_products' %}"
             >
-              <span>Products</span>
+              <span>المنتجات</span>
             </a>
           </li>
 
@@ -52,7 +80,7 @@
               class="nav-link {% if 'product-lists' in request.path %}active{% endif %}"
               href="{% url 'admin_product_lists' %}"
             >
-              <span>Product Lists</span>
+              <span>قوائم المنتجات</span>
             </a>
           </li>
 
@@ -61,7 +89,7 @@
               class="nav-link {% if 'sections' in request.path %}active{% endif %}"
               href="{% url 'admin_sections' %}"
             >
-              <span>Sections</span>
+              <span>الأقسام</span>
             </a>
           </li>
 
@@ -70,7 +98,16 @@
               class="nav-link {% if 'sell-with-us-cards' in request.path %}active{% endif %}"
               href="{% url 'admin_sell_with_us_cards' %}"
             >
-              <span>Sell With Us</span>
+              <span>تاجر معنا</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'reviews' in request.path %}active{% endif %}"
+              href="{% url 'admin_reviews' %}"
+            >
+              <span>التقييمات</span>
             </a>
           </li>
 
@@ -79,7 +116,7 @@
               class="nav-link {% if 'shipping-fees' in request.path %}active{% endif %}"
               href="{% url 'admin_shipping_fees' %}"
             >
-              <span>Shipping Fees</span>
+              <span>رسوم الشحن</span>
             </a>
           </li>
 
@@ -88,7 +125,7 @@
               class="nav-link {% if request.path == '/dashboard/settings/' %}active{% endif %}"
               href="{% url 'admin_settings' %}"
             >
-              <span>Site Settings</span>
+              <span>إعدادات الموقع</span>
             </a>
           </li>
         </ul>

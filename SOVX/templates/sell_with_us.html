@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% load static %} {% block header %}
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
 <link rel="stylesheet" href="{% static 'css/components/sell-with-us.css' %}" />
-{% endblock header %} {% block content %}
+{% endblock header %} {% block pages_content %}
 <main>
   <div class="split-form-container d-flex">
     <div>
@@ -38,4 +38,4 @@
     </div>
   </div>
 </main>
-{% endblock content %}
+{% endblock pages_content %}

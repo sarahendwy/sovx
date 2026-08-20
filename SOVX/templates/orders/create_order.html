@@ -1,6 +1,6 @@
-{% extends 'base.html' %} {% load static %} {% block header %}
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
-{% endblock header %} {% block content %}
+{% endblock header %} {% block pages_content %}
 <main>
 <div class="py-2 py-md-4">
   <div class="container">
@@ -9,4 +9,4 @@
   </div>
 </div>
 </main>
-{% endblock content %}
+{% endblock pages_content %}

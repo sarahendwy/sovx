@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% load static %} {% block header %}
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
 <link rel="stylesheet" href="{% static 'css/components/contact-us.css' %}" />
-{% endblock header %} {% block content %}
+{% endblock header %} {% block pages_content %}
 <main>
   <div class="split-form-container d-flex">
     <div class="bg-secondary carousel slide position-relative">
@@ -19,7 +19,7 @@
         />
 
         <a
-          href="https://www.google.com/maps/search/?api=1&query=New+Damietta,+Egypt"
+          href="{{ site_settings.location_url }}"
           target="_blank"
           rel="noopener noreferrer"
           class="contact-card text-decoration-none pe-auto"
@@ -34,7 +34,7 @@
           <div class="contact-content">
             <span class="contact-label">الموقع</span>
 
-            <p class="contact-text">دمياط الجديدة، محافظة دمياط، مصر</p>
+            <p class="contact-text">{{ site_settings.location_text }}</p>
           </div>
 
           <div class="contant-links">
@@ -57,8 +57,8 @@
             <span class="contact-label">ساعات العمل</span>
 
             <p class="contact-text">
-              الأحد - الخميس |
-              <span class="contact-time"> 9:00 صباحًا - 5:00 مساءً </span>
+              {{ site_settings.workdays }} |
+              <span class="contact-time">{{ site_settings.workhours }}</span>
             </p>
           </div>
         </div>
@@ -101,11 +101,11 @@
           <div class="contact-content">
             <span class="contact-label">رقم الهاتف</span>
 
-            <p class="contact-text">015 50204045</p>
+            <p class="contact-text">{{site_settings.phone_number}}+</p>
           </div>
           <div class="contant-links">
             <a
-              href="https://wa.me/201550204045"
+              href="https://wa.me/{{site_settings.whatsapp_number}}"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -115,7 +115,7 @@
               />
             </a>
 
-            <a href="tel:01550204045">
+            <a href="tel:{{site_settings.phone_number}}">
               <img
                 src="{% static 'images/sections/contact-us/call.svg' %}"
                 alt="اتصال"
@@ -135,10 +135,10 @@
           <div class="contact-content">
             <span class="contact-label">البريد الإلكتروني</span>
 
-            <p class="contact-text">info@altamayuzacademy.com</p>
+            <p class="contact-text">{{site_settings.email}}</p>
           </div>
           <div class="contant-links">
-            <a href="mailto:info@altamayuzacademy.com">
+            <a href="mailto:{{site_settings.email}}">
               <img
                 src="{% static 'images/sections/contact-us/send.svg' %}"
                 alt="إرسال بريد"
@@ -160,14 +160,14 @@
             <p class="contact-text">أحدث العروض والخصومات</p>
           </div>
           <div class="contant-links">
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="{{site_settings.facebook_link}}" target="_blank" rel="noopener noreferrer">
               <img
                 src="{% static 'images/sections/contact-us/facebook.svg' %}"
                 alt="Facebook"
               />
             </a>
 
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="{{site_settings.instgram_link}}" target="_blank" rel="noopener noreferrer">
               <img
                 src="{% static 'images/sections/contact-us/instagram.svg' %}"
                 alt="Instagram"
@@ -182,4 +182,4 @@
     </div>
   </div>
 </main>
-{% endblock content %}
+{% endblock pages_content %}

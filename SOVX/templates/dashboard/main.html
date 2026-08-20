@@ -2,22 +2,22 @@
 <div class="overview">
   <div class="header d-flex align-items-center">
     <div>
-      <h2 class="title heading-2">Dashboard Overview</h2>
+      <h2 class="title heading-2">نظرة عامة على لوحة التحكم</h2>
       <p class="subtitle">SOVX Commerce·{% now "M d, Y" %}</p>
     </div>
 
     <div class="period">
       <select id="period-select" class="select">
-        <option value="month" selected>Month</option>
-        <option value="year">Year</option>
-        <option value="all-time">All Time</option>
+        <option value="month" selected>شهر</option>
+        <option value="year">سنة</option>
+        <option value="all-time">كل الوقت</option>
       </select>
     </div>
   </div>
 
   <div class="stats">
     <div class="stat-card">
-      <span class="stat-title">Total Orders Created</span>
+      <span class="stat-title">إجمالي الطلبات المسجلة</span>
 
       <p class="stat-value heading-3" id="orders-created">
         {{ month_orders_created }}
@@ -25,7 +25,7 @@
     </div>
 
     <div class="stat-card">
-      <span class="stat-title">Total Orders Completed</span>
+      <span class="stat-title">إجمالي الطلبات المكتملة</span>
 
       <p class="stat-value heading-3" id="orders-completed">
         {{ month_orders_completed }}
@@ -33,7 +33,7 @@
     </div>
 
     <div class="stat-card">
-      <span class="stat-title">Total Order Value</span>
+      <span class="stat-title">إجمالي قيمة الطلبات</span>
 
       <p class="stat-value heading-3" id="order-value">
         EGP {{ month_order_value }}
@@ -41,7 +41,7 @@
     </div>
 
     <div class="stat-card">
-      <span class="stat-title">Pending Orders</span>
+      <span class="stat-title">الطلبات المعلقة</span>
 
       <p class="stat-value heading-3" id="pending-orders">
         {{ pending_orders }}
@@ -49,7 +49,7 @@
     </div>
 
     <div class="stat-card">
-      <span class="stat-title">Items Sold Count</span>
+      <span class="stat-title">عدد القطع المباعة</span>
 
       <p class="stat-value heading-3" id="items-sold">{{ month_items_sold }}</p>
     </div>
@@ -57,17 +57,17 @@
 
   <section class="orders">
     <div class="orders-header">
-      <h3>Latest Completed Orders</h3>
+      <h3>آخر الطلبات المكتملة</h3>
 
       <a href="{% url 'admin_orders' %}" class="btn dashboard-btn">
-        View All Orders
+        عرض كل الطلبات
       </a>
     </div>
 
     {% if latest_completed_orders %} {% include
     "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
     {% else %}
-    <div class="No-completed">No completed orders yet.</div>
+    <div class="No-completed">لا توجد طلبات مكتملة بعد.</div>
     {% endif %}
   </section>
 </div>

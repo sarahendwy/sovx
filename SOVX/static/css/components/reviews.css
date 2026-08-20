@@ -1,0 +1,261 @@
+.reviews-section {
+  --reviews-accent: #e13e3e;
+  --reviews-wave-w: 180px;
+  --reviews-wave-h: 64px;
+
+  position: relative;
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  background: var(--bg-primary-section);
+  padding-block: 100px 92px;
+}
+
+/* Same wave tile/curve as why-choose-us.css's .wcu-section (180x64 tile,
+   35px dip) so the top/bottom edge matches that section exactly - keep
+   the two in sync if the curve or --bg-primary-section value changes. */
+.reviews-section::before,
+.reviews-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--reviews-wave-h);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 64'%3E%3Cpath fill='%23FBE7E7' d='M0,0 C45,0 45,35 90,35 C135,35 135,0 180,0 L180,64 L0,64 Z'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: var(--reviews-wave-w) var(--reviews-wave-h);
+  pointer-events: none;
+}
+
+.reviews-section::before {
+  top: 0;
+}
+
+.reviews-section::after {
+  bottom: 0;
+  transform: scaleY(-1);
+}
+
+.reviews-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1160px;
+}
+
+/* ---------- Header ---------- */
+
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 56px;
+}
+
+.reviews-header-text {
+  max-width: 560px;
+}
+
+.reviews-title {
+  margin: 0 0 10px;
+  font-family: var(--font-primary);
+  font-weight: var(--font-bold);
+  font-size: clamp(26px, 3.2vw, 38px);
+  line-height: 1.3;
+  color: var(--text-dark);
+}
+
+.reviews-subtitle {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.reviews-nav {
+  display: flex;
+  /* forced LTR so source order [prev, next] always renders prev-left,
+     next-right regardless of the page's RTL direction */
+  direction: ltr;
+  gap: 12px;
+  flex-shrink: 0;
+  padding-top: 6px;
+}
+
+.reviews-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(225, 62, 62, 0.25);
+  background: var(--bg-white);
+  color: var(--reviews-accent);
+  cursor: pointer;
+  transition: border-color 0.2s ease, opacity 0.2s ease, transform 0.15s ease;
+}
+
+.reviews-nav-btn--prev {
+  opacity: 0.55;
+}
+
+.reviews-nav-btn--next {
+  border-color: rgba(225, 62, 62, 0.55);
+}
+
+.reviews-nav-btn:hover {
+  border-color: var(--reviews-accent);
+  opacity: 1;
+}
+
+.reviews-nav-btn:active {
+  transform: scale(0.94);
+}
+
+/* ---------- Cards ---------- */
+
+.reviews-track {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 22px;
+}
+
+.reviews-card {
+  width: 340px;
+  max-width: 100%;
+  background: var(--bg-white);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  transition: transform 0.35s ease, opacity 0.3s ease, box-shadow 0.35s ease;
+}
+
+.reviews-card--left,
+.reviews-card--right {
+  transform: translateY(26px);
+  opacity: 0.95;
+}
+
+.reviews-card--middle {
+  transform: translateY(-14px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.reviews-track.is-updating .reviews-card {
+  opacity: 0;
+}
+
+.reviews-card-header {
+  display: flex;
+  /* forced LTR + row-reverse so source order [avatar, meta] deterministically
+     renders avatar-right, meta-left regardless of page RTL direction */
+  direction: ltr;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.reviews-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-primary-section);
+}
+
+.reviews-meta {
+  direction: rtl;
+  text-align: right;
+  min-width: 0;
+}
+
+.reviews-name {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-semibold);
+  font-size: 16px;
+  color: var(--text-dark);
+}
+
+.reviews-date {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  color: var(--text-gray);
+}
+
+.reviews-text {
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 992px) {
+  .reviews-card {
+    width: 300px;
+  }
+}
+
+@media (max-width: 860px) {
+  .reviews-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .reviews-nav {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 700px) {
+  .reviews-section {
+    --reviews-wave-w: 120px;
+    --reviews-wave-h: 43px;
+    padding-block: 56px 48px;
+  }
+
+  .reviews-title {
+    font-size: 24px;
+  }
+
+  .reviews-subtitle {
+    font-size: 14px;
+  }
+
+  .reviews-header {
+    margin-bottom: 32px;
+  }
+
+  .reviews-track {
+    gap: 0;
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+
+  .reviews-card--left,
+  .reviews-card--right {
+    display: none;
+  }
+
+  .reviews-card--middle {
+    width: 100%;
+    max-width: 400px;
+    margin-inline: auto;
+    transform: none;
+  }
+}

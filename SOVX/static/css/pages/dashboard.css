@@ -62,7 +62,7 @@
 .stat-value {
   margin: auto 0 0;
   color: var(--bg-white);
-  text-align: left;
+  text-align: right;
 }
 
 .orders {
@@ -119,8 +119,8 @@
 }
 
 .admin-input {
-  border-right: 0 !important;
-  border-radius: var(--radius-lg) 0 0 var(--radius-lg) !important;
+  border-left: 0 !important;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0 !important;
 }
 
 .summary-card {

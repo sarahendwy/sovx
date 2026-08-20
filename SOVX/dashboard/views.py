@@ -7,12 +7,12 @@ from django.views.generic import TemplateView, ListView, CreateView, DeleteView,
 from django.utils import timezone as django_timezone
 from django.db.models import Sum
 
-from orders.models import Order, OrderEntry
+from orders.models import Order, OrderEntry, ContactUsRequest, SellWithUsRequest
 from .forms import (
     ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
-    ShippingFeeForm, ProductNutritionsValueFormSet
+    ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet
 )
-from .models import Setting, ProductList, Section, SellWithUsCard, City, ShippingFee
+from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee
 from products.models import Product
 
 class DashboardView(TemplateView):
@@ -268,6 +268,42 @@ class EditSellWithUsCardView(UpdateView):
 class DeleteSellWithUsCardView(DeleteView):
     model = SellWithUsCard
     success_url = reverse_lazy('admin_sell_with_us_cards')
+    template_name = "dashboard/confirm_delete.html"
+
+class ContactUsRequestsView(ListView):
+    template_name = 'dashboard/contact_request/contact_requests.html'
+    model = ContactUsRequest
+    context_object_name = "contact_requests"
+    paginate_by = 20
+    queryset = ContactUsRequest.objects.order_by('-created_at')
+
+class SellWithUsRequestsView(ListView):
+    template_name = 'dashboard/sell_with_us_request/sell_with_us_requests.html'
+    model = SellWithUsRequest
+    context_object_name = "sell_with_us_requests"
+    paginate_by = 20
+    queryset = SellWithUsRequest.objects.select_related('governorate', 'city').order_by('-created_at')
+
+class ReviewsView(ListView):
+    template_name = 'dashboard/review/reviews.html'
+    model = Review
+    context_object_name = "reviews"
+
+class AddReviewView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'dashboard/review/add_review.html'
+    success_url = reverse_lazy('admin_reviews')
+
+class EditReviewView(UpdateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = 'dashboard/review/edit_review.html'
+    success_url = reverse_lazy('admin_reviews')
+
+class DeleteReviewView(DeleteView):
+    model = Review
+    success_url = reverse_lazy('admin_reviews')
     template_name = "dashboard/confirm_delete.html"
 
 class ShippingFeesView(ListView):

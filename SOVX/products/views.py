@@ -1,10 +1,11 @@
 from typing import Any
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 from django.views.generic import ListView, DetailView
 from .models import Product
 from dashboard.models import ProductList
 
-from dashboard.models import Section, SectionType, SellWithUsCard
+from dashboard.models import Section, SectionType, SellWithUsCard, Review
 
 
 def index(request):
@@ -13,6 +14,20 @@ def index(request):
 
     if sections.filter(type=SectionType.SELL_WITH_US).exists():
         context["sell_with_us_cards"] = SellWithUsCard.objects.filter(disabled=False)
+
+    if sections.filter(type=SectionType.REVIEWS).exists():
+        # plain dicts (not model instances) so the same list can be indexed
+        # in the template for the initial render *and* dropped into
+        # {{ reviews|json_script:"..." }} for the JS carousel - see reviews.html
+        context["reviews"] = [
+            {
+                "name": review.name,
+                "date": f"{review.date.strftime('%B')} {review.date.day}, {review.date.year}",
+                "description": review.description,
+                "avatar": static(review.avatar_path),
+            }
+            for review in Review.objects.all()
+        ]
 
     return render(request, "index.html", context=context)
 

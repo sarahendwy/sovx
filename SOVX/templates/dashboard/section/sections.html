@@ -3,11 +3,11 @@
 <div class="admin-products-page min-vh-100 p-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="mb-1">Manage Sections</h2>
-      <p class="text-secondary mb-0">Manage homepage sections</p>
+      <h2 class="mb-1">إدارة الأقسام</h2>
+      <p class="text-secondary mb-0">إدارة أقسام الصفحة الرئيسية</p>
     </div>
 
-    <a class="btn dashboard-btn" href="{% url 'add_section' %}"> Create New </a>
+    <a class="btn dashboard-btn" href="{% url 'add_section' %}"> إضافة جديد </a>
   </div>
 
   <div class="admin-table-wrapper table-responsive">
@@ -15,10 +15,10 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Order</th>
-          <th>Actions</th>
+          <th>الاسم</th>
+          <th>النوع</th>
+          <th>الترتيب</th>
+          <th>الإجراءات</th>
         </tr>
       </thead>
 
@@ -37,14 +37,14 @@
                 href="{% url 'edit_section' section.id %}"
                 class="btn btn-sm admin-action-btn"
               >
-                Edit
+                تعديل
               </a>
 
               <a
                 href="{% url 'delete_section' section.id %}"
                 class="btn btn-sm admin-action-btn danger"
               >
-                Delete
+                حذف
               </a>
             </div>
           </td>
@@ -54,7 +54,7 @@
 
         <tr>
           <td colspan="5" class="text-center py-4 text-secondary">
-            No sections found.
+            لا توجد أقسام.
           </td>
         </tr>
 

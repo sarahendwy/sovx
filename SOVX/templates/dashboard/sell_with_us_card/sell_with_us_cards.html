@@ -3,12 +3,12 @@
 <div class="admin-products-page min-vh-100 p-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="mb-1">Manage Sell With Us Cards</h2>
-      <p class="text-secondary mb-0">Manage sell with us cards</p>
+      <h2 class="mb-1">إدارة بطاقات تاجر معنا</h2>
+      <p class="text-secondary mb-0">إدارة بطاقات تاجر معنا</p>
     </div>
 
     <a class="btn dashboard-btn" href="{% url 'add_sell_with_us_card' %}">
-      Create New
+      إضافة جديد
     </a>
   </div>
 
@@ -17,12 +17,12 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Title</th>
-          <th>Icon</th>
-          <th>Span</th>
-          <th>Order</th>
-          <th>Disabled</th>
-          <th>Actions</th>
+          <th>العنوان</th>
+          <th>الأيقونة</th>
+          <th>العرض</th>
+          <th>الترتيب</th>
+          <th>معطلة</th>
+          <th>الإجراءات</th>
         </tr>
       </thead>
 
@@ -33,14 +33,14 @@
           <td>{{ forloop.counter }}</td>
           <td>{{ card.title }}</td>
           <td>{{ card.get_svg_display }}</td>
-          <td>{{ card.span }}</td>
+          <td>{{ card.get_span_display }}</td>
           <td>{{ card.order }}</td>
 
           <td>
             {% if card.disabled %}
-            <span class="badge text-bg-danger">Yes</span>
+            <span class="badge text-bg-danger">نعم</span>
             {% else %}
-            <span class="badge text-bg-success">No</span>
+            <span class="badge text-bg-success">لا</span>
             {% endif %}
           </td>
 
@@ -50,14 +50,14 @@
                 href="{% url 'edit_sell_with_us_card' card.id %}"
                 class="btn btn-sm admin-action-btn"
               >
-                Edit
+                تعديل
               </a>
 
               <a
                 href="{% url 'delete_sell_with_us_card' card.id %}"
                 class="btn btn-sm admin-action-btn danger"
               >
-                Delete
+                حذف
               </a>
             </div>
           </td>
@@ -67,7 +67,7 @@
 
         <tr>
           <td colspan="7" class="text-center py-4 text-secondary">
-            No cards found.
+            لا توجد بطاقات.
           </td>
         </tr>
 

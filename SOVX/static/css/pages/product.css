@@ -94,6 +94,35 @@
   display: none;
 }
 
+/* Show a visible scrollbar on wider screens, but only when there are
+   more than 2 weight options (see .weight-options-row--scrollable in
+   product.html) - with 1-2 items there's nothing to scroll to anyway.
+   Scrolling is mouse/trackpad-driven here rather than touch, so it's
+   worth surfacing that there's more; below this breakpoint it stays
+   hidden (touch swipe is enough). */
+@media (min-width: 1000px) {
+  .weight-options-row--scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--bg-secondary);
+    -ms-overflow-style: auto;
+  }
+
+  .weight-options-row--scrollable::-webkit-scrollbar {
+    display: block;
+    height: 6px;
+  }
+
+  .weight-options-row--scrollable::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+    border-radius: 999px;
+  }
+
+  .weight-options-row--scrollable::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 999px;
+  }
+}
+
 .weight-item {
   border: 1px solid var(--border-secondary);
   border-radius: 10px 10px 0px 0px;

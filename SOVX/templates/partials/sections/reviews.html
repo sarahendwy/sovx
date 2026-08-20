@@ -1,5 +1,64 @@
-<section class="py-4 my-3" id="section_{{ section.id }}">
-  <h1 class="heading-1 font-regular mb-3">{{ section.name }}</h1>
+{% load static %}
+<section class="reviews-section" id="section_{{ section.id }}">
+  <h2 class="visually-hidden">{{ section.name }}</h2>
 
+  <div class="container reviews-container">
+    <div class="reviews-header">
+      <div class="reviews-header-text">
+        <h2 class="reviews-title" dir="auto">ناس جرّبت .. وقالت كلمتها</h2>
+        <p class="reviews-subtitle" dir="auto">آراء عملائنا بتتكلم عننا... طعم، جودة، وتوصيل يخلوك تطمئن قبل ما تطلب.</p>
+      </div>
 
+      <div class="reviews-nav">
+        <button type="button" class="reviews-nav-btn reviews-nav-btn--prev" data-reviews-prev aria-label="السابق">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button type="button" class="reviews-nav-btn reviews-nav-btn--next" data-reviews-next aria-label="التالي">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="reviews-track" data-reviews-root data-reviews-track>
+      <article class="reviews-card reviews-card--left" data-slot="left">
+        <div class="reviews-card-header">
+          <img class="reviews-avatar" data-field="avatar" src="{{ reviews.0.avatar }}" alt="" />
+          <div class="reviews-meta">
+            <h3 class="reviews-name" data-field="name" dir="auto">{{ reviews.0.name }}</h3>
+            <span class="reviews-date" data-field="date">{{ reviews.0.date }}</span>
+          </div>
+        </div>
+        <p class="reviews-text" data-field="text" dir="auto">{{ reviews.0.description }}</p>
+      </article>
+
+      <article class="reviews-card reviews-card--middle" data-slot="middle">
+        <div class="reviews-card-header">
+          <img class="reviews-avatar" data-field="avatar" src="{{ reviews.1.avatar|default:reviews.0.avatar }}" alt="" />
+          <div class="reviews-meta">
+            <h3 class="reviews-name" data-field="name" dir="auto">{{ reviews.1.name|default:reviews.0.name }}</h3>
+            <span class="reviews-date" data-field="date">{{ reviews.1.date|default:reviews.0.date }}</span>
+          </div>
+        </div>
+        <p class="reviews-text" data-field="text" dir="auto">{{ reviews.1.description|default:reviews.0.description }}</p>
+      </article>
+
+      <article class="reviews-card reviews-card--right" data-slot="right">
+        <div class="reviews-card-header">
+          <img class="reviews-avatar" data-field="avatar" src="{{ reviews.2.avatar|default:reviews.0.avatar }}" alt="" />
+          <div class="reviews-meta">
+            <h3 class="reviews-name" data-field="name" dir="auto">{{ reviews.2.name|default:reviews.0.name }}</h3>
+            <span class="reviews-date" data-field="date">{{ reviews.2.date|default:reviews.0.date }}</span>
+          </div>
+        </div>
+        <p class="reviews-text" data-field="text" dir="auto">{{ reviews.2.description|default:reviews.0.description }}</p>
+      </article>
+    </div>
+  </div>
 </section>
+
+{{ reviews|json_script:"reviews-data" }}
+<script src="{% static 'js/reviews.js' %}" defer></script>

@@ -4,7 +4,7 @@ from django.core.validators import validate_image_file_extension
 from django.forms import inlineformset_factory
 
 from products.models import Product, ProductBuyingOption, NutritionalValue
-from .models import Setting, ProductList, Section, SellWithUsCard, Governorate, City, ShippingFee
+from .models import Setting, ProductList, Section, SellWithUsCard, Review, Governorate, City, ShippingFee
 
 
 class GovernorateCityFormMixin:
@@ -131,8 +131,8 @@ class ProductListForm(forms.ModelForm):
 
     select_all_products = forms.BooleanField(
         required=False,
-        label="Select all products?",
-        help_text="Check this box to include all products instead of picking specific ones below.",
+        label="تضمين كل المنتجات؟",
+        help_text="فعّل هذا الخيار لتضمين كل المنتجات بدل اختيار منتجات محددة بالأسفل.",
     )
 
     class Meta:
@@ -162,11 +162,24 @@ class SellWithUsCardForm(forms.ModelForm):
         model = SellWithUsCard
         fields = '__all__'
 
+class ReviewForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = Review
+        fields = '__all__'
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
+
 class ShippingFeeForm(GovernorateCityFormMixin, forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.fields['city'].required = False
-        self.fields['city'].empty_label = "All cities (governorate-wide fee)"
+        self.fields['city'].empty_label = "كل المدن (رسوم على مستوى المحافظة)"
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
 

@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base_site_pages.html' %}
 {% load static %}
 
 {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/product-card.css' %}" />
 {% endblock header %}
 
-{% block content %}
+{% block pages_content %}
 <main class="flex-grow-1 mx-auto">
     {% if search_message %}
     <h4 class="text-center my-5 text-muted fw-normal">{{ search_message }}</h4>
@@ -14,4 +14,4 @@
         {% include "partials/sections/product_list.html" with products=products %}
     </div>
 </main>
-{% endblock content %}
+{% endblock pages_content %}

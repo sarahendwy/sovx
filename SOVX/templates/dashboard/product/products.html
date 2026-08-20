@@ -3,12 +3,12 @@
 <div class="admin-products-page min-vh-100 p-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <h2 class="mb-1">Manage Products</h2>
-      <p class="text-secondary mb-0">Search and manage your products</p>
+      <h2 class="mb-1">إدارة المنتجات</h2>
+      <p class="text-secondary mb-0">ابحث عن منتجاتك وأدرها</p>
     </div>
 
     <a class="btn dashboard-btn" href="{% url 'add_products' %}">
-      Create New
+      إضافة جديد
     </a>
   </div>
 
@@ -18,10 +18,10 @@
       name="query"
       value="{{ request.GET.query }}"
       class="form-control admin-input"
-      placeholder="Search products..."
+      placeholder="ابحث عن منتجات..."
     />
 
-    <button class="btn dashboard-btn px-4" type="submit">Search</button>
+    <button class="btn dashboard-btn px-4" type="submit">بحث</button>
   </form>
 
   <div class="admin-table-wrapper table-responsive">
@@ -29,10 +29,10 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Product Name</th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>Actions</th>
+          <th>اسم المنتج</th>
+          <th>السعر</th>
+          <th>المخزون</th>
+          <th>الإجراءات</th>
         </tr>
       </thead>
 
@@ -54,14 +54,14 @@
                 href="{% url 'edit_product' product.id %}"
                 class="btn btn-sm admin-action-btn"
               >
-                Edit
+                تعديل
               </a>
 
               <a
                 href="{% url 'delete_product' product.id %}"
                 class="btn btn-sm admin-action-btn danger"
               >
-                Delete
+                حذف
               </a>
             </div>
           </td>
@@ -71,7 +71,7 @@
 
         <tr>
           <td colspan="5" class="text-center py-4 text-secondary">
-            No products found.
+            لا توجد منتجات.
           </td>
         </tr>
 

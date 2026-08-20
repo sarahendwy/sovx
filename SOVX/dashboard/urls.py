@@ -10,6 +10,9 @@ urlpatterns = [
     path('orders/<order_id>/deliver', deliver_order, name='deliver_order'),
     path('orders/<order_id>/complete', complete_order, name='complete_order'),
 
+    path('contact-requests/', ContactUsRequestsView.as_view(), name='admin_contact_requests'),
+    path('sell-with-us-requests/', SellWithUsRequestsView.as_view(), name='admin_sell_with_us_requests'),
+
     path('products/', ProductsView.as_view(), name='admin_products'),
     path('products/add', AddProductView.as_view(), name='add_products'),
     path('products/edit/<pk>', EditProductView.as_view(), name='edit_product'),
@@ -31,6 +34,11 @@ urlpatterns = [
     path('sell-with-us-cards/add', AddSellWithUsCardView.as_view(), name='add_sell_with_us_card'),
     path('sell-with-us-cards/edit/<pk>', EditSellWithUsCardView.as_view(), name='edit_sell_with_us_card'),
     path('sell-with-us-cards/delete/<pk>', DeleteSellWithUsCardView.as_view(), name='delete_sell_with_us_card'),
+
+    path('reviews/', ReviewsView.as_view(), name='admin_reviews'),
+    path('reviews/add', AddReviewView.as_view(), name='add_review'),
+    path('reviews/edit/<pk>', EditReviewView.as_view(), name='edit_review'),
+    path('reviews/delete/<pk>', DeleteReviewView.as_view(), name='delete_review'),
 
     path('shipping-fees/', ShippingFeesView.as_view(), name='admin_shipping_fees'),
     path('shipping-fees/add', AddShippingFeeView.as_view(), name='add_shipping_fee'),

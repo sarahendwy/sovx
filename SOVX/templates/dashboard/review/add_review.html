@@ -1,0 +1,6 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+
+{% block admin_content %}
+    {% include "partials/components/form.html" with form_title="إضافة تقييم جديد" form_class="review-form" form_button_text="إضافة" %}
+{% endblock admin_content %}

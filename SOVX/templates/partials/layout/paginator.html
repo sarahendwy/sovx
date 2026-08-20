@@ -1,23 +1,22 @@
-<nav aria-label="Page navigation">
+<nav aria-label="التنقل بين الصفحات" dir="rtl">
     <ul class="pagination justify-content-center mt-5">
         {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            <li class="page-item"><a class="page-link" href="?page=1">الأولى &raquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">السابق</a>
             </li>
         {% else %}
-            <li class="page-item disabled"><a class="page-link">&laquo; First</a></li>
-            <li class="page-item disabled"><a class="page-link">Previous</a></li>
+            <li class="page-item disabled"><a class="page-link">الأولى &raquo;</a></li>
+            <li class="page-item disabled"><a class="page-link">السابق</a></li>
         {% endif %}
-        <li class="page-item"><a class="page-link">Page {{ page_obj.number }}
-            of {{ page_obj.paginator.num_pages }}</a></li>
+        <li class="page-item"><a class="page-link">صفحة {{ page_obj.number }}
+            من {{ page_obj.paginator.num_pages }}</a></li>
         {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">التالي</a>
             </li>
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last
-                &raquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&laquo; الأخيرة</a></li>
         {% else %}
-            <li class="page-item disabled"><a class="page-link">Next</a></li>
-            <li class="page-item disabled"><a class="page-link">Last &raquo;</a></li>
+            <li class="page-item disabled"><a class="page-link">التالي</a></li>
+            <li class="page-item disabled"><a class="page-link">&laquo; الأخيرة</a></li>
         {% endif %}
 
     </ul>

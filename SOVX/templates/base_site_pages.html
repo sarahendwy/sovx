@@ -1,0 +1,10 @@
+{% extends 'base.html' %} 
+{% block content %} 
+  {% include "partials/components/announcement_bar.html"%}
+  {% include "partials/layout/navbar.html" %}
+  {% include "partials/components/cart_offcanvas.html" %}
+
+  {% block pages_content %}
+  {% endblock pages_content %}
+
+{% endblock %}

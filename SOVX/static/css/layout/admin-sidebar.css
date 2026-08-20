@@ -3,7 +3,7 @@
   min-height: 100vh;
   background-color: var(--bg-dark);
   color: var(--bg-white);
-  border-right: 1px solid var(--border-dark);
+  border-left: 1px solid var(--border-dark);
 }
 
 .admin-sidebar-header {
@@ -12,15 +12,14 @@
   border-bottom: 1px solid var(--border-dark);
 }
 
-.admin-logo {
-  width: 44px;
-  height: 44px;
+.admin-logo-link {
   flex-shrink: 0;
-  border-radius: 10px;
-  background-color: var(--primary);
-  color: var(--bg-white);
-  font-size: 18px;
-  font-weight: var(--font-bold);
+}
+
+.admin-logo-img {
+  display: block;
+  width: 64px;
+  height: auto;
 }
 
 .admin-brand-name {
@@ -39,6 +38,13 @@
 
 .admin-sidebar-nav {
   padding: var(--space-9);
+}
+
+.admin-sidebar-divider {
+  margin: var(--space-3) var(--space-1);
+  border: none;
+  border-top: 1px solid var(--border-dark);
+  opacity: 1;
 }
 
 .admin-sidebar .nav {

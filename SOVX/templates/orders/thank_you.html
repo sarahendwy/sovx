@@ -1,0 +1,23 @@
+{% extends 'base_site_pages.html' %}
+{% load static %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/pages/thank-you.css' %}" />
+{% endblock header %}
+
+{% block pages_content %}
+<main class="thank-you-page">
+  <div class="thank-you-card">
+    <span class="thank-you-icon" aria-hidden="true">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13L9.5 17.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+
+    <h1 class="thank-you-title" dir="auto">شكراً لك، استلمنا طلبك</h1>
+    <p class="thank-you-text" dir="auto">هنراجع طلبك ونتواصل معاك في أقرب وقت.</p>
+
+    <a href="{% url 'index' %}" class="thank-you-btn">العودة للصفحة الرئيسية</a>
+  </div>
+</main>
+{% endblock pages_content %}

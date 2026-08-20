@@ -1,0 +1,58 @@
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
+
+<div class="admin-products-page min-vh-100 p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">طلبات تاجر معنا</h2>
+      <p class="text-secondary mb-0">طلبات التجار المرسلة من نموذج تاجر معنا</p>
+    </div>
+  </div>
+
+  <div class="admin-table-wrapper table-responsive">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>الاسم</th>
+          <th>اسم المحل</th>
+          <th>رقم الهاتف</th>
+          <th>المحافظة</th>
+          <th>المدينة</th>
+          <th>العنوان</th>
+          <th>الرسالة</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for request in sell_with_us_requests %}
+
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ request.name }}</td>
+          <td>{{ request.store_name }}</td>
+          <td>{{ request.phone }}</td>
+          <td>{{ request.governorate.name_ar|default:"—" }}</td>
+          <td>{{ request.city.name_ar|default:"—" }}</td>
+          <td>{{ request.address }}</td>
+          <td>{{ request.message|default:"—" }}</td>
+          <td>{{ request.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+          <td colspan="9" class="text-center py-4 text-secondary">
+            لا توجد طلبات بعد.
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4">{% include 'partials/layout/paginator.html' %}</div>
+</div>
+
+{% endblock admin_content %}

@@ -2,9 +2,10 @@ from collections import defaultdict
 from typing import Any
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from .models import Order, OrderEntry, OrderLog
 from products.models import Product
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, TemplateView
 from .forms import OrderForm, SellWithUsForm, ContactUsForm
 from dashboard.models import Setting
 
@@ -192,13 +193,13 @@ class CreateOrder(CreateView):
         )
 
         order.save()
-        return redirect(f"/order/success/{order.id}")
+        return redirect('thank_you')
 
 
 class SellWithUs(CreateView):
     template_name = 'sell_with_us.html'
     form_class = SellWithUsForm
-    success_url = "/orders/success"
+    success_url = reverse_lazy('thank_you')
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -208,12 +209,16 @@ class SellWithUs(CreateView):
 class ContactUs(CreateView):
     template_name = 'contact_us.html'
     form_class = ContactUsForm
-    success_url = "/orders/success"
+    success_url = reverse_lazy('thank_you')
 
 
 class OrderDetails(DetailView):
     model = Order
     template_name = 'orders/order_details.html'
+
+
+class ThankYou(TemplateView):
+    template_name = 'orders/thank_you.html'
 
 
 CONTACT_SLIDES = [

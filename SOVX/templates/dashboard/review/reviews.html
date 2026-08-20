@@ -1,0 +1,73 @@
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
+
+<div class="admin-products-page min-vh-100 p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">إدارة التقييمات</h2>
+      <p class="text-secondary mb-0">إدارة تقييمات العملاء المعروضة في الصفحة الرئيسية</p>
+    </div>
+
+    <a class="btn dashboard-btn" href="{% url 'add_review' %}">
+      إضافة جديد
+    </a>
+  </div>
+
+  <div class="admin-table-wrapper table-responsive">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>الاسم</th>
+          <th>التاريخ</th>
+          <th>النوع</th>
+          <th>التقييم</th>
+          <th>الترتيب</th>
+          <th>الإجراءات</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for review in reviews %}
+
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ review.name }}</td>
+          <td>{{ review.date }}</td>
+          <td>{{ review.get_type_display }}</td>
+          <td>{{ review.description|truncatechars:60 }}</td>
+          <td>{{ review.order }}</td>
+
+          <td>
+            <div class="d-flex gap-2">
+              <a
+                href="{% url 'edit_review' review.id %}"
+                class="btn btn-sm admin-action-btn"
+              >
+                تعديل
+              </a>
+
+              <a
+                href="{% url 'delete_review' review.id %}"
+                class="btn btn-sm admin-action-btn danger"
+              >
+                حذف
+              </a>
+            </div>
+          </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+          <td colspan="7" class="text-center py-4 text-secondary">
+            لا توجد تقييمات.
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock admin_content %}

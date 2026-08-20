@@ -1,7 +1,5 @@
 {% load static %}
 <section class="py-4 my-3" id="section_{{ section.id }}">
-    <h1 class="visually-hidden">{{ section.name }}</h1>
-
     <div class="sell-with-us-grid">
         {% for card in cards %}
             <div class="swu-card {% if card.span == 2 %}swu-card--wide{% endif %}" style="background-color: {{ card.bg_color }}; --swu-span: {{ card.span }};">

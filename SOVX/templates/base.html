@@ -38,9 +38,6 @@
   <body class="d-flex flex-column min-vh-100" data-bs-spy="scroll" data-bs-target="#navbarSectionsNav" tabindex="0">
     <script src="{% static 'js/cart.js' %}"></script>
     <script src="{% static 'js/locations.js' %}"></script>
-    {% include "partials/components/announcement_bar.html"%}
-    {% include "partials/layout/navbar.html" %}
-    {% include "partials/components/cart_offcanvas.html" %}
     {% block content %} {% endblock %}
     {% include "partials/layout/footer.html" %}
 

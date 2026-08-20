@@ -1,7 +1,6 @@
 .cart-offcanvas .offcanvas-body a {
   margin: 16px auto;
-  width: min(250px, 100%);
-  border-radius: 2px 16px 2px 16px;
+  width: min(250px, 100%) !important;
 }
 
 .cart-offcanvas .cart-totals .cart-total {

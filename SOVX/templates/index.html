@@ -1,19 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'base_site_pages.html' %}
 {% load static %}
 
 {% block header %}
 <link rel="stylesheet" href="{% static 'css/components/product-card.css' %}" />
 <link rel="stylesheet" href="{% static 'css/layout/section.css' %}" />
 <link rel="stylesheet" href="{% static 'css/components/sell-with-us.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/why-choose-us.css' %}" />
+<link rel="stylesheet" href="{% static 'css/components/reviews.css' %}" />
 {% endblock header %}
 
-{% block content %}
+{% block pages_content %}
     <main class="container flex-grow-1">
         {% for section in sections %}
             {% if section.type == "product_list" and section.product_list %}
                 {% include "partials/sections/product_list.html" with section=section products=section.product_list.get_products %}
-            {% elif section.type == "reviews" %}
-                {% include "partials/sections/reviews.html" with section=section %}
+            {% elif section.type == "reviews" and reviews %}
+                {% include "partials/sections/reviews.html" with section=section reviews=reviews %}
             {% elif section.type == "why_choose_us" %}
                 {% include "partials/sections/why_choose_us.html" with section=section %}
             {% elif section.type == "sell_with_us" %}
@@ -22,4 +24,4 @@
         {% endfor %}
     </main>
     
-{% endblock content %}
+{% endblock pages_content %}

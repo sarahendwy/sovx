@@ -1,4 +1,5 @@
 import os
+from datetime import date
 
 from django.conf import settings
 from django.core.files import File
@@ -8,6 +9,8 @@ from products.models import Product, ProductBuyingOption, NutritionalValue
 from dashboard.models import (
     ProductList,
     ProductSortField,
+    Review,
+    ReviewType,
     Section,
     SectionType,
     SellWithUsCard,
@@ -107,6 +110,39 @@ SAMPLE_SELL_WITH_US_CARDS = [
     },
 ]
 
+SAMPLE_REVIEWS = [
+    {
+        "name": "مرام الدالي",
+        "date": date(2026, 3, 15),
+        "type": ReviewType.FEMALE,
+        "description": "المكسرات طازة فعلًا وطعمها باين من أول قضمة. الخلطة متظبطة والقرمشة ممتازة، غير إن التوصيل كان سريع جدًا والتغليف محترم.",
+    },
+    {
+        "name": "محمد حسن",
+        "date": date(2024, 7, 22),
+        "type": ReviewType.MALE,
+        "description": "المكسرات طازة فعلًا وطعمها باين من أول قضمة. الخلطة متظبطة والقرمشة ممتازة، غير إن التوصيل كان سريع جدًا والتغليف محترم.",
+    },
+    {
+        "name": "إيهاب قاسم",
+        "date": date(2023, 11, 5),
+        "type": ReviewType.MALE,
+        "description": "المكسرات طازة فعلًا وطعمها باين من أول قضمة. الخلطة متظبطة والقرمشة ممتازة، غير إن التوصيل كان سريع جدًا والتغليف محترم.",
+    },
+    {
+        "name": "سارة عبد الله",
+        "date": date(2025, 5, 9),
+        "type": ReviewType.FEMALE,
+        "description": "أول مرة أطلب مكسرات أونلاين وأتفاجئ بالجودة دي. اللوز والكاجو طازة وحجم الكيس مظبوط مع السعر، وهطلب تاني أكيد.",
+    },
+    {
+        "name": "أحمد فتحي",
+        "date": date(2026, 1, 18),
+        "type": ReviewType.MALE,
+        "description": "بطلب من سوفكس بقالي شهور والخدمة ثابتة كل مرة. التوصيل في معاده والمكسرات دايمًا فريش، حاجة نادرة تلاقيها في مكان واحد.",
+    },
+]
+
 
 class Command(BaseCommand):
     help = "Seed the database with sample data for local development"
@@ -117,6 +153,7 @@ class Command(BaseCommand):
         product_lists = self.seed_product_lists(products)
         self.seed_sections(product_lists)
         self.seed_sell_with_us_cards()
+        self.seed_reviews()
 
     def seed_products(self):
         Product.objects.all().delete()
@@ -158,18 +195,26 @@ class Command(BaseCommand):
 
     def seed_settings(self):
         setting = Setting.objects.first()
-        offer_banner_text = "اطلب قبل 18 ديسمبر علشان توصلك الأوردرات قبل الكريسماس 🎄🎁"
-        default_shipping_fees = 50
+        settings_data = {
+            "offer_banner_text": "اطلب قبل 18 ديسمبر علشان توصلك الأوردرات قبل الكريسماس 🎄🎁",
+            "facebook_link": "https://www.facebook.com/sovx",
+            "instgram_link": "https://www.instagram.com/sovx/",
+            "email": "info@altamayuzacademy.com",
+            "whatsapp_number": "201550204045",
+            "phone_number": "201550204045",
+            "location_text": "دمياط الجديدة، محافظة دمياط، مصر",
+            "location_url": "https://maps.app.goo.gl/i4M9Uff18EWoceR68",
+            "workdays": "الأحد - الخميس",
+            "workhours": "9:00 صباحًا - 5:00 مساءً",
+            "default_shipping_fees": 50,
+        }
 
         if setting is None:
-            setting = Setting.objects.create(
-                offer_banner_text=offer_banner_text,
-                default_shipping_fees=default_shipping_fees,
-            )
+            Setting.objects.create(**settings_data)
             self.stdout.write(self.style.SUCCESS("Created site settings"))
         else:
-            setting.offer_banner_text = offer_banner_text
-            setting.default_shipping_fees = default_shipping_fees
+            for field, value in settings_data.items():
+                setattr(setting, field, value)
             setting.save()
             self.stdout.write(self.style.SUCCESS("Updated site settings"))
 
@@ -262,3 +307,11 @@ class Command(BaseCommand):
             SellWithUsCard.objects.create(order=order, **data)
 
         self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SELL_WITH_US_CARDS)} sell with us cards"))
+
+    def seed_reviews(self):
+        Review.objects.all().delete()
+
+        for order, data in enumerate(SAMPLE_REVIEWS, start=1):
+            Review.objects.create(order=order, **data)
+
+        self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_REVIEWS)} reviews"))

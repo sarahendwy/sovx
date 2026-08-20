@@ -2,15 +2,15 @@
 
 <div class="admin-orders-page  p-4">
   <div class="mb-4">
-    <h2 class="mb-1 pe-1">Manage Orders</h2>
-    <p class="text-secondary mb-0">Search and manage customer orders</p>
+    <h2 class="mb-1 pe-1">إدارة الطلبات</h2>
+    <p class="text-secondary mb-0">ابحث عن طلبات العملاء وأدرها</p>
   </div>
 
   <div class="row g-3 mb-4">
     <div class="col-12 col-sm-6 col-xl-3">
       <div class="summary-card h-100 p-3">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>Total Orders</span>
+          <span>إجمالي الطلبات</span>
           <span class="summary-dot bg-info"></span>
         </div>
 
@@ -21,7 +21,7 @@
     <div class="col-12 col-sm-6 col-xl-3">
       <div class="summary-card h-100 p-3">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>Completed</span>
+          <span>مكتملة</span>
           <span class="summary-dot bg-success"></span>
         </div>
 
@@ -32,7 +32,7 @@
     <div class="col-12 col-sm-6 col-xl-3">
       <div class="summary-card h-100 p-3">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>Pending</span>
+          <span>معلقة</span>
           <span class="summary-dot bg-warning"></span>
         </div>
 
@@ -43,7 +43,7 @@
     <div class="col-12 col-sm-6 col-xl-3">
       <div class="summary-card h-100 p-3">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>Cancelled</span>
+          <span>ملغاة</span>
           <span class="summary-dot bg-danger"></span>
         </div>
 
@@ -58,28 +58,28 @@
         href="?status=all"
         class="btn {% if not request.GET.status or request.GET.status == 'all' %}active{% endif %}"
       >
-        All
+        الكل
       </a>
 
       <a
         href="?status=completed"
         class="btn {% if request.GET.status == 'completed' %}active{% endif %}"
       >
-        Completed
+        مكتملة
       </a>
 
       <a
         href="?status=pending"
         class="btn {% if request.GET.status == 'pending' %}active{% endif %}"
       >
-        Pending
+        معلقة
       </a>
 
       <a
         href="?status=cancelled"
         class="btn {% if request.GET.status == 'cancelled' %}active{% endif %}"
       >
-        Cancelled
+        ملغاة
       </a>
     </div>
 
@@ -93,23 +93,23 @@
         name="query"
         value="{{ request.GET.query }}"
         class="form-control admin-input"
-        placeholder="Search orders..."
+        placeholder="ابحث عن طلبات..."
       />
 
-      <button class="btn dashboard-btn px-4" type="submit">Search</button>
+      <button class="btn dashboard-btn px-4" type="submit">بحث</button>
     </form>
   </div>
 
   {% if pending_orders %}
-  <h3 class="my-4">Pending Orders</h3>
+  <h3 class="my-4">الطلبات المعلقة</h3>
 
   {% include "dashboard/orders/orders_table.html" with orders=pending_orders %}
   {% endif %} {% if confirmed_orders %}
-  <h3 class="my-4">Confirmed Orders</h3>
+  <h3 class="my-4">الطلبات المؤكدة</h3>
 
   {% include "dashboard/orders/orders_table.html" with orders=confirmed_orders
   %} {% endif %} {% if in_delivery_orders %}
-  <h3 class="my-4">In Delivery Orders</h3>
+  <h3 class="my-4">طلبات قيد التوصيل</h3>
 
   {% include "dashboard/orders/orders_table.html" with orders=in_delivery_orders
   %} {% endif %}

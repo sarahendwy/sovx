@@ -1,0 +1,73 @@
+.thank-you-page {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 64px;
+}
+
+.thank-you-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: 480px;
+  text-align: center;
+  padding-inline: 24px;
+}
+
+.thank-you-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--bg-primary-section);
+  color: var(--primary);
+}
+
+.thank-you-icon svg {
+  display: block;
+  width: 44px;
+  height: 44px;
+}
+
+.thank-you-title {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-bold);
+  font-size: clamp(24px, 4vw, 32px);
+  line-height: 1.35;
+  color: var(--text-dark);
+}
+
+.thank-you-text {
+  margin: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-regular);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.thank-you-btn {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  background: var(--primary);
+  color: #fff;
+  border-radius: 2px 16px 2px 16px;
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  font-size: 15px;
+  transition: filter 0.2s ease;
+}
+
+.thank-you-btn:hover {
+  filter: brightness(0.92);
+  color: #fff;
+}
