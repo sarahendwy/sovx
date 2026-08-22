@@ -30,6 +30,14 @@ class GovernorateCityFormMixin:
         governorate_field.widget.attrs["data-governorate-select"] = ""
         city_field.widget.attrs["data-city-select"] = ""
 
+        # City.__str__ appends "(governorate)" for contexts where a city is
+        # shown on its own (e.g. ShippingFee's admin list). That's redundant
+        # here since the governorate is already its own select right next to
+        # this one - and locations.js's client-side repopulation only ever
+        # shows the plain name anyway, so this keeps server- and JS-rendered
+        # options consistent.
+        city_field.label_from_instance = lambda city: city.name_ar
+
         if self.is_bound:
             governorate_id = self.data.get(self.add_prefix("governorate"))
         else:

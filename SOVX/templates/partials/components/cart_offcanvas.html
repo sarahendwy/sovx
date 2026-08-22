@@ -144,12 +144,17 @@
         const subtotalEl = panel.querySelector('[data-cart-subtotal]');
         if (subtotalEl) subtotalEl.textContent = formatAmount(subtotal);
 
-        // No city is known yet at this point in the flow, so real per-city
-        // shipping (dashboard.models.ShippingFee) can't be resolved here -
-        // fall back to the site-wide Setting.default_shipping_fees, rendered
-        // server-side onto the shipping row's data attribute.
+        // Starts out as the site-wide Setting.default_shipping_fees,
+        // rendered server-side onto this data attribute (no address known
+        // yet). Once the order form's governorate/city changes,
+        // locations.js's updateShippingFeeDisplay() overwrites it with the
+        // real per-city rate (dashboard.models.ShippingFee) and fires
+        // `shipping:change`, which re-runs this same render().
         const shippingRow = panel.querySelector('[data-cart-shipping]');
         const shippingFee = shippingRow ? Number(shippingRow.dataset.cartShipping) || 0 : 0;
+
+        const shippingAmountEl = panel.querySelector('[data-cart-shipping-amount]');
+        if (shippingAmountEl) shippingAmountEl.textContent = formatAmount(shippingFee);
 
         const grandTotalEl = panel.querySelector('[data-cart-grand-total]');
         if (grandTotalEl) grandTotalEl.textContent = formatAmount(subtotal + shippingFee);
@@ -173,6 +178,7 @@
     });
 
     window.addEventListener('cart:change', render);
+    window.addEventListener('shipping:change', render);
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', render);

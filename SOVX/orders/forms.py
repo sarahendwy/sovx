@@ -62,6 +62,17 @@ class ContactUsForm(SellWithUsForm):
 
     
 class OrderForm(SellWithUsForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        # Marks these two selects (only, not SellWithUsForm's/ContactUsForm's
+        # own governorate+city) as the ones whose changes should refresh the
+        # cart panel's shipping-fee estimate - see locations.js's
+        # updateShippingFeeDisplay().
+        for field_name in ("governorate", "city"):
+            field = self.fields.get(field_name)
+            if field:
+                field.widget.attrs["data-updates-cart-shipping"] = ""
+
     class Meta:
         model = Order
         exclude = ["created_at", "updated_at", "status", "delivered_at", "order_total"]

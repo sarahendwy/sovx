@@ -18,6 +18,15 @@
  * options/selection from the server, so this only has to do anything once
  * the user changes the governorate - call Locations.initAll() again if you
  * inject a new form pair after page load.
+ *
+ * If that governorate select also carries `data-updates-cart-shipping` (set
+ * by orders.forms.OrderForm on the order-create page's delivery address
+ * fields - not on Sell With Us's or the dashboard's, which share the same
+ * mixin but shouldn't move the cart estimate), changing the governorate or
+ * city re-fetches the real fee and updates every
+ * `[data-cart-shipping]` element on the page (there can be more than one -
+ * see cart_offcanvas.html), then fires a `shipping:change` event on
+ * `window` so the cart panel(s) re-render their totals.
  */
 (function (window) {
   'use strict';
@@ -108,9 +117,41 @@
     citySelect.disabled = cities.length === 0;
   }
 
+  /**
+   * Refreshes every cart panel's shipping-fee estimate (see
+   * partials/components/cart_offcanvas.html) for the given
+   * governorate/city, then tells them to re-render. Each element's
+   * original (site-default) fee is remembered on first use, so an
+   * unconfigured governorate/city falls back to it instead of showing 0.
+   * No-op wherever there's no cart panel on the page.
+   */
+  function updateShippingFeeDisplay(governorateId, cityId) {
+    var elements = document.querySelectorAll('[data-cart-shipping]');
+    if (!elements.length) return;
+
+    elements.forEach(function (el) {
+      if (el.dataset.cartShippingDefault === undefined) {
+        el.dataset.cartShippingDefault = el.dataset.cartShipping;
+      }
+    });
+
+    calculateShippingFee(governorateId, cityId).then(function (fee) {
+      elements.forEach(function (el) {
+        el.dataset.cartShipping = fee !== null ? fee : el.dataset.cartShippingDefault;
+      });
+      window.dispatchEvent(new Event('shipping:change'));
+    });
+  }
+
   /** Wires one governorate select to its dependent city select. */
   function bindGovernorateCity(governorateSelect, citySelect) {
     if (!governorateSelect || !citySelect) return;
+
+    // Opt-in (set by orders.forms.OrderForm) - only the actual delivery
+    // address's selects should move the cart's shipping estimate. Other
+    // governorate/city pairs on the same page (Sell With Us, the dashboard
+    // Shipping Fees form) still get city cascading below, just not this.
+    var updatesShipping = governorateSelect.hasAttribute('data-updates-cart-shipping');
 
     governorateSelect.addEventListener('change', function () {
       // The previously selected city (if any) belongs to the old
@@ -118,12 +159,20 @@
       var governorateId = governorateSelect.value;
       if (!governorateId) {
         populateCitySelect(citySelect, [], '');
+        if (updatesShipping) updateShippingFeeDisplay(null, null);
         return;
       }
       getCities(governorateId).then(function (cities) {
         populateCitySelect(citySelect, cities, '');
       });
+      if (updatesShipping) updateShippingFeeDisplay(governorateId, null);
     });
+
+    if (updatesShipping) {
+      citySelect.addEventListener('change', function () {
+        updateShippingFeeDisplay(governorateSelect.value, citySelect.value);
+      });
+    }
   }
 
   /** Auto-wires every governorate/city select pair found in `root` (default: whole document). */
@@ -139,6 +188,7 @@
   window.Locations = {
     getCities: getCities,
     calculateShippingFee: calculateShippingFee,
+    updateShippingFeeDisplay: updateShippingFeeDisplay,
     bindGovernorateCity: bindGovernorateCity,
     initAll: initAll,
   };
