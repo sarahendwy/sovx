@@ -1,9 +1,9 @@
-.cart-offcanvas .offcanvas-body a {
+.cart-offcanvas-body  a {
   margin: 16px auto;
   width: min(250px, 100%) !important;
 }
 
-.cart-offcanvas .cart-totals .cart-total {
+.cart-offcanvas-body .cart-totals .cart-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,6 +13,14 @@
 
 .cart-offcanvas {
   --bs-offcanvas-width: min(400px, 92vw);
+}
+
+.cart-offcanvas .cart-offcanvas-body {
+  justify-content: space-between;
+}
+
+.cart-offcanvas a.btn-primary {
+  display: block !important;
 }
 
 .cart-items-list {

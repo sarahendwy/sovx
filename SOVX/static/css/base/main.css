@@ -16,3 +16,7 @@
 .split-form-container > *:last-child {
     padding: 32px 44px 32px 32px;
 }
+
+main {
+    flex-grow: 1;
+}

@@ -43,10 +43,22 @@ p {
   color: var(--text-gray) !important;
 }
 
+.text-success {
+  color: var(--text-success) !important;
+}
+
 .text-secondary {
   color: var(--text-secondary) !important;
 }
 
 .text-dark {
   color: var(--text-dark) !important;
+}
+
+.border-primary {
+  border-color: var(--border-primary) !important; 
+}
+
+.bg-success {
+  background-color: var(--bg-success) !important;
 }

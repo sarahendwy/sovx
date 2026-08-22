@@ -1,0 +1,17 @@
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %}
+<link rel="stylesheet" href="{% static 'css/components/form.css' %}" />
+<link rel="stylesheet" href="{% static 'css/pages/order.css' %}" />
+{% endblock header %} {% block pages_content %}
+<main id="order-page">
+  <div class="split-form-container d-flex">
+    <div>
+      <h3 class="body-large font-medium">حدد عنوان الاستلام</h3>
+      <p class="body-small text-secondary mb-4">اكتب عنوانك بالتفصيل علشان نضمن وصول الأوردر بسرعة وسهولة بدون أي تأخير.</p>
+      {% include "partials/components/form.html" with form_button_text="إتمام الطلب" %}
+    </div>
+    <div class="bg-secondary">
+      {% include "partials/components/cart_offcanvas.html" %}
+    </div>
+  </div>
+</main>
+{% endblock pages_content %}

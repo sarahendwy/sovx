@@ -5,6 +5,10 @@
   color: var(--bg-white);
 }
 
+.admin-layout {
+  background-color: var(--bg-dark);
+}
+
 .overview {
   padding: var(--space-6);
 }

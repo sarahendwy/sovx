@@ -39,6 +39,8 @@ FIELDS_ICONS = {
     "city": "images/icons/location.svg",
     "address": "images/icons/navigator.svg",
     "email": "images/icons/email.svg",
+    "building_number": "images/icons/building.svg",
+    "appartment_number": "images/icons/appartment.svg",
 }
 
 class SellWithUsForm(GovernorateCityFormMixin, FormControlMixin, forms.ModelForm):
@@ -59,3 +61,7 @@ class ContactUsForm(SellWithUsForm):
         exclude = ["created_at"]
 
     
+class OrderForm(SellWithUsForm):
+    class Meta:
+        model = Order
+        exclude = ["created_at", "updated_at", "status", "delivered_at", "order_total"]

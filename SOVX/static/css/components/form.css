@@ -1,3 +1,31 @@
+
+main form {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+main form > div {
+  width: 100%;
+}
+
+@media screen and (min-width: 700px) {
+  main form > div:has(select[name='governorate']),
+  main form > div:has(input[name='building_number']),
+  main form > div:has(input[name='appartment_number']),
+  main form > div:has(select[name='city'])
+  {
+    width: 49%;
+  }
+
+  main form > div:has(select[name='city']),
+  main form > div:has(input[name='appartment_number'])
+  {
+    margin-inline-start: auto;
+  }
+
+}
+
+
 .form-label {
   color: var(--text-label);
 }

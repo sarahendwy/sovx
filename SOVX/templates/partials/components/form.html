@@ -1,151 +1,205 @@
 {% load static %}
 {% if form_title %}<h2 class="admin-form-title mb-4">{{ form_title }}</h2>{% endif %}
 <form class="{{form_class}}" method="post" enctype="multipart/form-data">
-  {% csrf_token %} {% if form.non_field_errors %}
-  <div class="alert alert-danger p-3 mb-2" role="alert">
-    {{ form.non_field_errors }}
-  </div>
-  {% endif %} {% for field in form %}
-  <div class="mb-3 position-relative">
-    <label for="{{ field.auto_id }}" class="form-label"
-      >{{ field.label }}</label
-    >
+  {% csrf_token %} 
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger p-3 mb-2" role="alert">
+      {{ form.non_field_errors }}
+    </div>
+  {% endif %} 
 
-    {{ field }} {% if field.field.widget.icon %}
-    <img
-      src="{% static field.field.widget.icon %}"
-      alt="{{ field.label }} icon"
-      width="20"
-      height="20"
-      class="position-absolute field-icon"
-    />
-    {% endif %} {% for error in field.errors %}
-    <div class="form-text text-danger">{{ error }}</div>
-    {% endfor %}
-  </div>
+  {% for field in form %}
+    {% if field.name == "payment_method" %}
+      <div class="pt-4 border-top border-primary">
+        
+        <h3 class="body-large font-medium">اختار طريقة الاستلام</h3>
+        <p class="body-small text-secondary mb-3">فّر على نفسك الوقت، واختار الطريقة اللي تناسبك لاستلام أوردرِك بكل سهولة ومرونة.</p>
+        
+        <div class="d-flex gap-4 justify-content-between flex-wrap">
+          <label for="payment_method_cash" class="payment-option d-flex justify-content-between">
+            <div class="payment-option-icon">
+              <img
+                src="{% static 'images/icons/cash.svg' %}"
+                alt="cash icon"
+                width="20"
+                height="20"
+                class="field-icon"
+              />
+            </div>
+            <div class="payment-option-description">
+              <p class="body-small font-medium text-secondary title">كاش عند الاستلام<span class="bg-success text-success badge rounded-pill caption me-1">الافضل</span></p>
+              <p class="text-gray caption mt-1 description">استلم أوردرِك وادفع كاش عند وصوله لحد مكانك</p>
+            </div>
+            <div class="payment-option-choose">
+              <input type="radio" name="payment_method" value="COD" id="payment_method_cash" checked/>
+            </div>
+          </label>
+          
+          <label for="payment_method_pickup" class="payment-option d-flex justify-content-between">
+            <div class="payment-option-icon">
+              <img
+                src="{% static 'images/icons/pickup_at_store.svg' %}"
+                alt="pickup_at_store icon"
+                width="20"
+                height="20"
+                class="field-icon"
+              />
+            </div>
+            <div class="payment-option-description">
+              <p class="body-small font-medium text-secondary title">الاستلام من الفرع</p>
+              <p class="text-gray caption mt-1 description">عدّي بنفسك واستلم الأوردر في الوقت اللي يناسبك</p>
+            </div>
+            <div class="payment-option-choose">
+              <input type="radio" name="payment_method" value="Pickup" id="payment_method_pickup"/>
+            </div>
+          </label>
+        </div>
+        
+        {% for error in field.errors %}
+          <div class="form-text text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="mb-3 position-relative">
+        <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+        {{ field }} 
+        {% if field.field.widget.icon %}
+          <img
+            src="{% static field.field.widget.icon %}"
+            alt="{{ field.label }} icon"
+            width="20"
+            height="20"
+            class="position-absolute field-icon"
+          />
+        {% endif %} 
+        {% for error in field.errors %}
+          <div class="form-text text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
   {% endfor %}
 
   {% if buying_options_formset %}
-  <div class="buying-options-formset" data-formset>
-    <h5 class="mt-4 mb-2">خيارات الشراء</h5>
-    <p class="form-text">مطلوب خيار شراء واحد على الأقل.</p>
+    <div class="buying-options-formset" data-formset>
+      <h5 class="mt-4 mb-2">خيارات الشراء</h5>
+      <p class="form-text">مطلوب خيار شراء واحد على الأقل.</p>
 
-    {% if buying_options_formset.non_form_errors %}
-    <div class="alert alert-danger p-3 mb-2" role="alert">
-      {{ buying_options_formset.non_form_errors }}
-    </div>
-    {% endif %}
+      {% if buying_options_formset.non_form_errors %}
+      <div class="alert alert-danger p-3 mb-2" role="alert">
+        {{ buying_options_formset.non_form_errors }}
+      </div>
+      {% endif %}
 
-    {{ buying_options_formset.management_form }}
+      {{ buying_options_formset.management_form }}
 
-    <div data-formset-forms>
-      {% for option_form in buying_options_formset %}
-      <div class="buying-option-row border rounded p-3 mb-3" data-formset-form>
-        {% if option_form.non_field_errors %}
-        <div class="alert alert-danger p-2 mb-2">{{ option_form.non_field_errors }}</div>
-        {% endif %}
-        {{ option_form.id }}
-        <div class="row g-2">
-          {% for field in option_form.visible_fields %}
-          {% if field.name != 'DELETE' %}
-          <div class="col-md-4 col-6">
-            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
-            {{ field }}
-            {% for error in field.errors %}
-            <div class="form-text text-danger">{{ error }}</div>
+      <div data-formset-forms>
+        {% for option_form in buying_options_formset %}
+        <div class="buying-option-row border rounded p-3 mb-3" data-formset-form>
+          {% if option_form.non_field_errors %}
+          <div class="alert alert-danger p-2 mb-2">{{ option_form.non_field_errors }}</div>
+          {% endif %}
+          {{ option_form.id }}
+          <div class="row g-2">
+            {% for field in option_form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+            <div class="col-md-4 col-6">
+              <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% for error in field.errors %}
+              <div class="form-text text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
             {% endfor %}
           </div>
-          {% endif %}
-          {% endfor %}
+          <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
+          <div class="d-none">{{ option_form.DELETE }}</div>
         </div>
-        <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
-        <div class="d-none">{{ option_form.DELETE }}</div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
 
-    <template data-formset-empty-form>
-      <div class="buying-option-row border rounded p-3 mb-3" data-formset-form>
-        <div class="row g-2">
-          {% for field in buying_options_formset.empty_form.visible_fields %}
-          {% if field.name != 'DELETE' %}
-          <div class="col-md-4 col-6">
-            <label class="form-label">{{ field.label }}</label>
-            {{ field }}
+      <template data-formset-empty-form>
+        <div class="buying-option-row border rounded p-3 mb-3" data-formset-form>
+          <div class="row g-2">
+            {% for field in buying_options_formset.empty_form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+            <div class="col-md-4 col-6">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+            </div>
+            {% endif %}
+            {% endfor %}
           </div>
-          {% endif %}
-          {% endfor %}
+          <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
+          <div class="d-none">{{ buying_options_formset.empty_form.DELETE }}</div>
         </div>
-        <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
-        <div class="d-none">{{ buying_options_formset.empty_form.DELETE }}</div>
-      </div>
-    </template>
+      </template>
 
-    <button type="button" class="btn btn-outline-primary btn-sm" data-formset-add>+ إضافة خيار شراء</button>
-  </div>
-  <script src="{% static 'js/dashboard/inline-formset.js' %}"></script>
+      <button type="button" class="btn btn-outline-primary btn-sm" data-formset-add>+ إضافة خيار شراء</button>
+    </div>
+    <script src="{% static 'js/dashboard/inline-formset.js' %}"></script>
   {% endif %}
 
   
   {% if nutrition_values_formset %}
-  <div class="nutrition-values-formset" data-formset>
-    <h5 class="mt-4 mb-2">القيم الغذائية</h5>
-    <p class="form-text">مطلوبة قيمة غذائية واحدة على الأقل.</p>
+    <div class="nutrition-values-formset" data-formset>
+      <h5 class="mt-4 mb-2">القيم الغذائية</h5>
+      <p class="form-text">مطلوبة قيمة غذائية واحدة على الأقل.</p>
 
-    {% if nutrition_values_formset.non_form_errors %}
-    <div class="alert alert-danger p-3 mb-2" role="alert">
-      {{ nutrition_values_formset.non_form_errors }}
-    </div>
-    {% endif %}
+      {% if nutrition_values_formset.non_form_errors %}
+      <div class="alert alert-danger p-3 mb-2" role="alert">
+        {{ nutrition_values_formset.non_form_errors }}
+      </div>
+      {% endif %}
 
-    {{ nutrition_values_formset.management_form }}
+      {{ nutrition_values_formset.management_form }}
 
-    <div data-formset-forms>
-      {% for option_form in nutrition_values_formset %}
-      <div class="nutrition-value-row border rounded p-3 mb-3" data-formset-form>
-        {% if option_form.non_field_errors %}
-        <div class="alert alert-danger p-2 mb-2">{{ option_form.non_field_errors }}</div>
-        {% endif %}
-        {{ option_form.id }}
-        <div class="row g-2">
-          {% for field in option_form.visible_fields %}
-          {% if field.name != 'DELETE' %}
-          <div class="col-md-4 col-6">
-            <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
-            {{ field }}
-            {% for error in field.errors %}
-            <div class="form-text text-danger">{{ error }}</div>
+      <div data-formset-forms>
+        {% for option_form in nutrition_values_formset %}
+        <div class="nutrition-value-row border rounded p-3 mb-3" data-formset-form>
+          {% if option_form.non_field_errors %}
+          <div class="alert alert-danger p-2 mb-2">{{ option_form.non_field_errors }}</div>
+          {% endif %}
+          {{ option_form.id }}
+          <div class="row g-2">
+            {% for field in option_form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+            <div class="col-md-4 col-6">
+              <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
+              {{ field }}
+              {% for error in field.errors %}
+              <div class="form-text text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {% endif %}
             {% endfor %}
           </div>
-          {% endif %}
-          {% endfor %}
+          <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
+          <div class="d-none">{{ option_form.DELETE }}</div>
         </div>
-        <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
-        <div class="d-none">{{ option_form.DELETE }}</div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
 
-    <template data-formset-empty-form>
-      <div class="nutrition-value-row border rounded p-3 mb-3" data-formset-form>
-        <div class="row g-2">
-          {% for field in nutrition_values_formset.empty_form.visible_fields %}
-          {% if field.name != 'DELETE' %}
-          <div class="col-md-4 col-6">
-            <label class="form-label">{{ field.label }}</label>
-            {{ field }}
+      <template data-formset-empty-form>
+        <div class="nutrition-value-row border rounded p-3 mb-3" data-formset-form>
+          <div class="row g-2">
+            {% for field in nutrition_values_formset.empty_form.visible_fields %}
+            {% if field.name != 'DELETE' %}
+            <div class="col-md-4 col-6">
+              <label class="form-label">{{ field.label }}</label>
+              {{ field }}
+            </div>
+            {% endif %}
+            {% endfor %}
           </div>
-          {% endif %}
-          {% endfor %}
+          <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
+          <div class="d-none">{{ nutrition_values_formset.empty_form.DELETE }}</div>
         </div>
-        <button type="button" class="btn btn-outline-danger btn-sm mt-2" data-formset-remove>حذف</button>
-        <div class="d-none">{{ nutrition_values_formset.empty_form.DELETE }}</div>
-      </div>
-    </template>
+      </template>
 
-    <button type="button" class="btn btn-outline-primary btn-sm" data-formset-add>+ إضافة قيمة غذائية</button>
-  </div>
-  <script src="{% static 'js/dashboard/inline-formset.js' %}"></script>
+      <button type="button" class="btn btn-outline-primary btn-sm" data-formset-add>+ إضافة قيمة غذائية</button>
+    </div>
+    <script src="{% static 'js/dashboard/inline-formset.js' %}"></script>
   {% endif %}
 
   <div class="text-center">

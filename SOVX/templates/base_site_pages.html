@@ -2,7 +2,24 @@
 {% block content %} 
   {% include "partials/components/announcement_bar.html"%}
   {% include "partials/layout/navbar.html" %}
-  {% include "partials/components/cart_offcanvas.html" %}
+  
+  <div
+    class="offcanvas offcanvas-start cart-offcanvas"
+    tabindex="-1"
+    id="cartOffcanvas"
+    aria-labelledby="cartOffcanvasLabel"
+  >
+  <div class="offcanvas-header bg-weak flex justify-content-between align-items-center">
+    <h5 class="offcanvas-title" id="cartOffcanvasLabel">السلة</h5>
+    <button
+      type="button"
+      class="btn-close m-0"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+    {% include "partials/components/cart_offcanvas.html" %}
+  </div>
 
   {% block pages_content %}
   {% endblock pages_content %}

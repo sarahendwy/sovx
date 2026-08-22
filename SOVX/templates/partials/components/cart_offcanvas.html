@@ -1,54 +1,37 @@
-<div
-  class="offcanvas offcanvas-start cart-offcanvas"
-  tabindex="-1"
-  id="cartOffcanvas"
-  aria-labelledby="cartOffcanvasLabel"
->
-  <div class="offcanvas-header bg-weak flex justify-content-between align-items-center">
-    <h5 class="offcanvas-title" id="cartOffcanvasLabel">السلة</h5>
-    <button
-      type="button"
-      class="btn-close m-0"
-      data-bs-dismiss="offcanvas"
-      aria-label="Close"
-    ></button>
-  </div>
-  <div class="offcanvas-body p-0 d-flex flex-column justify-content-between" data-cart-panel-body>
-    <div class="cart-items-list" data-cart-items-list></div>
-    <div class="text-center">
-      <p class="text-gray bg-weak text-end body-small py-1 px-4">تفاصيل الدفع</p>
-      <div class="cart-totals py-3 px-4 text-secondary">
-        <div class="cart-total" id="cart-subtotal">
-          <span class="body-small">المجموع الفرعي</span>
-          <div>
-            <span class="text-gray amount text-dark" data-cart-subtotal>0.00</span>
-            <span class="text-gray caption">جـ . مـ</span>
-          </div>
+<div class="offcanvas-body cart-offcanvas-body p-0 d-flex flex-column" data-cart-panel-body>
+  <div class="cart-items-list flex-grow-0" data-cart-items-list></div>
+  <div class="text-center">
+    <p class="text-gray bg-weak text-end body-small py-2 px-4">تفاصيل الدفع</p>
+    <div class="cart-totals py-3 px-4 text-secondary">
+      <div class="cart-total">
+        <span class="body-small">المجموع الفرعي</span>
+        <div>
+          <span class="text-gray amount text-dark" data-cart-subtotal>0.00</span>
+          <span class="text-gray caption">جـ . مـ</span>
         </div>
-        <div class="cart-total" id="cart-shipping" data-cart-shipping="{{ site_settings.default_shipping_fees|default:0 }}">
-          <span class="body-small">رسوم التوصيل</span>
-          <div>
-            <span class="text-gray amount text-dark" data-cart-shipping-amount>{{ site_settings.default_shipping_fees|default:0|floatformat:2 }}</span>
-            <span class="text-gray caption">جـ . مـ</span>
-          </div>
-        </div>
-        <hr class="mt-0 mb-2"/>
-        <div class="cart-total" id="cart-total">
-          <span class="body-small">المجموع الكلي</span>
-          <div>
-            <span class="text-gray amount text-dark" data-cart-grand-total>0.00</span>
-            <span class="text-gray caption">جـ . مـ</span>
-          </div>
-        </div>
-
       </div>
-      <a class="btn btn-primary mt-3" href="{% url 'create_order' %}">
-        استكمال الشراء
-      </a>
+      <div class="cart-total" data-cart-shipping="{{ site_settings.default_shipping_fees|default:0 }}">
+        <span class="body-small">رسوم التوصيل</span>
+        <div>
+          <span class="text-gray amount text-dark" data-cart-shipping-amount>{{ site_settings.default_shipping_fees|default:0|floatformat:2 }}</span>
+          <span class="text-gray caption">جـ . مـ</span>
+        </div>
+      </div>
+      <hr class="mt-0 mb-2"/>
+      <div class="cart-total">
+        <span class="body-small">المجموع الكلي</span>
+        <div>
+          <span class="text-gray amount text-dark" data-cart-grand-total>0.00</span>
+          <span class="text-gray caption">جـ . مـ</span>
+        </div>
+      </div>
+
     </div>
+    <a class="btn btn-primary mt-3 d-none" href="{% url 'create_order' %}">
+      استكمال الشراء
+    </a>
   </div>
 </div>
-
 <script>
   if (!window.__cartOffcanvasInit) {
     window.__cartOffcanvasInit = true;
@@ -129,43 +112,54 @@
       return row;
     };
 
+    // The cart panel body can appear more than once on the same page -
+    // the real slide-out offcanvas (included once by base_site_pages.html)
+    // plus any page that reuses the same partial inline (e.g. the order
+    // create page's order-summary column). Every lookup below is scoped to
+    // each [data-cart-panel-body] instance rather than a single
+    // document-wide match, so all copies stay in sync.
     const render = function () {
       if (!window.Cart) return;
-      const list = document.querySelector('[data-cart-items-list]');
-      if (!list) return;
 
       const items = window.Cart.getItems();
-      list.replaceChildren();
-
-      if (items.length === 0) {
-        const empty = document.createElement('p');
-        empty.className = 'text-center text-secondary body-small py-5 mb-0';
-        empty.textContent = 'السلة فارغة';
-        list.appendChild(empty);
-      } else {
-        items.forEach(function (item) {
-          list.appendChild(createItemRow(item));
-        });
-      }
-
       const subtotal = window.Cart.getSubtotal();
-      const subtotalEl = document.querySelector('[data-cart-subtotal]');
-      const grandTotalEl = document.querySelector('[data-cart-grand-total]');
-      if (subtotalEl) subtotalEl.textContent = formatAmount(subtotal);
 
-      // No city is known yet at this point in the flow, so real per-city
-      // shipping (dashboard.models.ShippingFee) can't be resolved here —
-      // fall back to the site-wide Setting.default_shipping_fees, rendered
-      // server-side onto the shipping row's data attribute.
-      const shippingRow = document.getElementById('cart-shipping');
-      const shippingFee = shippingRow ? Number(shippingRow.dataset.cartShipping) || 0 : 0;
-      if (grandTotalEl) grandTotalEl.textContent = formatAmount(subtotal + shippingFee);
+      document.querySelectorAll('[data-cart-panel-body]').forEach(function (panel) {
+        const list = panel.querySelector('[data-cart-items-list]');
+        if (list) {
+          list.replaceChildren();
+
+          if (items.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'text-center text-secondary body-small py-5 mb-0';
+            empty.textContent = 'السلة فارغة';
+            list.appendChild(empty);
+          } else {
+            items.forEach(function (item) {
+              list.appendChild(createItemRow(item));
+            });
+          }
+        }
+
+        const subtotalEl = panel.querySelector('[data-cart-subtotal]');
+        if (subtotalEl) subtotalEl.textContent = formatAmount(subtotal);
+
+        // No city is known yet at this point in the flow, so real per-city
+        // shipping (dashboard.models.ShippingFee) can't be resolved here -
+        // fall back to the site-wide Setting.default_shipping_fees, rendered
+        // server-side onto the shipping row's data attribute.
+        const shippingRow = panel.querySelector('[data-cart-shipping]');
+        const shippingFee = shippingRow ? Number(shippingRow.dataset.cartShipping) || 0 : 0;
+
+        const grandTotalEl = panel.querySelector('[data-cart-grand-total]');
+        if (grandTotalEl) grandTotalEl.textContent = formatAmount(subtotal + shippingFee);
+      });
     };
 
     document.addEventListener('click', function (e) {
       if (!window.Cart) return;
-      const list = document.querySelector('[data-cart-items-list]');
-      if (!list || !list.contains(e.target)) return;
+      const list = e.target.closest('[data-cart-items-list]');
+      if (!list) return;
 
       const row = e.target.closest('[data-item-id]');
       if (!row) return;

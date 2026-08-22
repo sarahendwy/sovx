@@ -1,53 +1,16 @@
-from collections import defaultdict
 from typing import Any
-from django.shortcuts import redirect, render
-from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from .models import Order, OrderEntry, OrderLog
 from products.models import Product
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, TemplateView
 from .forms import OrderForm, SellWithUsForm, ContactUsForm
-from dashboard.models import Setting
-
-def order_success(request, order_id):
-    return render(request, 'orders/order_success.html', context={'order_id': order_id})
 
 class CreateOrder(CreateView):
-    template_name = 'orders/create_order.html'
+    template_name = 'orders/create.html'
     form_class = OrderForm
-    success_url = "/orders/success"
+    success_url = reverse_lazy('thank_you')
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-
-        if self.request.user.is_authenticated:
-            cart = self.request.user.cart or ""
-        else:
-            cart = self.request.session.get('cart') or ""
-
-        cart = cart.strip("-")
-        if cart:
-            cart_set = set(cart.split("-"))
-            cart_products = []
-            for pr in cart_set:
-                if pr:  # Skip empty strings
-                    try:
-                        product_id = int(pr.split("#")[0])
-                        cart_products.append(product_id)
-                    except (ValueError, IndexError):
-                        continue
-            products = Product.objects.filter(id__in=cart_products)
-            stocks = {product.id: product.stock for product in products}
-        else:
-            products = Product.objects.none()
-            stocks = {}
-
-        setting = Setting.objects.first()
-
-        context['products'] = products
-        context['stocks'] = stocks
-        return context
-    
     def form_valid(self, form):
         user = self.request.user
         
@@ -210,12 +173,6 @@ class ContactUs(CreateView):
     template_name = 'contact_us.html'
     form_class = ContactUsForm
     success_url = reverse_lazy('thank_you')
-
-
-class OrderDetails(DetailView):
-    model = Order
-    template_name = 'orders/order_details.html'
-
 
 class ThankYou(TemplateView):
     template_name = 'orders/thank_you.html'

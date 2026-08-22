@@ -13,12 +13,15 @@
   --bg-dark: #0d0f12;
   --bg-dark-secondary: #14161c;
   --border-dark: #24272f;
+  --bg-red: #D80E0E;
+  --bg-success: #A1DAA7;
   
   /* Text colors */
   --text-dark: #18221d;
   --text-secondary: #6a716c;
   --text-gray: #9ba19d;
   --text-label: #0a0d14;
+  --text-success: #2C7A34;
 
   /*placeholder colors*/
   --placeholder-color: #868c98;

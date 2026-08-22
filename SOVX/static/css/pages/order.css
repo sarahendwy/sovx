@@ -1,0 +1,84 @@
+#order-page .split-form-container > div:first-child {
+    width: clamp(min(100vw, 450px), 50%, 1200px);
+    flex-grow: 1;
+}
+
+#order-page .split-form-container > div:last-child {
+    width: clamp(100px, 50%, 500px);
+    flex-grow: 1;
+}
+
+.payment-option {
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--border-primary);
+    width: clamp(300px, 48%, 600px);
+}
+
+.payment-option:has(input:checked) {
+    border-color: var(--bg-red);
+}
+
+.payment-option:has(input:checked) .title {
+    color: var(--text-dark) !important;
+}
+
+.payment-option:has(input:checked) .description {
+    color: var(--text-secondary) !important;
+}
+
+.payment-option .payment-option-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--border-primary);
+    border-radius: 50%;
+}
+
+.payment-option .payment-option-description {
+    margin-inline: 14px;
+}
+
+.payment-option .payment-option-description .badge {
+    padding: 2px 8px;    
+}
+
+.payment-option-choose input[type="radio"] {
+  /* Remove default browser styling */
+  appearance: none;
+  -webkit-appearance: none;
+  
+  /* Create the outer dimensions */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  
+  /* Default unselected state (e.g., a simple gray outline) */
+  border: 4px solid #CED2D0;
+  background-color: #fff;
+  padding: 0;
+}
+
+.payment-option-choose input[type="radio"]:checked {
+  border: 4px solid var(--bg-red); 
+  background-color: #ffffff; 
+}
+
+@media screen and (max-width: 1320px) {
+    .payment-option {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    #order-page .split-form-container {
+        flex-direction: column-reverse;
+    }
+
+    #order-page .split-form-container > div:last-child {
+        width: 100%;
+    }
+}

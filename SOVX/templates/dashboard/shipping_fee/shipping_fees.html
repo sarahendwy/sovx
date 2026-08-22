@@ -33,8 +33,7 @@
           <td>{{ forloop.counter }}</td>
           <td>{{ shipping_fee.governorate.name_ar }}</td>
           <td>
-            {{ shipping_fee.city.name_ar|default:"كل المدن (على مستوى المحافظة)"
-            }}
+            {{ shipping_fee.city.name_ar|default:"كل المدن (على مستوى المحافظة)"}}
           </td>
           <td>EGP {{ shipping_fee.cost }}</td>
 

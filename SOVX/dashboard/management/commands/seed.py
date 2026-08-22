@@ -3,6 +3,7 @@ from datetime import date
 
 from django.conf import settings
 from django.core.files import File
+from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
 from products.models import Product, ProductBuyingOption, NutritionalValue
@@ -148,6 +149,7 @@ class Command(BaseCommand):
     help = "Seed the database with sample data for local development"
 
     def handle(self, *args, **options):
+        call_command("load_locations")
         self.seed_settings()
         products = self.seed_products()
         product_lists = self.seed_product_lists(products)
