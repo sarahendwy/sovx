@@ -2,7 +2,7 @@ from typing import Any
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from .models import Order, OrderEntry, OrderLog
-from products.models import Product
+from products.models import ProductBuyingOption
 from django.views.generic import CreateView, TemplateView
 from .forms import OrderForm, SellWithUsForm, ContactUsForm
 
@@ -12,150 +12,74 @@ class CreateOrder(CreateView):
     success_url = reverse_lazy('thank_you')
 
     def form_valid(self, form):
-        user = self.request.user
-        
-        # Check for undelivered orders limit (max 2)
-        # Undelivered orders are those not "Delivered" or "Cancelled"
-        undelivered_statuses = ['Pending Confirmation', 'Confirmed', 'In Delivery']
-        
-        if user.is_authenticated:
-            # Check by authenticated user
-            undelivered_count = Order.objects.filter(
-                user=user,
-                status__in=undelivered_statuses
-            ).count()
-        else:
-            # Check by phone number for non-authenticated users
-            phone = form.cleaned_data.get('phone') or form.data.get('phone')
-            if phone:
-                undelivered_count = Order.objects.filter(
-                    phone=phone,
-                    status__in=undelivered_statuses
-                ).count()
-            else:
-                undelivered_count = 0
-        
-        if undelivered_count >= 2:
-            form.add_error(
-                None, 
-                "You cannot have more than 2 undelivered orders at the same time. Please wait for your existing orders to be delivered before placing a new order."
-            )
-            return self.form_invalid(form)
-        
-        if user.is_authenticated:
-            form.instance.user = user
-        form.instance.status = "Pending Confirmation"
-        form.instance.payment_account = form.data.get("payment_account")
+        cart_items = form.cleaned_data.get('user_cart') or []
 
-        payment_proof = form.files.get('payment_proof')
-        if payment_proof:
-            form.instance.payment_proof = payment_proof
-
-        # Get cart items
-        if self.request.user.is_authenticated:
-            cart = self.request.user.cart or ""
-        else:
-            cart = self.request.session.get('cart') or ""
-
-        cart = cart.strip("-")
-        if cart:
-            cart_set = set(cart.split("-"))
-            for pr in cart_set:
-                if pr:  # Skip empty strings
-                    try:
-                        product_id = int(pr.split("#")[0])
-                    except (ValueError, IndexError):
-                        continue
-
-        # Collect all quantity fields and validate
-        order_items = []
+        order_entries = []
         errors = []
-        
-        for field_name in form.data:
-            if not field_name.startswith("quantity"):
+
+        for raw_item in cart_items:
+            try:
+                option_id = int(raw_item.get('id'))
+                quantity = int(raw_item.get('quantity'))
+            except (TypeError, ValueError, AttributeError):
                 continue
 
-            try:
-                quantity = int(form.data[field_name])
-            except (ValueError, TypeError):
-                continue
-            
-            # Skip items with zero quantity
             if quantity <= 0:
                 continue
-            
-            product_id = int(field_name.split("-")[-1])
+
             try:
-                product = Product.objects.get(id=product_id)
-            except Product.DoesNotExist:
-                errors.append(f"Product with ID {product_id} not found.")
+                option = ProductBuyingOption.objects.select_related('product').get(id=option_id)
+            except ProductBuyingOption.DoesNotExist:
+                errors.append("أحد المنتجات في سلتك لم يعد متاحًا.")
                 continue
-            
-            # Validate stock availability
-            if product.stock == 0:
-                errors.append(f"'{product.title}' is out of stock.")
+
+            # Stock is re-checked here against the DB, not trusted from the
+            # client - the cart's snapshot can be stale by submit time.
+            if option.stock <= 0:
+                errors.append(f"'{option.product.title} - {option.name}' غير متوفر حاليًا.")
                 continue
-            
-            if quantity > product.stock:
-                errors.append(f"Requested quantity for '{product.title}' ({quantity}) exceeds available stock ({product.stock}).")
+
+            if quantity > option.stock:
+                errors.append(
+                    f"الكمية المطلوبة من '{option.product.title} - {option.name}' "
+                    f"({quantity}) أكبر من المتاح ({option.stock})."
+                )
                 continue
-            
-            order_items.append({
-                'product': product,
-                'quantity': quantity
-            })
-        
-        # Check if order has any items
-        if not order_items:
-            errors.append("Your order must contain at least one item.")
-        
-        # If there are errors, return form invalid with error messages
+
+            order_entries.append({'option': option, 'quantity': quantity})
+
+        if not order_entries:
+            errors.append("سلتك فارغة. من فضلك أضف منتجات قبل إرسال الطلب.")
+
         if errors:
             for error in errors:
                 form.add_error(None, error)
             return self.form_invalid(form)
-        
-        # All validations passed, create the order
+
+        # All validations passed - create the order and its entries.
         order = form.save()
-        order.payment_method = form.data.get("payment_method")
-        order.order_total = order.shipping_fees
-        
-        # Clear cart
-        if self.request.user.is_authenticated:
-            self.request.user.cart = ""
-            self.request.user.save()
-        else:
-            self.request.session['cart'] = ""
-        
-        # Create order entries and update stock
-        for item in order_items:
-            product = item['product']
-            quantity = item['quantity']
-            variant = item['variant']
-            
-            # Update product stock
-            product.stock -= quantity
-            product.save()
-            
-            # Create order entry
+
+        order_total = 0
+        for entry_data in order_entries:
+            option = entry_data['option']
+            quantity = entry_data['quantity']
+
+            option.stock -= quantity
+            option.save()
+
             entry = OrderEntry.objects.create(
                 order=order,
-                product=product,
+                product_option=option,
                 quantity=quantity,
-                variant=variant,
-                price=product.price * quantity
+                price=option.price * quantity,
             )
-            order.order_total += entry.price
-        
-        if order.payment_method == "Cash on Delivery":
-            order.status = "Confirmed"
+            order_total += entry.price
 
-        OrderLog.objects.create(
-            order=order,
-            content="Order Created"
-        )
-
+        order.order_total = order_total + order.shipping_fees
         order.save()
+
+        OrderLog.objects.create(order=order, content="Order Created")
+
         return redirect('thank_you')
 
 

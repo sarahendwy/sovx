@@ -5,10 +5,8 @@ urlpatterns = [
     path('', DashboardView.as_view(), name='admin_dashboard'),
     
     path('orders/', OrdersView.as_view(), name='admin_orders'),
-    path('orders/<order_id>/confirm', confirm_order, name='confirm_order'),
-    path('orders/<order_id>/reject', reject_order, name='cancel_order'),
-    path('orders/<order_id>/deliver', deliver_order, name='deliver_order'),
-    path('orders/<order_id>/complete', complete_order, name='complete_order'),
+    path('orders/<order_id>/', OrderDetailsView.as_view(), name='order_details'),
+    path('orders/<order_id>/status', change_order_status, name='change_order_status'),
 
     path('contact-requests/', ContactUsRequestsView.as_view(), name='admin_contact_requests'),
     path('sell-with-us-requests/', SellWithUsRequestsView.as_view(), name='admin_sell_with_us_requests'),

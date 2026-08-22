@@ -55,6 +55,16 @@
     </div>
   </div>
 
+  <h3 class="mb-3">حالة الطلبات الآن</h3>
+  <div class="stats">
+    {% for value, label, count in status_counts %}
+    <div class="stat-card">
+      <span class="stat-title">{{ label }}</span>
+      <p class="stat-value heading-3">{{ count }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
   <section class="orders">
     <div class="orders-header">
       <h3>آخر الطلبات المكتملة</h3>

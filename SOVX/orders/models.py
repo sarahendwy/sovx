@@ -10,12 +10,69 @@ orders_states = [
     ('Ready', 'جاهز'),
     ('In Delivery', 'قيد التوصيل'),
     ('Completed', 'مكتمل'),
+    ('Returned', 'مرتجع'),
 ]
 
 payment_methods = [
     ('COD', 'كاش عند الاستلام'),
-    ('Pickup', 'محفظة الإستلام من الفرع')
+    ('Pickup', 'الإستلام من الفرع')
 ]
+
+# Short, URL-friendly slugs for ?status=<slug> filtering (see dashboard's
+# OrdersView) - stored status values have spaces/mixed case, not fit for a
+# query string.
+ORDER_STATUS_SLUGS = {
+    "pending": "Pending Confirmation",
+    "preparing": "Preparing",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "ready": "Ready",
+    "delivery": "In Delivery",
+    "completed": "Completed",
+    "returned": "Returned",
+}
+ORDER_STATUS_VALUE_TO_SLUG = {value: slug for slug, value in ORDER_STATUS_SLUGS.items()}
+
+# The order status workflow (see dashboard's change_order_status view):
+#
+#   Pending Confirmation -> Rejected, Cancelled, Preparing
+#   Preparing            -> Cancelled, Rejected, Ready
+#   Cancelled            -> Pending Confirmation
+#   Rejected             -> Pending Confirmation
+#   Ready                -> In Delivery (if COD) / Completed (if Pickup),
+#                            Cancelled, Rejected, Returned
+#   In Delivery          -> Completed, Cancelled, Returned, Rejected
+#   Completed, Returned  -> (terminal, no further transitions)
+ORDER_STATUS_TRANSITIONS = {
+    "Pending Confirmation": ["Rejected", "Cancelled", "Preparing"],
+    "Preparing": ["Cancelled", "Rejected", "Ready"],
+    "Cancelled": ["Pending Confirmation"],
+    "Rejected": ["Pending Confirmation"],
+    "In Delivery": ["Completed", "Cancelled", "Returned", "Rejected"],
+    "Completed": [],
+    "Returned": [],
+}
+
+# Landing on one of these releases the order's reserved stock back to each
+# line's ProductBuyingOption; leaving one of these (only possible by
+# returning to "Pending Confirmation") re-reserves it. See
+# dashboard.views.change_order_status.
+ORDER_STOCK_RELEASING_STATUSES = {"Cancelled", "Rejected", "Returned"}
+
+# Action-phrased button labels for status-change buttons (orders list +
+# order details pages) - keyed by target status, since the action reads the
+# same regardless of which status it's coming from. Falls back to the plain
+# status label (orders_states) for anything not listed here.
+ORDER_STATUS_ACTION_LABELS = {
+    "Pending Confirmation": "إعادة تفعيل الطلب",
+    "Preparing": "بدء التجهيز",
+    "Ready": "الطلب جاهز",
+    "In Delivery": "بدء التوصيل",
+    "Completed": "تأكيد التسليم",
+    "Cancelled": "إلغاء الطلب",
+    "Rejected": "رفض الطلب",
+    "Returned": "تسجيل كمرتجع",
+}
 
 class Order(models.Model):
     name = models.CharField(max_length=255, verbose_name="الإسم", help_text="اكتب اسمك")
@@ -39,6 +96,22 @@ class Order(models.Model):
     @property
     def shipping_fees(self):
         return ShippingFee.get_fee(self.governorate_id, self.city_id) or 0
+
+    def get_available_status_transitions(self):
+        """(value, action_label) pairs for the statuses this order can move
+        to next from its current status - see ORDER_STATUS_TRANSITIONS
+        above. "Ready" branches on payment_method: COD orders go out for
+        delivery, Pickup orders are handed over directly. Labels are
+        action-phrased ("بدء التجهيز") rather than the plain status name, for
+        use directly as button text."""
+        if self.status == "Ready":
+            next_values = ["In Delivery" if self.payment_method == "COD" else "Completed"]
+            next_values += ["Cancelled", "Rejected", "Returned"]
+        else:
+            next_values = ORDER_STATUS_TRANSITIONS.get(self.status, [])
+
+        status_labels = dict(orders_states)
+        return [(value, ORDER_STATUS_ACTION_LABELS.get(value, status_labels.get(value, value))) for value in next_values]
 
     def __str__(self):
         return f"Order id: {self.id} - {self.name} - {self.order_total}"

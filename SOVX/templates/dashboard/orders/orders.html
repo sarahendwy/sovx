@@ -6,81 +6,16 @@
     <p class="text-secondary mb-0">ابحث عن طلبات العملاء وأدرها</p>
   </div>
 
-  <div class="row g-3 mb-4">
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="summary-card h-100 p-3">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>إجمالي الطلبات</span>
-          <span class="summary-dot bg-info"></span>
-        </div>
-
-        <h2 class="mb-0 text-info">{{ total_orders }}</h2>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="summary-card h-100 p-3">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>مكتملة</span>
-          <span class="summary-dot bg-success"></span>
-        </div>
-
-        <h2 class="mb-0 text-success">{{ completed_orders_count }}</h2>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="summary-card h-100 p-3">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>معلقة</span>
-          <span class="summary-dot bg-warning"></span>
-        </div>
-
-        <h2 class="mb-0 text-warning">{{ pending_orders_count }}</h2>
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-6 col-xl-3">
-      <div class="summary-card h-100 p-3">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <span>ملغاة</span>
-          <span class="summary-dot bg-danger"></span>
-        </div>
-
-        <h2 class="mb-0 text-danger">{{ cancelled_orders_count }}</h2>
-      </div>
-    </div>
-  </div>
-
   <div class="mb-4">
     <div class="d-flex flex-wrap gap-2 mb-3 status-filter">
+      {% for slug, label, count in status_filters %}
       <a
-        href="?status=all"
-        class="btn {% if not request.GET.status or request.GET.status == 'all' %}active{% endif %}"
+        href="?status={{ slug }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}"
+        class="btn {% if current_status == slug %}active{% endif %}"
       >
-        الكل
+        {{ label }} ({{ count }})
       </a>
-
-      <a
-        href="?status=completed"
-        class="btn {% if request.GET.status == 'completed' %}active{% endif %}"
-      >
-        مكتملة
-      </a>
-
-      <a
-        href="?status=pending"
-        class="btn {% if request.GET.status == 'pending' %}active{% endif %}"
-      >
-        معلقة
-      </a>
-
-      <a
-        href="?status=cancelled"
-        class="btn {% if request.GET.status == 'cancelled' %}active{% endif %}"
-      >
-        ملغاة
-      </a>
+      {% endfor %}
     </div>
 
     <form method="get" class="input-group  w-100">
@@ -100,19 +35,9 @@
     </form>
   </div>
 
-  {% if pending_orders %}
-  <h3 class="my-4">الطلبات المعلقة</h3>
+  {% include "dashboard/orders/orders_table.html" with orders=orders %}
 
-  {% include "dashboard/orders/orders_table.html" with orders=pending_orders %}
-  {% endif %} {% if confirmed_orders %}
-  <h3 class="my-4">الطلبات المؤكدة</h3>
-
-  {% include "dashboard/orders/orders_table.html" with orders=confirmed_orders
-  %} {% endif %} {% if in_delivery_orders %}
-  <h3 class="my-4">طلبات قيد التوصيل</h3>
-
-  {% include "dashboard/orders/orders_table.html" with orders=in_delivery_orders
-  %} {% endif %}
+  <div class="mt-4">{% include 'partials/layout/paginator.html' %}</div>
 </div>
 
 {% endblock admin_content %}

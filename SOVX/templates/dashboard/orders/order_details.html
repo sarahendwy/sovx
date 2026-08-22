@@ -1,0 +1,155 @@
+{% extends 'dashboard.html' %} {% load static %} {% block admin_content %}
+
+<div class="admin-orders-page p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1">تفاصيل الطلب #{{ order.id }}</h2>
+      <p class="text-secondary mb-0">{{ order.created_at|date:"Y-m-d H:i" }}</p>
+    </div>
+
+    <a class="btn btn-sm admin-action-btn" href="{% url 'admin_orders' %}">
+      رجوع لكل الطلبات
+    </a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-lg-6">
+      <div class="summary-card h-100 p-3">
+        <h3 class="body-large font-medium mb-3">بيانات العميل</h3>
+
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">الاسم</span>
+          <span>{{ order.name }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">رقم الهاتف</span>
+          <span>{{ order.phone }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">المحافظة</span>
+          <span>{{ order.governorate.name_ar|default:"—" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">المدينة</span>
+          <span>{{ order.city.name_ar|default:"—" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">العنوان</span>
+          <span>{{ order.address }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">رقم العمارة</span>
+          <span>{{ order.building_number|default:"—" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2">
+          <span class="text-secondary">رقم الشقة</span>
+          <span>{{ order.appartment_number|default:"—" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="summary-card h-100 p-3">
+        <h3 class="body-large font-medium mb-3">بيانات الطلب</h3>
+
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">الحالة</span>
+          <span>{{ order.get_status_display }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">طريقة الدفع</span>
+          <span>{{ order.get_payment_method_display }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">تاريخ الإنشاء</span>
+          <span>{{ order.created_at|date:"Y-m-d H:i" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">آخر تحديث</span>
+          <span>{{ order.updated_at|date:"Y-m-d H:i" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">تاريخ التسليم</span>
+          <span>{{ order.delivered_at|date:"Y-m-d H:i"|default:"—" }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2 border-bottom border-dark">
+          <span class="text-secondary">رسوم الشحن</span>
+          <span>EGP {{ order.shipping_fees }}</span>
+        </div>
+        <div class="d-flex justify-content-between py-2">
+          <span class="text-secondary">إجمالي الطلب</span>
+          <span class="font-medium">EGP {{ order.order_total }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% with transitions=order.get_available_status_transitions %}
+  {% if transitions %}
+  <div class="summary-card p-3 mb-4">
+    <h3 class="body-large font-medium mb-3">تغيير حالة الطلب</h3>
+    {% include "dashboard/orders/status_actions.html" with order=order next=request.get_full_path %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <h3 class="body-large font-medium mb-3">المنتجات</h3>
+  <div class="admin-table-wrapper table-responsive mb-4">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>المنتج</th>
+          <th>الخيار</th>
+          <th>الكمية</th>
+          <th>سعر الوحدة</th>
+          <th>الإجمالي</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for entry in order.entries.all %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ entry.product_option.product.title }}</td>
+          <td>{{ entry.product_option.name }} ({{ entry.product_option.amount }} {{ entry.product_option.unit_label }})</td>
+          <td>{{ entry.quantity }}</td>
+          <td>EGP {{ entry.product_option.price }}</td>
+          <td>EGP {{ entry.price }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center py-4 text-secondary">لا توجد منتجات في هذا الطلب.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if order.logs.all %}
+  <h3 class="body-large font-medium mb-3">سجل الطلب</h3>
+  <div class="admin-table-wrapper table-responsive">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>الحدث</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for log in order.logs.all %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ log.content }}</td>
+          <td>{{ log.created_at|date:"Y-m-d H:i" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock admin_content %}

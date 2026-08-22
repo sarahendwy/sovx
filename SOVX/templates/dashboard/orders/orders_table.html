@@ -1,71 +1,37 @@
 <!-- Orders Table -->
-<div class="overflow-x-scroll">
-    <table class="table table-striped">
-      <thead class="thead-dark">
+<div class="admin-table-wrapper table-responsive">
+    <table class="table admin-table align-middle mb-0">
+      <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">رقم الطلب</th>
-          <th scope="col">العميل</th>
-          <th scope="col">السعر</th>
-          <th scope="col">الحالة</th>
-          <th scope="col">تاريخ الإنشاء</th>
-          <th scope="col">الإجراءات</th>
-          <th scope="col"></th>
+          <th>#</th>
+          <th>رقم الطلب</th>
+          <th>العميل</th>
+          <th>السعر</th>
+          <th>الحالة</th>
+          <th>تاريخ الإنشاء</th>
+          <th>الإجراءات</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {% for order in orders %}
         <tr>
-          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ forloop.counter }}</td>
           <td>{{ order.name }}</td>
           <td>{{ order.id }}</td>
           <td>{{ order.order_total }}</td>
           <td>{{ order.get_status_display }}</td>
           <td>{{ order.created_at|date }}</td>
           <td>
-            {% if order.status == "Pending Confirmation" %}
-            <a
-              href="{% url 'confirm_order' order.id %}"
-              class="btn btn-sm btn-primary">
-              تأكيد الدفع
-            </a>
-            <a
-              href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary">
-              إلغاء الطلب
-            </a>
-            {% elif order.status == "Confirmed" %}
-            <a
-              href="{% url 'deliver_order' order.id %}"
-              class="btn btn-sm btn-primary">
-              بدء التوصيل
-            </a>
-            <a
-              href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary">
-              إلغاء الطلب
-            </a>
-            {% elif order.status == "In Delivery" %}
-            <a
-              href="{% url 'complete_order' order.id %}"
-              class="btn btn-sm btn-primary">
-              تم التوصيل
-            </a>
-            <a
-              href="{% url 'cancel_order' order.id %}"
-              class="btn btn-sm btn-outline-primary">
-              إلغاء الطلب
-            </a>
-            {% endif %}
+            {% include "dashboard/orders/status_actions.html" with order=order next=request.get_full_path %}
           </td>
-          <td class="text-center"><a href="{% url 'order_details' order.id %}">عرض التفاصيل</a></td>
-
+          <td class="text-center"><a class="text-light" href="{% url 'order_details' order.id %}">عرض التفاصيل</a></td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="7" class="text-center">لا توجد طلبات.</td>
+          <td colspan="8" class="text-center py-4 text-secondary">لا توجد طلبات.</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
-    </div>
+</div>

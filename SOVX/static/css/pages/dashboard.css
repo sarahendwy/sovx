@@ -225,6 +225,33 @@
   color: var(--bg-white);
 }
 
+.admin-orders-page .pagination .page-link,
+.admin-products-page .pagination .page-link {
+  background: var(--bg-dark-secondary);
+  border: 1px solid var(--border-dark);
+  color: var(--text-gray);
+  padding: 8px 16px;
+}
+
+.admin-orders-page .pagination .page-link:hover,
+.admin-products-page .pagination .page-link:hover {
+  background: var(--bg-dark-secondary);
+  border-color: var(--primary);
+  color: var(--bg-white);
+}
+
+.admin-orders-page .pagination .page-link:focus,
+.admin-products-page .pagination .page-link:focus {
+  box-shadow: none;
+}
+
+.admin-orders-page .pagination .page-item.disabled .page-link,
+.admin-products-page .pagination .page-item.disabled .page-link {
+  background: var(--bg-dark-secondary);
+  border-color: var(--border-dark);
+  color: var(--border-dark);
+}
+
 
 @media screen and (max-width: 1200px) {
   .dashboard-stats {

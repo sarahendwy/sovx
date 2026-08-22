@@ -1,3 +1,4 @@
+import json
 from typing import Any
 from .models import Order, SellWithUsRequest, ContactUsRequest
 from django import forms
@@ -62,6 +63,12 @@ class ContactUsForm(SellWithUsForm):
 
     
 class OrderForm(SellWithUsForm):
+    # Not a model field - holds a JSON snapshot of the client-side cart
+    # (window.Cart.getItems(), see static/js/cart.js), kept in sync by the
+    # inline script in orders/create.html and read in CreateOrder.form_valid
+    # to build the order's OrderEntry rows.
+    user_cart = forms.CharField(widget=forms.HiddenInput(), required=True)
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         # Marks these two selects (only, not SellWithUsForm's/ContactUsForm's
@@ -72,6 +79,16 @@ class OrderForm(SellWithUsForm):
             field = self.fields.get(field_name)
             if field:
                 field.widget.attrs["data-updates-cart-shipping"] = ""
+
+    def clean_user_cart(self):
+        raw = self.cleaned_data.get("user_cart", "")
+        try:
+            items = json.loads(raw)
+        except (TypeError, ValueError):
+            raise forms.ValidationError("سلة المشتريات غير صالحة.")
+        if not isinstance(items, list) or not items:
+            raise forms.ValidationError("سلتك فارغة. من فضلك أضف منتجات قبل إرسال الطلب.")
+        return items
 
     class Meta:
         model = Order

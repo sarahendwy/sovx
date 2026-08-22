@@ -14,4 +14,26 @@
     </div>
   </div>
 </main>
+<script>
+  (function () {
+    var hiddenField = document.getElementById('id_user_cart');
+    if (!hiddenField || !window.Cart) return;
+
+    // Keeps the hidden `user_cart` field (see orders.forms.OrderForm) in
+    // sync with the client-side cart at all times - the user can still
+    // change quantities (or the cart panel reused inline on this page)
+    // while filling in the rest of the form. `cart:change` covers every
+    // edit as it happens; the submit listener is just a safety net in
+    // case a change ever slips in without firing that event.
+    var syncCartField = function () {
+      hiddenField.value = JSON.stringify(window.Cart.getItems());
+    };
+
+    syncCartField();
+    window.addEventListener('cart:change', syncCartField);
+
+    var form = hiddenField.closest('form');
+    if (form) form.addEventListener('submit', syncCartField);
+  })();
+</script>
 {% endblock pages_content %}

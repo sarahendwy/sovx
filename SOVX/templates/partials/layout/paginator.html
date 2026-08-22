@@ -1,3 +1,4 @@
+{% if page_obj.paginator.num_pages > 1 %}
 <nav aria-label="التنقل بين الصفحات" dir="rtl">
     <ul class="pagination justify-content-center mt-5">
         {% if page_obj.has_previous %}
@@ -21,3 +22,4 @@
 
     </ul>
 </nav>
+{% endif %}

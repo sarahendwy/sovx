@@ -59,10 +59,15 @@
           <div class="form-text text-danger">{{ error }}</div>
         {% endfor %}
       </div>
+    {% elif field.is_hidden %}
+      {{ field }}
+      {% for error in field.errors %}
+        <div class="form-text text-danger">{{ error }}</div>
+      {% endfor %}
     {% else %}
       <div class="mb-3 position-relative">
         <label for="{{ field.auto_id }}" class="form-label">{{ field.label }}</label>
-        {{ field }} 
+        {{ field }}
         {% if field.field.widget.icon %}
           <img
             src="{% static field.field.widget.icon %}"

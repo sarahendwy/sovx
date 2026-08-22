@@ -1,13 +1,15 @@
-from datetime import datetime, timezone
 from typing import Any
 from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, DeleteView, UpdateView
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.utils import timezone as django_timezone
-from django.db.models import Sum
+from django.db.models import Sum, Count
 
-from orders.models import Order, OrderEntry, ContactUsRequest, SellWithUsRequest
+from orders.models import (
+    Order, OrderEntry, OrderLog, ContactUsRequest, SellWithUsRequest,
+    orders_states, ORDER_STATUS_SLUGS, ORDER_STATUS_VALUE_TO_SLUG, ORDER_STOCK_RELEASING_STATUSES,
+)
 from .forms import (
     ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
     ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet
@@ -29,73 +31,84 @@ class DashboardView(TemplateView):
         # Calculate statistics for MONTH
         month_orders_created = Order.objects.filter(created_at__gte=month_start).count()
         month_orders_completed = Order.objects.filter(
-            status='Delivered',
+            status='Completed',
             delivered_at__gte=month_start
         ).count()
         month_order_value = Order.objects.filter(created_at__gte=month_start).aggregate(
             total=Sum('order_total')
         )['total'] or 0
         month_items_sold = OrderEntry.objects.filter(
-            order__status='Delivered',
+            order__status='Completed',
             order__delivered_at__gte=month_start
         ).aggregate(total=Sum('quantity'))['total'] or 0
-        
+
         # Calculate statistics for YEAR
         year_orders_created = Order.objects.filter(created_at__gte=year_start).count()
         year_orders_completed = Order.objects.filter(
-            status='Delivered',
+            status='Completed',
             delivered_at__gte=year_start
         ).count()
         year_order_value = Order.objects.filter(created_at__gte=year_start).aggregate(
             total=Sum('order_total')
         )['total'] or 0
         year_items_sold = OrderEntry.objects.filter(
-            order__status='Delivered',
+            order__status='Completed',
             order__delivered_at__gte=year_start
         ).aggregate(total=Sum('quantity'))['total'] or 0
-        
+
         # Calculate statistics for ALL TIME
         all_time_orders_created = Order.objects.count()
-        all_time_orders_completed = Order.objects.filter(status='Delivered').count()
+        all_time_orders_completed = Order.objects.filter(status='Completed').count()
         all_time_order_value = Order.objects.aggregate(
             total=Sum('order_total')
         )['total'] or 0
         all_time_items_sold = OrderEntry.objects.filter(
-            order__status='Delivered'
+            order__status='Completed'
         ).aggregate(total=Sum('quantity'))['total'] or 0
-        
+
         # Pending orders (same for all periods)
         pending_orders = Order.objects.filter(status='Pending Confirmation').count()
-        
+
         # Get latest completed orders (limit to 10)
         latest_completed_orders = Order.objects.filter(
-            status='Delivered'
+            status='Completed'
         ).order_by('-delivered_at')[:10]
-        
+
+        # Order counts by every status, for the "other states" stat cards -
+        # (value, label, count) so the template can loop over it directly.
+        counts_by_status = {
+            row['status']: row['count']
+            for row in Order.objects.values('status').annotate(count=Count('id'))
+        }
+        status_counts = [
+            (value, label, counts_by_status.get(value, 0)) for value, label in orders_states
+        ]
+
         context.update({
             # Month statistics
             'month_orders_created': month_orders_created,
             'month_orders_completed': month_orders_completed,
             'month_order_value': month_order_value,
             'month_items_sold': month_items_sold,
-            
+
             # Year statistics
             'year_orders_created': year_orders_created,
             'year_orders_completed': year_orders_completed,
             'year_order_value': year_order_value,
             'year_items_sold': year_items_sold,
-            
+
             # All time statistics
             'all_time_orders_created': all_time_orders_created,
             'all_time_orders_completed': all_time_orders_completed,
             'all_time_order_value': all_time_order_value,
             'all_time_items_sold': all_time_items_sold,
-            
+
             # Common
             'pending_orders': pending_orders,
             'latest_completed_orders': latest_completed_orders,
+            'status_counts': status_counts,
         })
-        
+
         return context
 
 class ProductsView(ListView):
@@ -364,51 +377,114 @@ def get_shipping_fee(request):
 
     return JsonResponse({"fee": ShippingFee.get_fee(governorate_id, city_id)})
 
-class OrdersView(TemplateView):
+class OrdersView(ListView):
     template_name = 'dashboard/orders/orders.html'
+    model = Order
+    context_object_name = 'orders'
+    paginate_by = 30
+
+    def get_queryset(self):
+        queryset = Order.objects.all().order_by('-created_at')
+
+        query = self.request.GET.get('query')
+        if query:
+            queryset = queryset.filter(name__icontains=query)
+
+        status_slug = self.request.GET.get('status')
+        status_value = ORDER_STATUS_SLUGS.get(status_slug) if status_slug else None
+        if status_value:
+            queryset = queryset.filter(status=status_value)
+
+        return queryset
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        query = self.request.GET.get('query')
-        if query:
-            all_orders = Order.objects.filter(name__icontains=query)
-        else:
-            all_orders = Order.objects.all()
 
-        context["query"] = query or "Search..."
-        context["pending_orders"] = all_orders.filter(status="Pending Confirmation")[:50]
-        context["confirmed_orders"] = all_orders.filter(status="Confirmed")[:50]
-        context["in_delivery_orders"] = all_orders.filter(status="In Delivery")[:50]
+        all_orders = Order.objects.all()
+        counts_by_status = {
+            row['status']: row['count']
+            for row in all_orders.values('status').annotate(count=Count('id'))
+        }
+
+        context["query"] = self.request.GET.get('query') or ""
+        context["current_status"] = self.request.GET.get('status') or "all"
+        # (slug, label, count) for every status, plus "all" - drives both
+        # the filter tabs and the summary cards.
+        context["status_filters"] = [("all", "الكل", all_orders.count())] + [
+            (ORDER_STATUS_VALUE_TO_SLUG.get(value, value), label, counts_by_status.get(value, 0))
+            for value, label in orders_states
+        ]
 
         return context
-    
 
-def confirm_order(request, order_id):
-    order = Order.objects.get(id=order_id)
-    order.status = "Confirmed"
+
+class OrderDetailsView(DetailView):
+    template_name = 'dashboard/orders/order_details.html'
+    model = Order
+    context_object_name = 'order'
+    pk_url_kwarg = 'order_id'
+
+    def get_queryset(self):
+        return Order.objects.select_related('governorate', 'city').prefetch_related(
+            'entries__product_option__product', 'logs'
+        )
+
+
+def change_order_status(request, order_id):
+    """Moves an order to a new status, per Order.get_available_status_transitions.
+    Used by both the orders list (quick actions) and the order details page -
+    each status-change form includes a `next` field so this can redirect back
+    to wherever it was submitted from."""
+    order = get_object_or_404(Order, id=order_id)
+    next_url = request.POST.get('next') or ''
+    if not next_url.startswith('/'):
+        next_url = reverse('order_details', args=[order.id])
+
+    if request.method != "POST":
+        return redirect(next_url)
+
+    new_status = request.POST.get('status')
+    status_labels = dict(orders_states)
+    allowed_values = {value for value, _ in order.get_available_status_transitions()}
+
+    if new_status not in allowed_values:
+        OrderLog.objects.create(
+            order=order,
+            content=f"محاولة تغيير غير صالحة إلى حالة \"{status_labels.get(new_status, new_status)}\" - تم تجاهلها.",
+        )
+        return redirect(next_url)
+
+    old_status = order.status
+
+    if new_status in ORDER_STOCK_RELEASING_STATUSES and old_status not in ORDER_STOCK_RELEASING_STATUSES:
+        # Cancelled/Rejected/Returned - give the reserved stock back.
+        for entry in order.entries.select_related('product_option'):
+            option = entry.product_option
+            option.stock += entry.quantity
+            option.save()
+    elif old_status in ORDER_STOCK_RELEASING_STATUSES and new_status == "Pending Confirmation":
+        # Reactivating - re-reserve stock, but only if it's still available.
+        entries = list(order.entries.select_related('product_option'))
+        if any(entry.quantity > entry.product_option.stock for entry in entries):
+            OrderLog.objects.create(
+                order=order,
+                content="تعذّرت إعادة تفعيل الطلب - المخزون غير كافٍ لأحد المنتجات.",
+            )
+            return redirect(next_url)
+        for entry in entries:
+            option = entry.product_option
+            option.stock -= entry.quantity
+            option.save()
+
+    if new_status == "Completed":
+        order.delivered_at = django_timezone.now()
+
+    order.status = new_status
     order.save()
-    return redirect('admin_orders')
 
-def reject_order(request, order_id):
-    order = Order.objects.get(id=order_id)
-    order.status = "Cancelled"
-    order.save()
+    OrderLog.objects.create(
+        order=order,
+        content=f"تغيّرت حالة الطلب من \"{status_labels.get(old_status, old_status)}\" إلى \"{status_labels.get(new_status, new_status)}\".",
+    )
 
-    for entry in order.entries.all():
-        entry.product.stock += entry.quantity
-        entry.product.save()
-
-    return redirect('admin_orders')
-
-def deliver_order(request, order_id):
-    order = Order.objects.get(id=order_id)
-    order.status = "In Delivery"
-    order.save()
-    return redirect('admin_orders')
-
-def complete_order(request, order_id):
-    order = Order.objects.get(id=order_id)
-    order.status = "Delivered"
-    order.delivered_at = datetime.now(timezone.utc)
-    order.save()
-    return redirect('admin_orders')
+    return redirect(next_url)
