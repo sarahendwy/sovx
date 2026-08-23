@@ -16,6 +16,7 @@
   --bg-red: #D80E0E;
   --bg-success: #A1DAA7;
   
+  
   /* Text colors */
   --text-dark: #18221d;
   --text-secondary: #6a716c;
@@ -29,6 +30,7 @@
   /* Borders */
   --border-primary: #e8ecea;
   --border-secondary: #e2e4e9;
+  --border-admin: #3a3d46;
 
   /* Fonts */
   --font-primary: "Zanjabeel", Arial, sans-serif;

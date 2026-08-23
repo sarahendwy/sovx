@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block admin_content %}
-    {% include "partials/components/form.html" with form_title="إضافة قائمة منتجات جديدة" form_class="product-list-form" form_button_text="إضافة" %}
+<div class="edit-product-page">
+    {% include "partials/components/form.html" with form_title="إضافة قائمة منتجات جديدة" form_class="edit-product-form" form_button_text="إضافة" %}
+</div>
 
     <script>
         (function () {
