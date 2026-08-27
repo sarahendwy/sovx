@@ -5,6 +5,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.utils import timezone as django_timezone
 from django.db.models import Sum, Count
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from orders.models import (
     Order, OrderEntry, OrderLog, ContactUsRequest, SellWithUsRequest,
@@ -17,7 +18,7 @@ from .forms import (
 from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee
 from products.models import Product
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard/main.html'
     
     def get_context_data(self, **kwargs) -> dict[str, Any]:
@@ -111,7 +112,7 @@ class DashboardView(TemplateView):
 
         return context
 
-class ProductsView(ListView):
+class ProductsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/product/products.html'
     model = Product
     context_object_name = "products"
@@ -180,24 +181,24 @@ class ProductNutritionsValueFormsetMixin:
 
         return redirect(self.get_success_url())
 
-class AddProductView(ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, CreateView):
+class AddProductView(LoginRequiredMixin, ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/add_product.html'
     success_url = reverse_lazy('admin_products')
 
-class EditProductView(ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, UpdateView):
+class EditProductView(LoginRequiredMixin, ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product/edit_product.html'
     success_url = reverse_lazy('admin_products')
 
-class DeleteProductView(DeleteView):
+class DeleteProductView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('admin_products')
     template_name = "dashboard/confirm_delete.html"
 
-class SettingsView(UpdateView):
+class SettingsView(LoginRequiredMixin, UpdateView):
     template_name = 'dashboard/settings.html'
     form_class = SettingsForm
     success_url = reverse_lazy('admin_settings')
@@ -205,12 +206,12 @@ class SettingsView(UpdateView):
     def get_object(self, queryset=None):
         return Setting.objects.first()
 
-class ProductListsView(ListView):
+class ProductListsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/product_list/product_lists.html'
     model = ProductList
     context_object_name = "product_lists"
 
-class AddProductListView(CreateView):
+class AddProductListView(LoginRequiredMixin, CreateView):
     model = ProductList
     form_class = ProductListForm
     template_name = 'dashboard/product_list/add_product_list.html'
@@ -222,7 +223,7 @@ class AddProductListView(CreateView):
             self.object.product_ids.clear()
         return response
 
-class EditProductListView(UpdateView):
+class EditProductListView(LoginRequiredMixin, UpdateView):
     model = ProductList
     form_class = ProductListForm
     template_name = 'dashboard/product_list/edit_product_list.html'
@@ -234,92 +235,92 @@ class EditProductListView(UpdateView):
             self.object.product_ids.clear()
         return response
 
-class DeleteProductListView(DeleteView):
+class DeleteProductListView(LoginRequiredMixin, DeleteView):
     model = ProductList
     success_url = reverse_lazy('admin_product_lists')
     template_name = "dashboard/confirm_delete.html"
 
-class SectionsView(ListView):
+class SectionsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/section/sections.html'
     model = Section
     context_object_name = "sections"
 
-class AddSectionView(CreateView):
+class AddSectionView(LoginRequiredMixin, CreateView):
     model = Section
     form_class = SectionForm
     template_name = 'dashboard/section/add_section.html'
     success_url = reverse_lazy('admin_sections')
 
-class EditSectionView(UpdateView):
+class EditSectionView(LoginRequiredMixin, UpdateView):
     model = Section
     form_class = SectionForm
     template_name = 'dashboard/section/edit_section.html'
     success_url = reverse_lazy('admin_sections')
 
-class DeleteSectionView(DeleteView):
+class DeleteSectionView(LoginRequiredMixin, DeleteView):
     model = Section
     success_url = reverse_lazy('admin_sections')
     template_name = "dashboard/confirm_delete.html"
 
-class SellWithUsCardsView(ListView):
+class SellWithUsCardsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/sell_with_us_card/sell_with_us_cards.html'
     model = SellWithUsCard
     context_object_name = "sell_with_us_cards"
 
-class AddSellWithUsCardView(CreateView):
+class AddSellWithUsCardView(LoginRequiredMixin, CreateView):
     model = SellWithUsCard
     form_class = SellWithUsCardForm
     template_name = 'dashboard/sell_with_us_card/add_sell_with_us_card.html'
     success_url = reverse_lazy('admin_sell_with_us_cards')
 
-class EditSellWithUsCardView(UpdateView):
+class EditSellWithUsCardView(LoginRequiredMixin, UpdateView):
     model = SellWithUsCard
     form_class = SellWithUsCardForm
     template_name = 'dashboard/sell_with_us_card/edit_sell_with_us_card.html'
     success_url = reverse_lazy('admin_sell_with_us_cards')
 
-class DeleteSellWithUsCardView(DeleteView):
+class DeleteSellWithUsCardView(LoginRequiredMixin, DeleteView):
     model = SellWithUsCard
     success_url = reverse_lazy('admin_sell_with_us_cards')
     template_name = "dashboard/confirm_delete.html"
 
-class ContactUsRequestsView(ListView):
+class ContactUsRequestsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/contact_request/contact_requests.html'
     model = ContactUsRequest
     context_object_name = "contact_requests"
     paginate_by = 20
     queryset = ContactUsRequest.objects.order_by('-created_at')
 
-class SellWithUsRequestsView(ListView):
+class SellWithUsRequestsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/sell_with_us_request/sell_with_us_requests.html'
     model = SellWithUsRequest
     context_object_name = "sell_with_us_requests"
     paginate_by = 20
     queryset = SellWithUsRequest.objects.select_related('governorate', 'city').order_by('-created_at')
 
-class ReviewsView(ListView):
+class ReviewsView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/review/reviews.html'
     model = Review
     context_object_name = "reviews"
 
-class AddReviewView(CreateView):
+class AddReviewView(LoginRequiredMixin, CreateView):
     model = Review
     form_class = ReviewForm
     template_name = 'dashboard/review/add_review.html'
     success_url = reverse_lazy('admin_reviews')
 
-class EditReviewView(UpdateView):
+class EditReviewView(LoginRequiredMixin, UpdateView):
     model = Review
     form_class = ReviewForm
     template_name = 'dashboard/review/edit_review.html'
     success_url = reverse_lazy('admin_reviews')
 
-class DeleteReviewView(DeleteView):
+class DeleteReviewView(LoginRequiredMixin, DeleteView):
     model = Review
     success_url = reverse_lazy('admin_reviews')
     template_name = "dashboard/confirm_delete.html"
 
-class ShippingFeesView(ListView):
+class ShippingFeesView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/shipping_fee/shipping_fees.html'
     model = ShippingFee
     context_object_name = "shipping_fees"
@@ -327,19 +328,19 @@ class ShippingFeesView(ListView):
     def get_queryset(self):
         return super().get_queryset().select_related('governorate', 'city')
 
-class AddShippingFeeView(CreateView):
+class AddShippingFeeView(LoginRequiredMixin, CreateView):
     model = ShippingFee
     form_class = ShippingFeeForm
     template_name = 'dashboard/shipping_fee/add_shipping_fee.html'
     success_url = reverse_lazy('admin_shipping_fees')
 
-class EditShippingFeeView(UpdateView):
+class EditShippingFeeView(LoginRequiredMixin, UpdateView):
     model = ShippingFee
     form_class = ShippingFeeForm
     template_name = 'dashboard/shipping_fee/edit_shipping_fee.html'
     success_url = reverse_lazy('admin_shipping_fees')
 
-class DeleteShippingFeeView(DeleteView):
+class DeleteShippingFeeView(LoginRequiredMixin, DeleteView):
     model = ShippingFee
     success_url = reverse_lazy('admin_shipping_fees')
     template_name = "dashboard/confirm_delete.html"
@@ -377,7 +378,7 @@ def get_shipping_fee(request):
 
     return JsonResponse({"fee": ShippingFee.get_fee(governorate_id, city_id)})
 
-class OrdersView(ListView):
+class OrdersView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/orders/orders.html'
     model = Order
     context_object_name = 'orders'
@@ -418,7 +419,7 @@ class OrdersView(ListView):
         return context
 
 
-class OrderDetailsView(DetailView):
+class OrderDetailsView(LoginRequiredMixin, DetailView):
     template_name = 'dashboard/orders/order_details.html'
     model = Order
     context_object_name = 'order'
