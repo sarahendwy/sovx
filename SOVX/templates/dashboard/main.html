@@ -74,8 +74,8 @@
       </a>
     </div>
 
-    {% if latest_completed_orders %} {% include
-    "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
+    {% if latest_completed_orders %} 
+      {% include "dashboard/orders/orders_table.html" with orders=latest_completed_orders %}
     {% else %}
     <div class="No-completed">لا توجد طلبات مكتملة بعد.</div>
     {% endif %}

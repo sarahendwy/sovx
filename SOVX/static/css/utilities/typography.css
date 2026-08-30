@@ -101,10 +101,6 @@
   line-height: 1.5;
 }
 
-.bg-tertiary {
-  background-color: var(--bg-tertiary) !important;
-}
-
 .py-12 {
   padding-block: var(--space-3);
 }

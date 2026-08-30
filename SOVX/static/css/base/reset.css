@@ -31,10 +31,6 @@ p {
   }
 }
 
-.bg-secondary {
-  background-color: var(--bg-secondary) !important;
-}
-
 .bg-weak {
   background-color: var(--bg-weak) !important;
 }
@@ -61,4 +57,15 @@ p {
 
 .bg-success {
   background-color: var(--bg-success) !important;
+}
+
+.bg-primary {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--bg-secondary) !important;
+}
+.bg-tertiary {
+  background-color: var(--bg-tertiary) !important;
 }

@@ -78,6 +78,12 @@ SAMPLE_SECTIONS = [
 
 SAMPLE_SELL_WITH_US_CARDS = [
     {
+        "title": "عايز تزود ربحك من بيع المكسرات؟",
+        "svg": SellWithUsIcon.COINS_HAND,
+        "bg_color": SellWithUsColor.YELLOW,
+        "span": 1,
+    },
+    {
         "title": "حتى لو مكانك بعيد عننا؟",
         "svg": SellWithUsIcon.GLOBE,
         "bg_color": SellWithUsColor.YELLOW,
@@ -90,9 +96,9 @@ SAMPLE_SELL_WITH_US_CARDS = [
         "span": 1,
     },
     {
-        "title": "عايز تزود ربحك من بيع المكسرات؟",
-        "svg": SellWithUsIcon.COINS_HAND,
-        "bg_color": SellWithUsColor.YELLOW,
+        "title": "ومحتاج طلبيات توصلك في مواعيد ثابتة؟",
+        "svg": SellWithUsIcon.PAYMENT_PLAN,
+        "bg_color": SellWithUsColor.GREEN,
         "span": 1,
     },
     {
@@ -102,12 +108,6 @@ SAMPLE_SELL_WITH_US_CARDS = [
         "span": 2,
         "description": "مكسرات بجودة عالية وأسعار تنافسية توصلّك لحد عندك وفي معادها.",
         "cta_text": "اطلب من سوفكس الآن",
-    },
-    {
-        "title": "ومحتاج طلبيات توصلك في مواعيد ثابتة؟",
-        "svg": SellWithUsIcon.PAYMENT_PLAN,
-        "bg_color": SellWithUsColor.GREEN,
-        "span": 1,
     },
 ]
 
