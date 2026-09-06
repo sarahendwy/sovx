@@ -80,7 +80,6 @@
 .site-navbar-links .nav-link {
   white-space: nowrap;
   padding-block: var(--space-4);
-  
 }
 
 #top-bar {
@@ -99,10 +98,18 @@
   }
 
   .site-navbar-links .nav-link {
-    padding-block: 10px;
+    padding: var(--space-2) 0;
     font-size: 14px;
   }
+  .site-navbar-links {
+    gap: 0;
+    text-align: right;
+  }
+  #navbarSectionsMenu {
+    width: 100%;
+  }
 }
+
 
 @media (max-width: 576px) {
   .site-navbar > div {

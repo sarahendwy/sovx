@@ -1,6 +1,9 @@
 {% load static %}
 
-<nav class="site-navbar bg-white position-sticky" aria-label="Main navigation">
+<nav
+  class="site-navbar navbar bg-white position-sticky"
+  aria-label="Main navigation"
+>
   <div
     id="top-bar"
     class="w-100 h-100 d-flex align-items-center gap-2 gap-sm-3"
@@ -44,7 +47,8 @@
       </svg>
     </form>
     <!-- </div> -->
-    {% comment %} <div
+    {% comment %}
+    <div
       class="d-flex align-items-center gap-2 text-nowrap"
       aria-label="Current language: English"
     >
@@ -67,7 +71,8 @@
         </g>
       </svg>
       <span class="body-small text-secondary">English</span>
-    </div> {% endcomment %}
+    </div>
+    {% endcomment %}
     <a
       class="site-navbar-cart position-relative d-flex align-items-center justify-content-center flex-shrink-0 text-decoration-none"
       role="button"
@@ -92,24 +97,39 @@
         data-cart-badge
         aria-hidden="true"
         hidden
-      >0</span>
+        >0</span
+      >
     </a>
   </div>
 
   {% if sections %}
-  <div class="w-100 d-flex align-items-center">
-    <ul
-      id="navbarSectionsNav"
-      class="site-navbar-links navbar-nav flex-row flex-nowrap overflow-auto mb-0"
+  <div class="w-100">
+    <button
+      class="navbar-toggler d-lg-none ms-auto my-2"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSectionsMenu"
+      aria-controls="navbarSectionsMenu"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
     >
-      {% for section in sections %}
-      <li class="nav-item">
-        <a class="nav-link text-secondary" href="#section_{{section.id}}"
-          >{{section.name}}</a
-        >
-      </li>
-      {% endfor %}
-    </ul>
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse d-lg-block" id="navbarSectionsMenu">
+      <ul
+        id="navbarSectionsNav"
+        class="site-navbar-links navbar-nav flex-column flex-lg-row mb-0"
+      >
+        {% for section in sections %}
+        <li class="nav-item">
+          <a class="nav-link text-secondary" href="#section_{{ section.id }}">
+            {{ section.name }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
   {% endif %}
 </nav>
@@ -118,29 +138,32 @@
   if (!window.__navbarCartBadgeInit) {
     window.__navbarCartBadgeInit = true;
 
-    const CART_LABEL = 'Shopping cart';
+    const CART_LABEL = "Shopping cart";
 
     const syncCartBadge = function () {
       if (!window.Cart) return;
-      const badge = document.querySelector('[data-cart-badge]');
-      const link = document.querySelector('.site-navbar-cart');
+      const badge = document.querySelector("[data-cart-badge]");
+      const link = document.querySelector(".site-navbar-cart");
       if (!badge) return;
 
       const count = window.Cart.getCount();
       const hasItems = count > 0;
 
       badge.hidden = !hasItems;
-      badge.textContent = count > 99 ? '99+' : String(count);
+      badge.textContent = count > 99 ? "99+" : String(count);
 
       if (link) {
-        link.setAttribute('aria-label', hasItems ? CART_LABEL + ' (' + count + ' items)' : CART_LABEL);
+        link.setAttribute(
+          "aria-label",
+          hasItems ? CART_LABEL + " (" + count + " items)" : CART_LABEL,
+        );
       }
     };
 
-    window.addEventListener('cart:change', syncCartBadge);
+    window.addEventListener("cart:change", syncCartBadge);
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', syncCartBadge);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", syncCartBadge);
     } else {
       syncCartBadge();
     }
