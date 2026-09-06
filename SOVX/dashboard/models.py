@@ -7,6 +7,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from products.models import Product
 
 class Setting(models.Model):
+    whatsapp_number = models.CharField(
+       max_length=20,
+       blank=True,
+       help_text="WhatsApp number with country code, without + or spaces"
+    )
+    
     offer_banner_text = models.CharField(
         verbose_name="نص شريط العروض",
         help_text="النص الذي يظهر في الشريط العلوي للصفحة الرئيسية",
