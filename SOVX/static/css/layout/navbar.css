@@ -91,6 +91,18 @@
   border-bottom: 1px solid var(--border-primary);
 }
 
+.mobile-menu {
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+}
+
+.mobile-menu .navbar-toggler-icon {
+  width: 18px;
+  height: 18px;
+}
 
 @media (max-width: 1024px) {
   .site-navbar > div {
@@ -110,15 +122,14 @@
   }
 }
 
-
 @media (max-width: 576px) {
   .site-navbar > div {
     padding-inline: 16px;
   }
 
   .site-navbar-cart {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
   }
 
   .site-navbar-search {
@@ -128,5 +139,15 @@
 
   .site-navbar-brand {
     width: 48px;
+  }
+
+  .site-navbar-cart svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .mobile-menu {
+    width: 32px;
+    height: 32px;
   }
 }

@@ -100,12 +100,8 @@
         >0</span
       >
     </a>
-  </div>
-
-  {% if sections %}
-  <div class="w-100">
     <button
-      class="navbar-toggler d-lg-none ms-auto my-2"
+      class="navbar-toggler mobile-menu d-lg-none "
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#navbarSectionsMenu"
@@ -115,7 +111,10 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+  </div>
 
+  {% if sections %}
+  <div class="w-100">
     <div class="collapse d-lg-block" id="navbarSectionsMenu">
       <ul
         id="navbarSectionsNav"
