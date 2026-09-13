@@ -113,24 +113,46 @@
     </button>
   </div>
 
-  {% if sections %}
   <div class="w-100">
     <div class="collapse d-lg-block" id="navbarSectionsMenu">
       <ul
         id="navbarSectionsNav"
         class="site-navbar-links navbar-nav flex-column flex-lg-row mb-0"
       >
-        {% for section in sections %}
+        {% if sections %}
+          {% for section in sections %}
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="#section_{{ section.id }}">
+              {{ section.name }}
+            </a>
+          </li>
+          {% endfor %}
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-secondary" href="{% url 'index' %}">
+              الرئيسية
+            </a>
+          </li>
+        {% endif %}
+
         <li class="nav-item">
-          <a class="nav-link text-secondary" href="#section_{{ section.id }}">
-            {{ section.name }}
+          <a class="nav-link text-secondary" href="{% url 'articles' %}">
+            مقالات
           </a>
         </li>
-        {% endfor %}
+        <li class="nav-item">
+          <a class="nav-link text-secondary" href="{% url 'about' %}">
+            نبذة عننا
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-secondary" href="{% url 'contact' %}">
+            اتصل بنا
+          </a>
+        </li>
       </ul>
     </div>
   </div>
-  {% endif %}
 </nav>
 
 <script>
