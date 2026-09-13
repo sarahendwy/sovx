@@ -86,7 +86,7 @@
 
           <li class="nav-item">
             <a
-              class="nav-link {% if 'sections' in request.path %}active{% endif %}"
+              class="nav-link {% if '/sections' in request.path %}active{% endif %}"
               href="{% url 'admin_sections' %}"
             >
               <span>الأقسام</span>
@@ -117,6 +117,24 @@
               href="{% url 'admin_shipping_fees' %}"
             >
               <span>رسوم الشحن</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'about-us-sections' in request.path %}active{% endif %}"
+              href="{% url 'admin_about_us_sections' %}"
+            >
+              <span>من نحن</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a
+              class="nav-link {% if 'articles' in request.path %}active{% endif %}"
+              href="{% url 'admin_articles' %}"
+            >
+              <span>المقالات</span>
             </a>
           </li>
 

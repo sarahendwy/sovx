@@ -13,9 +13,9 @@ from orders.models import (
 )
 from .forms import (
     ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
-    ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet
+    ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet, AboutUsSectionForm, ArticleForm
 )
-from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee
+from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee, AboutUsSection, Article
 from .emails import notify_order_status_changed
 from products.models import Product
 
@@ -283,6 +283,50 @@ class EditSellWithUsCardView(LoginRequiredMixin, UpdateView):
 class DeleteSellWithUsCardView(LoginRequiredMixin, DeleteView):
     model = SellWithUsCard
     success_url = reverse_lazy('admin_sell_with_us_cards')
+    template_name = "dashboard/confirm_delete.html"
+
+class AboutUsSectionsView(LoginRequiredMixin, ListView):
+    template_name = 'dashboard/about_us_section/about_us_sections.html'
+    model = AboutUsSection
+    context_object_name = "about_us_sections"
+
+class AddAboutUsSectionView(LoginRequiredMixin, CreateView):
+    model = AboutUsSection
+    form_class = AboutUsSectionForm
+    template_name = 'dashboard/about_us_section/add_about_us_section.html'
+    success_url = reverse_lazy('admin_about_us_sections')
+
+class EditAboutUsSectionView(LoginRequiredMixin, UpdateView):
+    model = AboutUsSection
+    form_class = AboutUsSectionForm
+    template_name = 'dashboard/about_us_section/edit_about_us_section.html'
+    success_url = reverse_lazy('admin_about_us_sections')
+
+class DeleteAboutUsSectionView(LoginRequiredMixin, DeleteView):
+    model = AboutUsSection
+    success_url = reverse_lazy('admin_about_us_sections')
+    template_name = "dashboard/confirm_delete.html"
+
+class ArticlesView(LoginRequiredMixin, ListView):
+    template_name = 'dashboard/article/articles.html'
+    model = Article
+    context_object_name = "articles"
+
+class AddArticleView(LoginRequiredMixin, CreateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'dashboard/article/add_article.html'
+    success_url = reverse_lazy('admin_articles')
+
+class EditArticleView(LoginRequiredMixin, UpdateView):
+    model = Article
+    form_class = ArticleForm
+    template_name = 'dashboard/article/edit_article.html'
+    success_url = reverse_lazy('admin_articles')
+
+class DeleteArticleView(LoginRequiredMixin, DeleteView):
+    model = Article
+    success_url = reverse_lazy('admin_articles')
     template_name = "dashboard/confirm_delete.html"
 
 class ContactUsRequestsView(LoginRequiredMixin, ListView):

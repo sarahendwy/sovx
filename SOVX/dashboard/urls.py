@@ -33,6 +33,16 @@ urlpatterns = [
     path('sell-with-us-cards/edit/<pk>', EditSellWithUsCardView.as_view(), name='edit_sell_with_us_card'),
     path('sell-with-us-cards/delete/<pk>', DeleteSellWithUsCardView.as_view(), name='delete_sell_with_us_card'),
 
+    path('about-us-sections/', AboutUsSectionsView.as_view(), name='admin_about_us_sections'),
+    path('about-us-sections/add', AddAboutUsSectionView.as_view(), name='add_about_us_section'),
+    path('about-us-sections/edit/<pk>', EditAboutUsSectionView.as_view(), name='edit_about_us_section'),
+    path('about-us-sections/delete/<pk>', DeleteAboutUsSectionView.as_view(), name='delete_about_us_section'),
+
+    path('articles/', ArticlesView.as_view(), name='admin_articles'),
+    path('articles/add', AddArticleView.as_view(), name='add_article'),
+    path('articles/edit/<pk>', EditArticleView.as_view(), name='edit_article'),
+    path('articles/delete/<pk>', DeleteArticleView.as_view(), name='delete_article'),
+
     path('reviews/', ReviewsView.as_view(), name='admin_reviews'),
     path('reviews/add', AddReviewView.as_view(), name='add_review'),
     path('reviews/edit/<pk>', EditReviewView.as_view(), name='edit_review'),

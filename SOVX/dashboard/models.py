@@ -341,3 +341,44 @@ class Review(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Article(models.Model):
+    title = models.CharField(verbose_name="العنوان", max_length=200)
+    body = models.TextField(verbose_name="المحتوى")
+    image = models.ImageField(verbose_name="الصورة", upload_to="dashboard/articles/")
+    tags = models.CharField(
+        verbose_name="الوسوم",
+        max_length=255,
+        blank=True,
+        help_text="افصل بين الوسوم بفاصلة، مثال: مكسرات، عروض، وصفات",
+    )
+    created_at = models.DateTimeField(verbose_name="تاريخ الإنشاء", auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "مقال"
+        verbose_name_plural = "المقالات"
+
+    @property
+    def tag_list(self):
+        # "مكسرات، عروض" / "nuts, offers" -> ["مكسرات", "عروض"] - splits on
+        # either Arabic or Latin comma and drops empties from stray commas.
+        return [tag.strip() for tag in self.tags.replace("،", ",").split(",") if tag.strip()]
+
+    def __str__(self):
+        return self.title
+
+
+class AboutUsSection(models.Model):
+    title = models.CharField(verbose_name="العنوان", max_length=150)
+    body = models.TextField(verbose_name="المحتوى")
+    order = models.PositiveIntegerField(verbose_name="الترتيب", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "قسم صفحة من نحن"
+        verbose_name_plural = "أقسام صفحة من نحن"
+
+    def __str__(self):
+        return self.title
