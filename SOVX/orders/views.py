@@ -1,6 +1,6 @@
 from typing import Any
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from .models import Order, OrderEntry, OrderLog
 from products.models import ProductBuyingOption
 from django.views.generic import CreateView, TemplateView
@@ -83,7 +83,10 @@ class CreateOrder(CreateView):
 
         notify_order_created(order, request=self.request)
 
-        return redirect('thank_you')
+        # ?source=order tells thank_you.html to clear the client-side cart -
+        # ContactUs/SellWithUs redirect to the same URL and must not trigger
+        # that (they have nothing to do with the cart).
+        return redirect(f"{reverse('thank_you')}?source=order")
 
 
 class SellWithUs(CreateView):

@@ -20,4 +20,16 @@
     <a href="{% url 'index' %}" class="thank-you-btn">العودة للصفحة الرئيسية</a>
   </div>
 </main>
+
+{% if request.GET.source == 'order' %}
+<script>
+  // Reached from a successful order submission (see orders.views.CreateOrder)
+  // - empty the client-side cart now that it's been placed. Contact Us /
+  // Sell With Us redirect here too but without ?source=order, so they don't
+  // wipe a cart that's unrelated to their submission.
+  if (window.Cart) {
+    window.Cart.clear();
+  }
+</script>
+{% endif %}
 {% endblock pages_content %}

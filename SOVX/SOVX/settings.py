@@ -133,18 +133,33 @@ STATICFILES_FINDERS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-# Gmail's SMTP server rejects sends whose From address isn't the
-# authenticated account, so admin-notification emails (see dashboard/emails.py)
-# must be sent from this rather than Django's "webserver@localhost" default.
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    # Gmail's SMTP server rejects sends whose From address isn't the
+    # authenticated account, so admin-notification emails (see
+    # dashboard/emails.py) must be sent from this rather than Django's
+    # "webserver@localhost" default.
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+else:
+    # No SMTP credentials configured yet - print emails to the console
+    # instead of sending them, so the notification flow still works end to
+    # end locally. Set EMAIL_HOST_USER/EMAIL_HOST_PASSWORD (a Gmail App
+    # Password, not the account password) to switch to real sending.
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = "noreply@sovx.local"
 
 ADMIN_LOGIN_REQUIRED_URLS = (r"/dashboard/(.*)$",)
+
+# There's no standalone login view for the dashboard - every dashboard view
+# uses LoginRequiredMixin, which would otherwise redirect unauthenticated
+# visitors to Django's default "/accounts/login/" (unregistered -> 404).
+# Send them to the admin's login page instead, which is already wired up.
+LOGIN_URL = "admin:login"
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
