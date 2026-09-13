@@ -5,6 +5,7 @@ from .models import Order, OrderEntry, OrderLog
 from products.models import ProductBuyingOption
 from django.views.generic import CreateView, TemplateView
 from .forms import OrderForm, SellWithUsForm, ContactUsForm
+from dashboard.emails import notify_order_created, notify_contact_us, notify_sell_with_us
 
 class CreateOrder(CreateView):
     template_name = 'orders/create.html'
@@ -80,6 +81,8 @@ class CreateOrder(CreateView):
 
         OrderLog.objects.create(order=order, content="Order Created")
 
+        notify_order_created(order, request=self.request)
+
         return redirect('thank_you')
 
 
@@ -93,10 +96,20 @@ class SellWithUs(CreateView):
         context['slides'] = CONTACT_SLIDES
         return context
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        notify_sell_with_us(self.object, request=self.request)
+        return response
+
 class ContactUs(CreateView):
     template_name = 'contact_us.html'
     form_class = ContactUsForm
     success_url = reverse_lazy('thank_you')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        notify_contact_us(self.object, request=self.request)
+        return response
 
 class ThankYou(TemplateView):
     template_name = 'orders/thank_you.html'

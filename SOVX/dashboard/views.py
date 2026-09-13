@@ -16,6 +16,7 @@ from .forms import (
     ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet
 )
 from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee
+from .emails import notify_order_status_changed
 from products.models import Product
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -486,6 +487,15 @@ def change_order_status(request, order_id):
     OrderLog.objects.create(
         order=order,
         content=f"تغيّرت حالة الطلب من \"{status_labels.get(old_status, old_status)}\" إلى \"{status_labels.get(new_status, new_status)}\".",
+    )
+
+    notify_order_status_changed(
+        order,
+        old_status,
+        new_status,
+        status_labels.get(old_status, old_status),
+        status_labels.get(new_status, new_status),
+        request=request,
     )
 
     return redirect(next_url)

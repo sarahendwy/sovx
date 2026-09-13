@@ -1,0 +1,27 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_title %}طلب جديد #{{ order.id }}{% endblock %}
+{% block email_heading %}طلب جديد #{{ order.id }}{% endblock %}
+
+{% block email_body %}
+  <p>وصل طلب جديد بالتفاصيل التالية:</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#18221d;">
+    <tr><td style="padding:4px 0; color:#6a716c;">الاسم</td><td style="padding:4px 0; font-weight:600;">{{ order.name }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">الهاتف</td><td style="padding:4px 0; font-weight:600;">{{ order.phone }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">المحافظة / المدينة</td><td style="padding:4px 0; font-weight:600;">{{ order.governorate }} - {{ order.city }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">العنوان</td><td style="padding:4px 0; font-weight:600;">{{ order.address }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">طريقة الاستلام</td><td style="padding:4px 0; font-weight:600;">{{ order.get_payment_method_display }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">الإجمالي</td><td style="padding:4px 0; font-weight:600;">{{ order.order_total }} ج.م</td></tr>
+  </table>
+
+  <p style="margin-top:16px; margin-bottom:8px; font-weight:600;">المنتجات:</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:13px; color:#18221d; border-collapse:collapse;">
+    {% for entry in order.entries.all %}
+    <tr>
+      <td style="padding:4px 0; border-bottom:1px solid #e8ecea;">{{ entry.product_option }}</td>
+      <td style="padding:4px 0; border-bottom:1px solid #e8ecea; text-align:center;">x{{ entry.quantity }}</td>
+      <td style="padding:4px 0; border-bottom:1px solid #e8ecea; text-align:left;">{{ entry.price }} ج.م</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

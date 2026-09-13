@@ -1,0 +1,18 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_title %}طلب جديد من بيع معنا{% endblock %}
+{% block email_heading %}طلب جديد من بيع معنا{% endblock %}
+
+{% block email_body %}
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#18221d;">
+    <tr><td style="padding:4px 0; color:#6a716c;">الاسم</td><td style="padding:4px 0; font-weight:600;">{{ sell_request.name }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">اسم المحل</td><td style="padding:4px 0; font-weight:600;">{{ sell_request.store_name }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">الهاتف</td><td style="padding:4px 0; font-weight:600;">{{ sell_request.phone }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">المحافظة / المدينة</td><td style="padding:4px 0; font-weight:600;">{{ sell_request.governorate }} - {{ sell_request.city }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">العنوان</td><td style="padding:4px 0; font-weight:600;">{{ sell_request.address }}</td></tr>
+  </table>
+  {% if sell_request.message %}
+  <p style="margin-top:16px; margin-bottom:8px; font-weight:600;">الرسالة:</p>
+  <p style="background-color:#f6f8fa; border-radius:8px; padding:12px; margin:0;">{{ sell_request.message }}</p>
+  {% endif %}
+{% endblock %}

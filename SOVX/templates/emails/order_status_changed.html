@@ -1,0 +1,16 @@
+{% extends "emails/base_email.html" %}
+
+{% block email_title %}تغيّرت حالة الطلب #{{ order.id }}{% endblock %}
+{% block email_heading %}تغيّرت حالة الطلب #{{ order.id }}{% endblock %}
+
+{% block email_body %}
+  <p>
+    تغيّرت حالة طلب <strong>{{ order.name }}</strong> (طلب #{{ order.id }})
+    من <strong>{{ old_status_label }}</strong> إلى <strong>{{ new_status_label }}</strong>.
+  </p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#18221d;">
+    <tr><td style="padding:4px 0; color:#6a716c;">العميل</td><td style="padding:4px 0; font-weight:600;">{{ order.name }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">الهاتف</td><td style="padding:4px 0; font-weight:600;">{{ order.phone }}</td></tr>
+    <tr><td style="padding:4px 0; color:#6a716c;">الإجمالي</td><td style="padding:4px 0; font-weight:600;">{{ order.order_total }} ج.م</td></tr>
+  </table>
+{% endblock %}

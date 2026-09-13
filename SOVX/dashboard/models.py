@@ -56,6 +56,27 @@ class Setting(models.Model):
         help_text="رسوم الشحن الافتراضية المعروضة قبل معرفة المدينة (مثلاً في سلة المشتريات)، تُستخدم لحين تحديد رسوم فعلية للمحافظة/المدينة.",
     )
 
+    notify_on_order = models.BooleanField(
+        verbose_name="إشعار عند إنشاء طلب جديد",
+        default=True,
+        help_text="إرسال بريد إلكتروني إلى البريد الإلكتروني أعلاه عند إنشاء طلب جديد.",
+    )
+    notify_on_order_status_change = models.BooleanField(
+        verbose_name="إشعار عند تغيير حالة الطلب",
+        default=True,
+        help_text="إرسال بريد إلكتروني إلى البريد الإلكتروني أعلاه عند تغيّر حالة أي طلب.",
+    )
+    notify_on_contact_us = models.BooleanField(
+        verbose_name="إشعار عند رسالة تواصل معنا",
+        default=True,
+        help_text="إرسال بريد إلكتروني إلى البريد الإلكتروني أعلاه عند إرسال نموذج تواصل معنا.",
+    )
+    notify_on_sell_with_us = models.BooleanField(
+        verbose_name="إشعار عند طلب بيع معنا",
+        default=True,
+        help_text="إرسال بريد إلكتروني إلى البريد الإلكتروني أعلاه عند إرسال نموذج بيع معنا.",
+    )
+
     class Meta:
         verbose_name = "الإعدادات"
         verbose_name_plural = "الإعدادات"

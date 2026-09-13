@@ -139,6 +139,10 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+# Gmail's SMTP server rejects sends whose From address isn't the
+# authenticated account, so admin-notification emails (see dashboard/emails.py)
+# must be sent from this rather than Django's "webserver@localhost" default.
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 ADMIN_LOGIN_REQUIRED_URLS = (r"/dashboard/(.*)$",)
 

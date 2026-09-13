@@ -116,7 +116,10 @@ class SettingsForm(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            if isinstance(field, forms.fields.BooleanField):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = Setting
