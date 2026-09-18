@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.templatetags.static import static
 from django.views.generic import ListView, DetailView
 from .models import Product
-from dashboard.models import ProductList
+from dashboard.models import AboutUsSection, ProductList
 
 from dashboard.models import Section, SectionType, SellWithUsCard, Review
 
@@ -91,3 +91,8 @@ class ProductView(DetailView):
     model = Product
     template_name = "product.html"
     context_object_name = "product"
+
+class AboutView(ListView):
+    model = AboutUsSection
+    template_name = "about.html"
+    context_object_name = "sections"

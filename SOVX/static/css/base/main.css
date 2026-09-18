@@ -39,6 +39,8 @@ main {
 
   font-size: 26px;
   text-decoration: none;
+
+  z-index: 1000;
 }
 
 .whatsapp-float i,
@@ -52,5 +54,5 @@ main {
 
 .whatsapp-float:hover {
   color: #fff;
-  transform: scale(1.02);
+  transform: scale(1.05);
 }

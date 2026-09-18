@@ -1,37 +1,54 @@
-.about-us {
-  background: var(--bg-primary);
+.container{
+  margin-inline: 108px;
+  margin-block: 32px;
+
 }
 
-.about-us-image {
-  height: 380px;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-}
-
-.about-us h2 {
+.about-page-header h1 {
   color: var(--text-dark);
   font-weight: var(--font-bold);
 }
 
-.about-us-btn {
-  padding: 10px 20px;
-
-  background: var(--primary);
-  color: var(--bg-white);
-
-  border: 0;
-  border-radius: 2px 16px 2px 16px;;
-
-  font-weight: var(--font-medium);
+.about-page-header p {
+  color: var(--text-secondary);
 }
 
-.about-us-btn:hover {
-  background: var(--text-dark);
-  color: var(--bg-white);
+.about-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
 }
+
+.about-content {
+  width: 70%;
+  margin-left: auto;
+}
+
+
+.about-item {
+  padding: var(--space-5);
+  background: var(--bg-primary);
+  border-radius: none;
+}
+
+.about-item:nth-child(even) {
+  background: var(--bg-white);
+}
+
+.about-item h2 {
+  color: var(--text-dark);
+  font-weight: var(--font-bold);
+  font-size: 22px;
+}
+
+.about-item p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
 
 @media (max-width: 768px) {
-  .about-us-image {
-    height: 260px;
+  .about-item {
+    padding: var(--space-4);
   }
 }

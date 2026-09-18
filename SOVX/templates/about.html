@@ -1,0 +1,31 @@
+{% extends 'base_site_pages.html' %} {% load static %} {% block header %} 
+<link rel="stylesheet" href="{% static 'css/components/about-us.css' %}" />
+{% endblock header %} {% block pages_content %}
+<main>
+  <div class="container">
+    <div class="about-page-header text-center mb-5">
+          <h1 class="mb-3">نبذة عنا</h1>
+          <p class="mb-0">
+            تعرف أكثر على قصتنا ورؤيتنا وما يميزنا.
+          </p>
+      </div>
+  <div class="about-list">
+      {% for section in sections %}
+
+      <section class="about-item">
+        <div class=" about-content">
+          <h2 class="mb-3">
+            {{ section.title }}
+          </h2>
+
+          <p class="mb-0">
+            {{ section.body }}
+          </p>
+        </div>
+      </section>
+
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock pages_content %}
