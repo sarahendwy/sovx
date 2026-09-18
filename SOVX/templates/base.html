@@ -36,6 +36,8 @@
     <link rel="stylesheet" href="{% static 'css/layout/navbar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/layout/footer.css' %}" />
     <link rel="stylesheet" href="{% static 'css/components/buttons.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/components/about-us.css' %}"
+/>
     {% block header %} {% endblock header %}
   </head>
   <body
@@ -46,7 +48,10 @@
   >
     <script src="{% static 'js/cart.js' %}"></script>
     <script src="{% static 'js/locations.js' %}"></script>
-    {% block content %} {% endblock %} 
+    {% block content %}
+    {% endblock %}
+
+    {% include "partials/sections/about-us.html" %}
     {% include "partials/layout/footer.html" %}
 
     <script

@@ -1,0 +1,37 @@
+.about-us {
+  background: var(--bg-primary);
+}
+
+.about-us-image {
+  height: 380px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
+.about-us h2 {
+  color: var(--text-dark);
+  font-weight: var(--font-bold);
+}
+
+.about-us-btn {
+  padding: 10px 20px;
+
+  background: var(--primary);
+  color: var(--bg-white);
+
+  border: 0;
+  border-radius: 2px 16px 2px 16px;;
+
+  font-weight: var(--font-medium);
+}
+
+.about-us-btn:hover {
+  background: var(--text-dark);
+  color: var(--bg-white);
+}
+
+@media (max-width: 768px) {
+  .about-us-image {
+    height: 260px;
+  }
+}
