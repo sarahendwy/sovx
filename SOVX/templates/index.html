@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/components/hero.css' %}" />
 {% endblock header %} {% block pages_content %}
 
-<section class="container py-4">
+<section class="container py-2">
   <div
     id="heroCarousel"
     class="carousel slide overflow-hidden rounded-4 position-relative"
@@ -63,6 +63,7 @@
 
   </div>
 </section>
+{% include "partials/sections/our-category.html" %}
 
 <main class="container flex-grow-1">
   {% for section in sections %}

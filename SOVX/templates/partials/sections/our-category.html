@@ -1,0 +1,15 @@
+<section class="container my-2">
+  <div class="row g-3 mt-0">
+
+    {% if sections %}
+          {% for section in sections %}
+            <div class="col-6 col-md-3">
+                <a class="btn category-btn w-100" href="#section_{{ section.id }}">
+                    {{ section.name }}
+                </a>
+            </div>
+          {% endfor %}
+        {% endif %}
+
+  </div>
+</section>
