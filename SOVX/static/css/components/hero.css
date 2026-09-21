@@ -24,25 +24,6 @@
   color: var(--bg-white);
 }
 
-
-.category-btn {
-  padding: var(--space-4);
-
-  background: var(--bg-primary);
-  color: var(--primary);
-
-  border: 1px solid var(--border-primary);
-  border-radius: 16px 2px 16px 2px;
-
-  font-weight: var(--font-medium);
-}
-
-.category-btn:hover {
-  background: var(--primary);
-  color: var(--bg-white);
-  border-color: var(--primary);
-}
-
 @media (max-width: 768px) {
   .hero-image {
     height: 180px;

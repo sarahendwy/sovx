@@ -28,7 +28,7 @@
 .about-item {
   padding: var(--space-5);
   background: var(--bg-primary);
-  border-radius: none;
+  border-radius: var(--radius-lg);
 }
 
 .about-item:nth-child(even) {
