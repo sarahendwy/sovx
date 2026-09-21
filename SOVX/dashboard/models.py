@@ -222,12 +222,19 @@ class SectionType(models.TextChoices):
     REVIEWS = "reviews", "التقييمات"
     WHY_CHOOSE_US = "why_choose_us", "ليه تختارنا"
     SELL_WITH_US = "sell_with_us", "تاجر معنا"
+    HERO_CAROUSEL = "hero_carousel", "سلايدر الصور"
+    CATEGORY_LINKS = "category_links", "روابط الأقسام"
 
 
 class Section(models.Model):
     name = models.CharField(verbose_name="الاسم", max_length=150)
     type = models.CharField(verbose_name="النوع", max_length=20, choices=SectionType.choices)
     order = models.PositiveIntegerField(verbose_name="الترتيب", default=0)
+    show_link = models.BooleanField(
+        verbose_name="إظهار الرابط",
+        default=True,
+        help_text="إظهار هذا القسم في القائمة العلوية وقسم روابط الأقسام",
+    )
     banner = models.ImageField(verbose_name="صورة الغلاف", upload_to="dashboard/sections/", blank=True)
     product_list = models.ForeignKey(
         ProductList,
@@ -250,6 +257,21 @@ class Section(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class HeroSlide(models.Model):
+    image = models.ImageField(verbose_name="الصورة", upload_to="dashboard/hero/")
+    alt_text = models.CharField(verbose_name="النص البديل", max_length=150, blank=True)
+    disabled = models.BooleanField(verbose_name="معطل", default=False, help_text="إخفاء هذه الصورة من السلايدر")
+    order = models.PositiveIntegerField(verbose_name="الترتيب", default=0)
+
+    class Meta:
+        ordering = ["order"]
+        verbose_name = "صورة سلايدر"
+        verbose_name_plural = "صور السلايدر"
+
+    def __str__(self):
+        return self.alt_text or f"صورة {self.pk}"
 
 
 class SellWithUsIcon(models.TextChoices):

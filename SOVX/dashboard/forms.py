@@ -4,7 +4,7 @@ from django.core.validators import validate_image_file_extension
 from django.forms import inlineformset_factory
 
 from products.models import Product, ProductBuyingOption, NutritionalValue
-from .models import Setting, ProductList, Section, SellWithUsCard, Review, Governorate, City, ShippingFee, AboutUsSection, Article
+from .models import Setting, ProductList, Section, SellWithUsCard, Review, Governorate, City, ShippingFee, AboutUsSection, Article, HeroSlide
 
 
 class GovernorateCityFormMixin:
@@ -154,10 +154,26 @@ class SectionForm(forms.ModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs.update({'class': 'form-control'})
+            if isinstance(field, forms.fields.BooleanField):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = Section
+        fields = '__all__'
+
+class HeroSlideForm(forms.ModelForm):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field, forms.fields.BooleanField):
+                field.widget.attrs.update({'class': 'form-check-input'})
+            else:
+                field.widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = HeroSlide
         fields = '__all__'
 
 class SellWithUsCardForm(forms.ModelForm):

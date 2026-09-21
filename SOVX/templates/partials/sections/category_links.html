@@ -1,0 +1,13 @@
+{% if link_sections %}
+<section class="my-2" id="section_{{ section.id }}">
+  <div class=" card-category row g-3 mt-0">
+    {% for link_section in link_sections %}
+      <div class="col-6 col-md-3">
+        <a class="btn category-btn w-100" href="#section_{{ link_section.id }}">
+          {{ link_section.name }}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

@@ -7,6 +7,11 @@
 
 {% block pages_content %}
 <main class="flex-grow-1 mx-auto">
+    {% if list_banner %}
+    <div class="container pt-2">
+        <img src="{{ list_banner.url }}" class="w-100" alt="{{ search_message }}" />
+    </div>
+    {% endif %}
     {% if search_message %}
     <h4 class="text-center my-5 text-muted fw-normal">{{ search_message }}</h4>
 {% endif %}

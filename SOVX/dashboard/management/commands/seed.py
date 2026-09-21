@@ -10,6 +10,7 @@ from products.models import Product, ProductBuyingOption, NutritionalValue
 from dashboard.models import (
     ProductList,
     ProductSortField,
+    HeroSlide,
     Review,
     ReviewType,
     Section,
@@ -65,6 +66,8 @@ NUTRITIONAL_VALUE_TEMPLATES = [
 # from media/dashboard/sections/ via ImageField.save() so it's stored like a normal upload
 # (and picked up correctly by django-cleanup's delete signal).
 SAMPLE_SECTIONS = [
+    {"name": "سلايدر الصور", "type": SectionType.HERO_CAROUSEL, "banner_file": None, "list": None, "show_link": False},
+    {"name": "روابط الأقسام", "type": SectionType.CATEGORY_LINKS, "banner_file": None, "list": None, "show_link": False},
     {"name": "وصل حديثاً", "type": SectionType.PRODUCT_LIST, "banner_file": "Newly_arrived.png", "list": "وصل حديثاً"},
     {"name": "الأفضل مبيعاً", "type": SectionType.PRODUCT_LIST, "banner_file": "Best_seller.png", "list": "الأفضل مبيعاً"},
     {"name": "ليه تختارنا؟", "type": SectionType.WHY_CHOOSE_US, "banner_file": None, "list": None},
@@ -154,6 +157,7 @@ class Command(BaseCommand):
         products = self.seed_products()
         product_lists = self.seed_product_lists(products)
         self.seed_sections(product_lists)
+        self.seed_hero_slides()
         self.seed_sell_with_us_cards()
         self.seed_reviews()
 
@@ -292,6 +296,7 @@ class Command(BaseCommand):
                 type=data["type"],
                 order=order,
                 product_list=product_lists.get(data["list"]),
+                show_link=data.get("show_link", True),
             )
             section.save()
 
@@ -301,6 +306,17 @@ class Command(BaseCommand):
                     section.banner.save(banner_file, File(image_file), save=True)
 
         self.stdout.write(self.style.SUCCESS(f"Created {len(SAMPLE_SECTIONS)} sections"))
+
+    def seed_hero_slides(self):
+        HeroSlide.objects.all().delete()
+
+        hero_dir = os.path.join(settings.BASE_DIR, "static", "images", "sections", "hero")
+        for order, filename in enumerate(["1.png", "2.png", "3.png"], start=1):
+            slide = HeroSlide(alt_text=f"Hero banner {order}", order=order)
+            with open(os.path.join(hero_dir, filename), "rb") as image_file:
+                slide.image.save(filename, File(image_file), save=True)
+
+        self.stdout.write(self.style.SUCCESS("Created 3 hero slides"))
 
     def seed_sell_with_us_cards(self):
         SellWithUsCard.objects.all().delete()

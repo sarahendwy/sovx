@@ -5,12 +5,17 @@ from django.views.generic import ListView, DetailView
 from .models import Product
 from dashboard.models import AboutUsSection, Article, ProductList
 
-from dashboard.models import Section, SectionType, SellWithUsCard, Review
+from dashboard.models import Section, SectionType, SellWithUsCard, Review, HeroSlide
 
 
 def index(request):
     sections = Section.objects.all()
-    context = {"sections": sections}
+    # only sections flagged show_link appear in the navbar and the
+    # category-links section (see navbar.html / category_links.html)
+    context = {"sections": sections, "link_sections": sections.filter(show_link=True)}
+
+    if sections.filter(type=SectionType.HERO_CAROUSEL).exists():
+        context["hero_slides"] = HeroSlide.objects.filter(disabled=False)
 
     if sections.filter(type=SectionType.SELL_WITH_US).exists():
         context["sell_with_us_cards"] = SellWithUsCard.objects.filter(disabled=False)
@@ -74,6 +79,10 @@ class ProductListView(ListView):
             list_obj = ProductList.objects.filter(id=product_list_id).first()
             if list_obj:
                 context['search_message'] = list_obj.name
+                # the banner lives on the Section(s) that display this list
+                banner_section = list_obj.sections.exclude(banner="").first()
+                if banner_section:
+                    context['list_banner'] = banner_section.banner
                 if not results.exists():
                     context['search_message'] = f"لا توجد منتجات في قائمة: {list_obj.name}"
             else:

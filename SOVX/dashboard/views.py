@@ -13,9 +13,9 @@ from orders.models import (
 )
 from .forms import (
     ProductForm, ProductBuyingOptionFormSet, SettingsForm, ProductListForm, SectionForm, SellWithUsCardForm,
-    ReviewForm, ShippingFeeForm, ProductNutritionsValueFormSet, AboutUsSectionForm, ArticleForm
+    ReviewForm, HeroSlideForm, ShippingFeeForm, ProductNutritionsValueFormSet, AboutUsSectionForm, ArticleForm
 )
-from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee, AboutUsSection, Article
+from .models import Setting, ProductList, Section, SellWithUsCard, Review, City, ShippingFee, AboutUsSection, Article, HeroSlide
 from .emails import notify_order_status_changed
 from products.models import Product
 
@@ -261,6 +261,28 @@ class EditSectionView(LoginRequiredMixin, UpdateView):
 class DeleteSectionView(LoginRequiredMixin, DeleteView):
     model = Section
     success_url = reverse_lazy('admin_sections')
+    template_name = "dashboard/confirm_delete.html"
+
+class HeroSlidesView(LoginRequiredMixin, ListView):
+    template_name = 'dashboard/hero_slide/hero_slides.html'
+    model = HeroSlide
+    context_object_name = "hero_slides"
+
+class AddHeroSlideView(LoginRequiredMixin, CreateView):
+    model = HeroSlide
+    form_class = HeroSlideForm
+    template_name = 'dashboard/hero_slide/add_hero_slide.html'
+    success_url = reverse_lazy('admin_hero_slides')
+
+class EditHeroSlideView(LoginRequiredMixin, UpdateView):
+    model = HeroSlide
+    form_class = HeroSlideForm
+    template_name = 'dashboard/hero_slide/edit_hero_slide.html'
+    success_url = reverse_lazy('admin_hero_slides')
+
+class DeleteHeroSlideView(LoginRequiredMixin, DeleteView):
+    model = HeroSlide
+    success_url = reverse_lazy('admin_hero_slides')
     template_name = "dashboard/confirm_delete.html"
 
 class SellWithUsCardsView(LoginRequiredMixin, ListView):

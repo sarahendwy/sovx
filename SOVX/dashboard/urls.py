@@ -28,7 +28,12 @@ urlpatterns = [
     path('sections/edit/<pk>', EditSectionView.as_view(), name='edit_section'),
     path('sections/delete/<pk>', DeleteSectionView.as_view(), name='delete_section'),
 
-    path('sell-with-us-cards/', SellWithUsCardsView.as_view(), name='admin_sell_with_us_cards'),
+    path('hero-slides/', HeroSlidesView.as_view(), name='admin_hero_slides'),
+    path('hero-slides/add', AddHeroSlideView.as_view(), name='add_hero_slide'),
+    path('hero-slides/edit/<pk>', EditHeroSlideView.as_view(), name='edit_hero_slide'),
+    path('hero-slides/delete/<pk>', DeleteHeroSlideView.as_view(), name='delete_hero_slide'),
+
+    path('sell-with-us-cards/',SellWithUsCardsView.as_view(), name='admin_sell_with_us_cards'),
     path('sell-with-us-cards/add', AddSellWithUsCardView.as_view(), name='add_sell_with_us_card'),
     path('sell-with-us-cards/edit/<pk>', EditSellWithUsCardView.as_view(), name='edit_sell_with_us_card'),
     path('sell-with-us-cards/delete/<pk>', DeleteSellWithUsCardView.as_view(), name='delete_sell_with_us_card'),

@@ -1,0 +1,43 @@
+{% if hero_slides %}
+<section class="py-2" id="section_{{ section.id }}">
+  <div
+    id="heroCarousel_{{ section.id }}"
+    class="carousel slide overflow-hidden rounded-4 position-relative"
+    data-bs-ride="carousel"
+  >
+    <div class="carousel-inner">
+      {% for slide in hero_slides %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img
+          src="{{ slide.image.url }}"
+          class="d-block w-100 hero-image"
+          alt="{{ slide.alt_text|default:section.name }}"
+        />
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if hero_slides|length > 1 %}
+    <button
+      class="carousel-control-prev hero-btn"
+      type="button"
+      data-bs-target="#heroCarousel_{{ section.id }}"
+      data-bs-slide="prev"
+      aria-label="Previous"
+    >
+      <span>←</span>
+    </button>
+
+    <button
+      class="carousel-control-next hero-btn"
+      type="button"
+      data-bs-target="#heroCarousel_{{ section.id }}"
+      data-bs-slide="next"
+      aria-label="Next"
+    >
+      <span>→</span>
+    </button>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

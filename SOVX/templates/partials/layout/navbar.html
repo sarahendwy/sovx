@@ -1,7 +1,7 @@
 {% load static %}
 
 <nav
-  class="site-navbar navbar bg-white position-sticky"
+  class="site-navbar navbar bg-white position-sticky w-100"
   aria-label="Main navigation"
 >
   <div
@@ -119,8 +119,8 @@
         id="navbarSectionsNav"
         class="site-navbar-links navbar-nav flex-column flex-lg-row mb-0"
       >
-        {% if sections %}
-          {% for section in sections %}
+        {% if link_sections %}
+          {% for section in link_sections %}
           <li class="nav-item">
             <a class="nav-link text-secondary" href="#section_{{ section.id }}">
               {{ section.name }}
