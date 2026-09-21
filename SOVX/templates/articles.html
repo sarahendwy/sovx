@@ -1,0 +1,68 @@
+{% extends 'base_site_pages.html' %}
+{% load static %}
+
+{% block header %}
+<link rel="stylesheet" href="{% static 'css/components/articles.css' %}" />
+{% endblock header %}
+
+{% block pages_content %}
+
+<main class="articles-page py-5" >
+  <div class="container">
+
+    <div class="text-center mb-5">
+      <h1 class="fw-bold mb-3">المقالات</h1>
+      <p class="text-secondary mb-0">
+        تعرف أكثر على قصتنا ورؤيتنا وما يميزنا.
+      </p>
+    </div>
+
+    <div class="articles-list d-flex flex-column">
+
+      {% for article in articles %}
+
+          <article class="article-card">
+            <div class="row g-0 article-row">
+              <div class="col-12 col-md-6">
+                {% if article.image %}
+                  <img
+                    src="{{ article.image.url }}"
+                    alt="{{ article.title }}"
+                    class="article-image"
+                  />
+                {% endif %}
+              </div>
+
+              <div class="col-12 col-md-6">
+                <div class="article-content h-100 text-align-right d-flex flex-column" dir="rtl">
+
+                  <h2 class="article-title">
+                    {{ article.title }}
+                  </h2>
+
+                  <p class="article-body mt-4">
+                    {{ article.body }}
+                  </p>
+
+                  <div class="article-tags d-flex mt-auto">
+                    {% for tag in article.tag_list %}
+                      <span class="article-tag">
+                        {{ tag }}
+                      </span>
+                    {% endfor %}
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </article>
+
+      {% endfor %}
+
+    </div>
+
+  </div>
+</main>
+
+{% endblock pages_content %}
