@@ -152,15 +152,16 @@ class ProductBuyingOptionsFormsetMixin:
         if not buying_options_formset.is_valid():
             return self.form_invalid(form)
 
-        self.object = form.save()
+        # Chain through the other mixins so every formset is validated before
+        # anything is saved, then save this formset against the saved product.
+        response = super().form_valid(form)
         buying_options_formset.instance = self.object
         buying_options_formset.save()
-
-        return redirect(self.get_success_url())
+        return response
 
 class ProductNutritionsValueFormsetMixin:
     """Adds the NutritionalValueInline inline formset to the product add/edit views
-    and requires at least one buying option before the product can be saved."""
+    and requires at least one nutrition value before the product can be saved."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -177,11 +178,10 @@ class ProductNutritionsValueFormsetMixin:
         if not nutrition_values_formset.is_valid():
             return self.form_invalid(form)
 
-        self.object = form.save()
+        response = super().form_valid(form)
         nutrition_values_formset.instance = self.object
         nutrition_values_formset.save()
-
-        return redirect(self.get_success_url())
+        return response
 
 class AddProductView(LoginRequiredMixin, ProductBuyingOptionsFormsetMixin, ProductNutritionsValueFormsetMixin, CreateView):
     model = Product

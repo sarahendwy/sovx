@@ -54,5 +54,10 @@
     }
   }
 
-  document.querySelectorAll('[data-formset]').forEach(initFormset);
+  // form.html includes this script once per formset section; only init each section once.
+  document.querySelectorAll('[data-formset]').forEach(function (root) {
+    if (root.dataset.formsetReady) return;
+    root.dataset.formsetReady = '1';
+    initFormset(root);
+  });
 })();
