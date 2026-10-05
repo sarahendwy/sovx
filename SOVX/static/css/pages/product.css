@@ -2,6 +2,8 @@
 .breadcrumbs {
   margin-bottom: var(--space-4);
   padding: 0;
+  max-width: 100%;
+  
 
 }
 
@@ -12,6 +14,8 @@
   /* Space between icon and text */
   text-decoration: none;
   color: var(--text-secondary);
+  min-width: 0;
+  
 }
 
 
@@ -24,23 +28,22 @@
   color: var(--text-secondary);
   font-style: normal;
   text-decoration: none;
-  margin-left: 6px;
+  white-space: normal;
 }
 
 .arrow {
   /* padding: 20px 20px;*/
   font-weight: var(--font-medium);
-  margin-left: 6px;
-  width: var(--space-9);
-  height: var(--space-9);
   display: inline-block;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .current {
   letter-spacing: -0.006em;
   line-height: var(--space-9);
   color: var(--text-primary) !important;
+  white-space: normal;
 
 }
 
@@ -50,8 +53,11 @@
 
 .product-main-container {
 
-  height: 400px !important;
-  width: 1009px !important;
+  /* height: 400px !important;
+  width: 1009px !important; */
+  width: 100%;
+  max-width: 100%;
+  min-height: 400px;
 
 }
 
@@ -261,20 +267,16 @@
   margin-left: 12px;
 }
 
-@media (max-width:888px) {
-
+@media (max-width: 888px) {
   .right-col,
+  .left-col,
   .product-image-box {
-    width: 500px !important;
-  }
-
-  .left-col {
-    width: 300px !important;
+    width: 100% !important;
+    max-width: 100%;
   }
 
   .btn-add-cart {
     font-size: 12px;
-    padding: 0;
   }
 
   .nutrition-value {
@@ -288,7 +290,9 @@
 
 @media (max-width:790px) {
   .product-main-container {
-    display: contents;
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
   }
 
   .buying-section {
@@ -311,5 +315,11 @@
     margin-top: var(--space-4);
     width: 100% !important;
   }
-
+  .label-small  {
+    font-size: 14px;
+  }
+  
+  .product-title{
+    font-size: 18px;
+  }
 }
