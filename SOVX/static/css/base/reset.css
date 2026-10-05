@@ -60,7 +60,7 @@ p {
 }
 
 .bg-primary {
-  background-color: var(--bg-primary) !important;
+  background-color: var(--primary) !important;
 }
 
 .bg-secondary {
