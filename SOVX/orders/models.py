@@ -133,9 +133,19 @@ class OrderLog(models.Model):
     def __str__(self):
         return f"{self.order} - {self.content}"
 
+class SellerType(models.TextChoices):
+    AGENT = "agent", "وكلاء"
+    WHOLESALE = "wholesale", "جملة"
+
 class SellWithUsRequest(models.Model):
     name = models.CharField(max_length=255, verbose_name="الاسم", help_text="اكتب اسمك")
     store_name = models.CharField(max_length=255, verbose_name="اسم المحل", help_text="اكتب اسم المحل")
+    seller_type = models.CharField(
+        max_length=20,
+        choices=SellerType.choices,
+        verbose_name="من تكون",
+        help_text="اختر نوع التعامل",
+   )
     phone = models.CharField(max_length=20, verbose_name="رقم التليفون", help_text="000-000-000-00")
 
     governorate = models.ForeignKey(
@@ -146,6 +156,7 @@ class SellWithUsRequest(models.Model):
         City, on_delete=models.PROTECT, null=True, related_name="sell_with_us_requests",
         verbose_name="المدينة", help_text="اختر المدينة",
     )
+   
     address = models.CharField(max_length=500, verbose_name="العنوان بالتفصيل", help_text="اكتب العنوان بالتفصيل")
     message = models.TextField(blank=True, verbose_name="رسالتك", help_text="نحن هنا لنستمع إليكم")
     created_at = models.DateTimeField(auto_now_add=True)
