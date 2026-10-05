@@ -18,6 +18,12 @@ payment_methods = [
     ('Pickup', 'الإستلام من الفرع')
 ]
 
+seller_types = [
+    ('agent', 'وكيل'),
+    ('supermarket', 'ماركت'),
+    ('wholesale', 'جملة')
+]
+
 # Short, URL-friendly slugs for ?status=<slug> filtering (see dashboard's
 # OrdersView) - stored status values have spaces/mixed case, not fit for a
 # query string.
@@ -133,18 +139,15 @@ class OrderLog(models.Model):
     def __str__(self):
         return f"{self.order} - {self.content}"
 
-class SellerType(models.TextChoices):
-    AGENT = "agent", "وكلاء"
-    WHOLESALE = "wholesale", "جملة"
-
 class SellWithUsRequest(models.Model):
     name = models.CharField(max_length=255, verbose_name="الاسم", help_text="اكتب اسمك")
     store_name = models.CharField(max_length=255, verbose_name="اسم المحل", help_text="اكتب اسم المحل")
     seller_type = models.CharField(
         max_length=20,
-        choices=SellerType.choices,
+        choices=seller_types,
         verbose_name="من تكون",
         help_text="اختر نوع التعامل",
+        default="agent"
    )
     phone = models.CharField(max_length=20, verbose_name="رقم التليفون", help_text="000-000-000-00")
 
