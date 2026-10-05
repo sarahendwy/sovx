@@ -141,6 +141,7 @@ class ProductBuyingOptionsFormsetMixin:
         context.setdefault(
             'buying_options_formset',
             ProductBuyingOptionFormSet(self.request.POST or None, instance=self.object),
+            
         )
         return context
 
@@ -158,7 +159,7 @@ class ProductBuyingOptionsFormsetMixin:
         return redirect(self.get_success_url())
 
 class ProductNutritionsValueFormsetMixin:
-    """Adds the ProductBuyingOption inline formset to the product add/edit views
+    """Adds the NutritionalValueInline inline formset to the product add/edit views
     and requires at least one buying option before the product can be saved."""
 
     def get_context_data(self, **kwargs):
