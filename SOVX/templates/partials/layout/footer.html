@@ -58,7 +58,9 @@
         </defs>
       </svg>
       <a class="text-white d-none d-md-block" href="/"> الرئيسيه </a>
-      <a class="text-white d-none d-md-block" href="{% url 'contact' %}"> اتصل بنا </a>
+      <a class="text-white d-none d-md-block" href="{% url 'contact' %}">
+        اتصل بنا
+      </a>
     </div>
     <div class="d-flex align-items-center gap-4">
       <p
@@ -101,8 +103,7 @@
             />
           </svg>
         </a>
-        {% endif %}
-        {% if site_settings.facebook_link %}
+        {% endif %} {% if site_settings.facebook_link %}
         <a
           href="https://facebook.com/sovx"
           target="_blank"
@@ -129,6 +130,29 @@
               stroke-linejoin="round"
             />
           </svg>
+        </a>
+        {% endif %} {% if site_settings.x_link %}
+        <a
+          href="{{ site_settings.x_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon d-inline-flex align-items-center justify-content-center"
+          aria-label="X"
+        >
+          <img src="{% static 'images/sections/contact-us/x.svg' %}" alt="X" />
+        </a>
+        {% endif %} {% if site_settings.tiktok_link %}
+        <a
+          href="{{ site_settings.tiktok_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon d-inline-flex align-items-center justify-content-center"
+          aria-label="TikTok"
+        >
+          <img
+            src="{% static 'images/sections/contact-us/tiktok.svg' %}"
+            alt="TikTok"
+          />
         </a>
         {% endif %}
       </div>

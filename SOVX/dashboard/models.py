@@ -21,6 +21,9 @@ class Setting(models.Model):
     )
     facebook_link = models.CharField(verbose_name="رابط فيسبوك", default="", max_length=50, blank=True)
     instgram_link = models.CharField(verbose_name="رابط إنستجرام", default="", max_length=50, blank=True)
+    tiktok_link = models.CharField(verbose_name="رابط تيك توك", default="", max_length=50, blank=True)
+    x_link = models.CharField(verbose_name="رابط X", default="", max_length=50, blank=True)
+    
     email = models.EmailField(verbose_name="البريد الإلكتروني", blank=True)
     whatsapp_number = models.CharField(
         verbose_name="رقم واتساب",
