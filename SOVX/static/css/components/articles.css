@@ -24,6 +24,12 @@
   object-fit: cover;
 }
 
+/* List page: fixed image height so tall images don't stretch the card */
+.article-row .article-image {
+  height: 320px;
+  min-height: 0;
+}
+
 .article-content {
   padding: var(--space-5);
 }
@@ -81,7 +87,8 @@
 }
 
 @media (max-width: 768px) {
-  .article-image {
+  .article-image,
+  .article-row .article-image {
     height: 220px;
     min-height: 0;
   }
