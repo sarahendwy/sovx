@@ -1,0 +1,37 @@
+{% extends 'base_site_pages.html' %}
+{% load static %}
+
+{% block header %}
+<meta name="description" content="{{ article.body|truncatewords:30 }}" />
+<link rel="stylesheet" href="{% static 'css/components/articles.css' %}" />
+{% endblock header %}
+
+{% block pages_content %}
+
+<main class="articles-page">
+  <div class="my-3 mx-4">
+    <article class="article-detail" dir="rtl">
+
+      <a href="{% url 'articles' %}" class="text-secondary text-decoration-none d-inline-block mb-3">&rarr; العودة إلى المقالات</a>
+
+      {% if article.image %}
+        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image mb-4" />
+      {% endif %}
+
+      <h1 class="article-title">{{ article.title }}</h1>
+
+      <p class="text-secondary small">{{ article.created_at|date:"Y-m-d" }}</p>
+
+      <p class="article-body mt-4">{{ article.body }}</p>
+
+      <div class="article-tags d-flex flex-wrap mt-4">
+        {% for tag in article.tag_list %}
+          <span class="article-tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+
+    </article>
+  </div>
+</main>
+
+{% endblock pages_content %}

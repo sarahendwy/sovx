@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Product(models.Model):
@@ -14,6 +15,9 @@ class Product(models.Model):
     class Meta:
         verbose_name = "المنتج"
         verbose_name_plural = "المنتجات"
+
+    def get_absolute_url(self):
+        return reverse("product", kwargs={"pk": self.pk})
 
     @property
     def default_buying_option(self):

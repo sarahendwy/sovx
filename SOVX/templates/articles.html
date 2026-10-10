@@ -21,7 +21,7 @@
 
       {% for article in articles %}
 
-          <article class="article-card">
+          <article class="article-card position-relative">
             <div class="row g-0 article-row">
               <div class="col-12 col-md-6">
                 {% if article.image %}
@@ -37,11 +37,11 @@
                 <div class="article-content h-100 text-align-right d-flex flex-column" dir="rtl">
 
                   <h2 class="article-title">
-                    {{ article.title }}
+                    <a href="{{ article.get_absolute_url }}" class="article-link stretched-link">{{ article.title }}</a>
                   </h2>
 
                   <p class="article-body mt-4">
-                    {{ article.body }}
+                    {{ article.body|truncatewords:40 }}
                   </p>
 
                   <div class="article-tags d-flex mt-auto">

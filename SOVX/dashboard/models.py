@@ -1,6 +1,7 @@
 import random
 
 from django.db import models
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -384,6 +385,9 @@ class Article(models.Model):
         ordering = ["-created_at"]
         verbose_name = "مقال"
         verbose_name_plural = "المقالات"
+
+    def get_absolute_url(self):
+        return reverse("article", kwargs={"pk": self.pk})
 
     @property
     def tag_list(self):

@@ -106,6 +106,12 @@ class AboutView(ListView):
     template_name = "about.html"
     context_object_name = "sections"
 
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = "article.html"
+    context_object_name = "article"
+
+
 class ArticleView(ListView):
     model = Article
     template_name = "articles.html"
